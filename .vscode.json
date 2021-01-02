@@ -45,7 +45,7 @@
     },
     "terminal.integrated.shell.osx": "/bin/bash",
     "python.pythonPath": "/usr/local/bin/python3",
-    "editor.matchBrackets": "always",
+    "editor.matchBrackets": false,
     
     // vim emulation
     "vim.leader": ",",

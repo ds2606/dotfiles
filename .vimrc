@@ -188,8 +188,8 @@ noremap <silent> <leader>dw mt:let _s=@/ <bar>
       \ <bar> :echom "deleted trailing whitespace"<cr>
 
 " file shortcuts for quick editing (last is for sourcing .vimrc)
-noremap <leader>ev  :tabedit ~/desktop/dropbox/.dotfiles/.vimrc<cr>
-noremap <leader>ez  :tabedit ~/desktop/dropbox/.dotfiles/.zsh_profile<cr>
+noremap <leader>ev  :tabedit ~/desktop/home/.dotfiles/.vimrc<cr>
+noremap <leader>ez  :tabedit ~/desktop/home/.dotfiles/.zsh_profile<cr>
 noremap <leader>es  :source ~/.vimrc
 
 " terminal access
@@ -286,7 +286,7 @@ inoremap ~`          `
 inoremap ;-          <down>
 inoremap ;=          <up>
 noremap  <leader>ld  :alegotodefinition<cr>
-noremap  <leader>lr  :alerename<cr>
+noremap  <leader>lR  :alerename<cr>
 "" hover config
 noremap <expr> <leader>lh getwinvar(winnr('#'), "&pvw") ?
       \ '<C-w>j <bar> :close<cr>`t' :

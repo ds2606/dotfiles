@@ -18,7 +18,7 @@ class Minesweeper():
         self.board = []
         for i in range(self.height):
             row = []
-                         for j in range(self.width):
+            for j in range(self.width):
                 row.append(False)
             self.board.append(row)
 
