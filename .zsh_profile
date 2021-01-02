@@ -1,0 +1,75 @@
+# ZSH PROFILE
+
+# set environment
+source /Users/dschreck/Desktop/home/.dotfiles/.zsh_aliases
+source /Users/dschreck/Desktop/home/.dotfiles/.shfunctions
+
+# set left prompt
+PROMPT='%B%F{blue}%1~ >%f%b '
+
+# set paths
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dschreck/desktop/home/.dotfiles/:/Users/dschreck/bin
+export PATH="$PATH:$HOME/desktop/home/.dotfiles/bin"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="/Library/Frameworks/Python.framework/Versions/3.8/bin:${PATH}"
+export PATH="$PATH:/usr/local/smlnj/bin"
+export PATH="$PATH:/Library/TeX/texbin"
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-14.0.2.jdk/Contents/Home
+
+# set environment variables
+export editor=vim
+export CLICOLOR=1                         # pretty colorful terminal
+export BASH_SILENCE_DEPRECATION_WARNING=1 # yes yes we know zsh is default
+export PYTHONDONTWRITEBYTECODE=1          # don't spew python bytecode everywhere
+export PYTHONBREAKPOINT=ipdb.set_trace    # ipdb debugging
+export PYTHONSTARTUP="$dotfiles/.pyrc"  # auto import modules in REPL
+
+# The following lines were added by compinstall
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|[._-]=** r:|=**'
+zstyle :compinstall filename '/Users/dschreck/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
+# Add colors to man pages
+export LESS_TERMCAP_mb=$'\E[01;31m'     # enter blinking mode
+export LESS_TERMCAP_md=$'\E[01;31m'     # enter double-bright mode
+export LESS_TERMCAP_me=$'\E[0m'         # turn off all appearance modes (mb, md, so, us)
+export LESS_TERMCAP_se=$'\E[0m'         # leave standout mode
+export LESS_TERMCAP_so=$'\E[01;44;33m'  # enter standout mode – yellow
+export LESS_TERMCAP_ue=$'\E[0m'         # leave underline mode
+export LESS_TERMCAP_us=$'\E[01;32m'     # enter underline mode
+
+# bat syntax colors
+export BAT_THEME="OneHalfDark"
+
+# initialize fasd
+eval "$(fasd --init auto)"
+
+# initialize fzf (commands rely on github.com/softmoth/zsh-vim-mode)
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND='fd . ~ --hidden --exclude .git'# find hidden files
+export FZF_CTRL_T_COMMAND='fd . ~ --hidden --type f --exclude .git'
+export FZF_ALT_C_COMMAND='fd . ~ --hidden --type d --exclude .git'
+export FZF_DEFAULT_OPTS='
+  --color info:114,prompt:26,spinner:135,pointer:81
+  --color header:221,hl+:204,hl:81,preview-fg:81
+'
+export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || bat {} || tree -C {}) 2> /dev/null | head -200'"
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+bindkey '^R' fzf-history-widget
+bindkey '^O' fzf-cd-widget
+bindkey '^F' fzf-file-widget
+
+# syntax highlighting
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+export zle_highlight=('paste:none') # don't highlight pasted items
+
+# history substring search
+source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=green,bold'
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=red,bold'
+

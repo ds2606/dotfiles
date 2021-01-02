@@ -1,0 +1,60 @@
+# ZSH ALIASES
+
+
+# safe environment
+set -o noclobber
+alias rm='rm -i'         # Prompt before removing files via 'rm'
+alias cp='cp -i'         # Prompt before overwriting files via 'cp'
+alias mv='mv -i'         # Prompt before overwriting files via 'mv'
+alias ln='ln -i'         # Prompt before overwriting files via 'ln'
+
+# navigation shortcuts
+alias ,="cd -"
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+cs=~/Desktop/home/cs # any trouble with alias and var having same name?
+alias cs="cd ~/Desktop/home/cs"
+dotfiles=~/Desktop/home/.dotfiles
+alias dotfiles="cd ~/Desktop/home/.dotfiles"
+export zrc=~/Desktop/home/.dotfiles/.zsh_profile
+export vrc=~/Desktop/home/.dotfiles/.vimrc
+export pyrc=~/Desktop/home/.dotfiles/.pyrc
+
+# command aliases
+# alias sourcezrc='source ~/.zshrc'
+alias srz='source ~/.zshrc'
+alias python='python3'
+alias ipy='ipython'
+alias pydoc='pydoc3'
+alias pyman='pydoc3'
+alias ll='exa -lah --color=always'
+alias ls='exa --color=always'
+alias la='exa -a --color=always'
+alias grep='ggrep --color=auto' # GNU grep as default
+alias fd='fd -i'
+alias rmf='rm -f'
+alias hist='history'
+alias cat='bat'
+alias vi='vim'
+alias rg='rg --smart-case'
+alias trash='trash -F'
+alias gs='git status'
+alias gb='git branch'
+alias gc='git checkout'
+alias gcb='git checkout -b'
+alias moo='fortune | cowsay | lolcat'
+
+# application shortcuts
+alias chrome='open -a Google\ Chrome'
+alias finder='open -a Finder'
+
+# enable help command for builtin manpages
+if [[ $(which run-help) == "run-help: aliased to man" ]]; then
+    autoload -Uz run-help
+    unalias run-help
+    alias help=run-help
+fi
+
+# keybindings
+# bindkey \^U backward-kill-line

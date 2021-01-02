@@ -1,0 +1,10 @@
+[user]
+	name = Daniel Schreck
+	email = daniel.s.schreck@gmail.com
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+[init]
+	defaultBranch = main
