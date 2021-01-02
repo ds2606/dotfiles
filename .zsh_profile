@@ -1,11 +1,9 @@
 # ZSH PROFILE
 
 # set environment
-source /Users/dschreck/Desktop/home/.dotfiles/.zsh_aliases
 source /Users/dschreck/Desktop/home/.dotfiles/.shfunctions
-
-# set left prompt
-PROMPT='%B%F{blue}%1~ >%f%b '
+source /Users/dschreck/Desktop/home/.dotfiles/.zsh_aliases
+source /Users/dschreck/Desktop/home/.dotfiles/.zsh_prompt
 
 # set paths
 PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dschreck/desktop/home/.dotfiles/:/Users/dschreck/bin
@@ -72,8 +70,3 @@ bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='underline'
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=204'
-
-# testing git prompt
-fpath+=$HOME/.zsh/pure
-autoload -U promptinit; promptinit
-prompt pure
