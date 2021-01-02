@@ -1,0 +1,33 @@
+# SSH BASH PROFILE
+
+
+# --------- local settings ---------
+# ----------------------------------
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+export HISTSIZE=5000  # give ^R some data to work with
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+ulimit -c 0
+set -o noclobber
+alias cp='cp -i'    # prompt before overwriting file
+alias mv='mv -i'    # prompt before overwriting file
+alias rm='rm -i'    # prompt before removing file
+
+# enable bash completion in interactive shells
+if [ -f /etc/bash_completion ] ; then
+   . /etc/bash_completion
+fi
+
+# Some programs honor VISUAL, so set this if EDITOR is set.
+if [ ! -z "$EDITOR" ] ; then
+   export VISUAL=$EDITOR
+fi
+

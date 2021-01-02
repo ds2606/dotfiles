@@ -1,0 +1,36 @@
+# settings that are out of the current .zshrc rotation
+
+
+# vim mode bindings
+bindkey -v
+source "$HOME/.zsh-vim-mode.plugin.zsh"
+export KEYTIMEOUT=10  # adjust if this causes issues with other commands
+bindkey '^r' history-incremental-search-backward
+bindkey '^w' backward-kill-word
+export VIM_MODE_INITIAL_KEYMAP=last
+vim-mode-bindkey viins vicmd -- fzf-history-widget '^R'
+vim-mode-bindkey viins vicmd -- fzf-cd-widget '^O'
+vim-mode-bindkey viins vicmd -- fzf-file-widget '^F'
+vim-mode-bindkey vicmd -- history-substring-search-up 'k'
+vim-mode-bindkey vicmd -- history-substring-search-down 'j'
+
+
+# autosuggestions (COLOR CHANGE NOT WORKING)
+source ~/.zsh-autosuggestions/zsh-autosuggestions.zsh
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=cyan"
+export ZSH_AUTOSUGGEST_HIGHLIGHT_COLOR="fg=cyan"
+
+# left prompt with time
+'%F{blue}[%D{%K:%M}] %B%1~ > %b%f'  # [H:M] pwd -d=1
+
+# set right prompt (current vi mode)
+function zle-line-init zle-keymap-select {
+    case ${KEYMAP} in
+        (vicmd)      RPS1=$'%B%F{114} n%f%b';;
+        (main|viins) RPS1=$'%B%F{135} i%f%b';;
+        (*)          RPS1=$'%B%F{114} n%f%b';;
+    esac
+    zle reset-prompt
+}
+zle -N zle-line-init
+zle -N zle-keymap-select

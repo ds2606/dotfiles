@@ -1,0 +1,70 @@
+[user]
+    name = Daniel Schreck
+    email = daniel.s.schreck@gmail.com
+[init]
+    defaultBranch = main
+[alias]
+    a     = add
+    aa    = add .
+    amend = commit --amend
+    b     = branch
+    c     = commit
+    cam   = commit -am
+    cat   = cat-file -p
+    cl    = clean -i
+    co    = checkout
+    cp    = cherry-pick
+    d     = diff
+    da    = diff HEAD
+    ds    = diff --staged
+    f     = fetch
+    h     = help
+    l     = log --oneline --graph -10
+    la    = log --oneline --graph --all -10
+    ll    = log --oneline --graph --all
+    ld    = log --oneline --graph -p
+    last  = log -1 HEAD
+    mg    = merge
+    mgt   = mergetool
+    r     = remote
+    rb    = rebase
+    rl    = reflog -10
+    rs    = restore
+    rt    = reset
+    rv    = revert
+    s     = status
+    sh    = show
+    ss    = status -s
+    st    = stash
+    sw    = switch
+    unstage = restore --staged --
+[core]
+    excludesfile = ~/.dotfiles/.gitignore_global
+    editor = vim
+    pager = less
+[pretty]
+    line = "%C(auto)%h %<|(60,trunc)%s %C(green)%ad%C(auto)%d"
+    detail = "%C(auto)%h %s%n  %C(yellow)by %C(blue)%an %C(magenta)<%ae> [%G?] %C(green)%ad%n %C(auto)%d%n"
+[merge]
+    tool = vimdiff
+[mergetool]
+    keepBackup = false
+[pull]
+	ff = only
+[push]
+	default = nothing
+# installed by git-lfs
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+
+# from jonhoo, not exactly sure what they do yet
+; [diff]
+;     mnemonicPrefix = true
+;     wordRegex = "[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+"
+;     compactionHeuristic = true
+; [alias]
+;     cl   = log -p -- ':(exclude)cargo.lock'
+;     f    = push --force-with-lease

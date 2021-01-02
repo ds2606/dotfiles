@@ -1,0 +1,9 @@
+bat
+exa
+fasd
+fd
+fl
+htop
+rg
+tldr
+node  // for vim coc

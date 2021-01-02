@@ -1,0 +1,55 @@
+#! /usr/bin/env python
+""" prints manpage info for flags """
+
+import re
+import subprocess as sp
+import sys
+
+# some ANSI color codes
+RED = "\033[31m"
+CYAN = "\033[94m"
+NONE = "\033[0m"
+GREEN = "\033[92m"
+MAGENTA = "\033[95m"
+
+# parse command-line arguments
+if len(sys.argv) < 3:
+    print("usage: fl <command> <flag(s)>")
+    sys.exit(2)
+command = sys.argv[1]
+flags = sys.argv[2:]
+
+# get and clean man page info
+p1 = sp.Popen(["man", command], stdout=sp.PIPE, stderr=sp.PIPE)
+p2 = sp.Popen(["col", "-b"], stdin=p1.stdout, stdout=sp.PIPE)
+manpage = p2.communicate()[0].decode("utf-8")
+if p1.stderr.peek():
+    # quit if no man page entry for `command`
+    # NOTE: can only check first subprocess standard error *after* waiting for
+    # second child (done with `communicate`) to avoid deadlock (caused by
+    # filled pipes in the case of long manpages)
+    print("%sNo man entry for '%s%s%s'" % (RED, MAGENTA, command, RED))
+    sys.exit(1)
+
+# print matches for each command-line flag
+for i, flag in enumerate(flags):
+    # format user input
+    if flag[0] != '-':
+        flag = '-' + flag
+
+    # extract matches for flag
+    p = re.compile(rf"\n[\s\t]*{flag}[^\w].*?\n\n", re.DOTALL)
+    matches = re.findall(p, manpage)
+
+    # failure if no matches
+    if not matches:
+        print("   %sNo matches for '%s%s %s%s'" % (RED, MAGENTA, command, flag, RED))
+
+    # pretty-print matches
+    for match in matches:
+        match = match.strip("\n ")[len(flag):].strip()
+        print("   %s%s %s%s%s" % (CYAN, command, GREEN, flag, NONE), match)
+
+    # separate flags with newline
+    if i != len(flags) - 1:
+        print()

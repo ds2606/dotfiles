@@ -1,0 +1,15 @@
+# .pdbrc
+
+
+# quicker temp breakpoint
+# alias tb tbreak  # not working
+
+# next and list, and step and list.
+alias nl n;;l
+alias sl s;;l
+
+# print instance variables (usage "pi classInst")
+alias p_ for k in %1.__dict__.keys(): print("%1.",k,"=",%1.__dict__[k])
+alias ps p_ self  # print instance variables in self
+alias pd for key, value in %1.items(): print(f"{key}: {value}")  # print dict
+alias pl pd locals()  # print local vars

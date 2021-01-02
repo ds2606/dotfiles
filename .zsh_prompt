@@ -1,0 +1,30 @@
+# ZSH PROMPT
+
+
+source ~/.zsh/git-prompt.zsh/git-prompt.zsh
+source ~/.dotfiles/colors/palenight/pn-palette.zsh && pn_colors 256 && unset -f pn_colors
+
+# set left prompt
+PROMPT='%B%F{69}%1~ ❯%f%b '
+
+# set right prompt
+RPROMPT='$(gitprompt)'
+
+# customize git prompt
+ZSH_GIT_PROMPT_SHOW_UPSTREAM="no"
+ZSH_THEME_GIT_PROMPT_PREFIX=""
+ZSH_THEME_GIT_PROMPT_SUFFIX=""
+ZSH_THEME_GIT_PROMPT_SEPARATOR=" "
+ZSH_THEME_GIT_PROMPT_DETACHED="%F{213}:"
+ZSH_THEME_GIT_PROMPT_BRANCH='%F{$c[ice]}'
+ZSH_THEME_GIT_PROMPT_UPSTREAM_SYMBOL="%{$fg_bold[yellow]%}⟳ "
+ZSH_THEME_GIT_PROMPT_UPSTREAM_PREFIX="%{$fg[red]%}(%{$fg[yellow]%}"
+ZSH_THEME_GIT_PROMPT_UPSTREAM_SUFFIX="%{$fg[red]%})"
+ZSH_THEME_GIT_PROMPT_BEHIND='%B%F{$c[ice]} ⇣'
+ZSH_THEME_GIT_PROMPT_AHEAD='%B%F{$c[ice]} ⇡'
+ZSH_THEME_GIT_PROMPT_UNMERGED="%B%F{204}✖"
+ZSH_THEME_GIT_PROMPT_STAGED='%B%F{221}●'
+ZSH_THEME_GIT_PROMPT_UNSTAGED='%B%F{204}●'  # 209 for orange-ish
+ZSH_THEME_GIT_PROMPT_UNTRACKED='%B%F{245}●'
+ZSH_THEME_GIT_PROMPT_STASHED="%{$fg[blue]%}⚑"
+ZSH_THEME_GIT_PROMPT_CLEAN='%B%F{118}●'

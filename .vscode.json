@@ -1,0 +1,170 @@
+{
+    // what do these do?
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+
+    // general editor settings
+    "workbench.startupEditor": "newUntitledFile",
+    "explorer.confirmDelete": false,
+    // python.linting.pylintUseMinimalCheckers": true,
+    //"editor.quickSuggestions": false,
+
+    // aesthetic
+    "workbench.colorTheme": "Material Theme Palenight",
+    "workbench.iconTheme": null,
+    "editor.fontSize": 12,
+    "editor.wordWrap": "on",
+    "editor.scrollBeyondLastLine": false,
+    "workbench.activityBar.visible": false,
+    "editor.scrollbar.verticalScrollbarSize": 7,
+    "editor.scrollbar.horizontalScrollbarSize": 5,
+    "editor.minimap.enabled": false,
+    "window.zoomLevel": 1,
+    "editor.cursorBlinking": "solid",
+    "workbench.colorCustomizations": {
+        "statusBar.background" : "#303030",
+        "editorError.foreground": "#ff000030",
+        "editorWarning.foreground": "#ffd9006f", 
+        "editorCursor.foreground": "#6947b6",
+        "terminalCursor.foreground": "#6947b6"
+    },
+    "subtleBrackets.style": {
+        "borderColor": "#6d65f8c5",
+        "borderWidth": "2px"
+      },
+    "editor.tokenColorCustomizations": {
+        "[Palenight Theme]": {
+            "textMateRules": [
+                {
+                    "scope": "constant.language.python",
+                    "settings": {
+                        "foreground": "#de7c8e"
+                    }
+                }
+            ]
+        }
+    },
+    "python.pythonPath": "/usr/local/bin/python3",
+    "python.jediEnabled": false,
+    "editor.matchBrackets": false,
+    
+    // vim emulation
+    "vim.leader": ",",
+    "vim.incsearch": true,
+    "vim.hlsearch": true,
+    "vim.useSystemClipboard": true,
+    "vim.useCtrlKeys": true,
+    "vim.easymotion": true,
+    "vim.insertModeKeyBindingsNonRecursive": [
+      {
+        "before": ["j", "k"],
+        "after": ["<Esc>"]
+      },
+      {
+        "before": ["<C-h>"],
+        "after": ["<C-o>", "h"]
+      },  
+      {
+        "before": ["<C-j>"],
+        "after": ["<C-o>", "j"]
+      },  
+      {
+        "before": ["<C-k>"],
+        "after": ["<C-o>", "k"]
+      },  
+      {
+        "before": ["<C-l>"],
+        "after": ["<C-o>", "l"]
+      },  
+      {
+        "before": ["<C-h>"],
+        "after": ["<C-o>", "h"]
+      },  
+      {
+        "before": ["<C-e>"],
+        "after": ["<esc>", "A"]
+      },  
+    ],
+    "vim.normalModeKeyBindingsNonRecursive": [
+      {
+        "before": ["U"],
+        "after": ["<C-r>"]
+      },  
+      {
+       "before": ["-"],
+        "after": ["<C-d>"]
+      },  
+      {
+        "before": ["="],
+        "after": ["<C-u>"]
+      },  
+      {
+        "before": ["<leader>", "="],
+        "after": ["="]
+      }, 
+      {
+        "before": ["<C-n>"],
+        "commands": [":nohl"]
+      },  
+      {
+        "before": [";"],
+        "after": [":"]
+      },
+      {
+        "before": ["<leader>", "p"],
+        "after": ["%"]
+      },
+      {
+        "before": ["j"],
+        "after": ["g", "j"]
+      },
+      {
+        "before": ["k"],
+        "after": ["g", "k"]
+      },
+      {
+        "before": ["H"],
+        "after": ["^"]
+      },
+      {
+        "before": ["L"],
+        "after": ["$"]
+      },
+      {
+        "before": ["J"],
+        "after": ["L"]
+      },
+      {
+        "before": ["K"],
+        "after": ["H"]
+      },
+      {
+        "before": ["&"],
+        "after": ["J"]
+      }
+    ],
+    "vim.handleKeys": {
+      "<C-a>": false,
+      "<C-f>": false
+    },
+    "latex-workshop.view.pdf.viewer": "tab",
+    "python.defaultInterpreterPath": "/Users/dschreck/.pyenv/versions/3.9.1/bin/python",
+    "C_Cpp.updateChannel": "Insiders",
+    "editor.columnSelection": false,
+    "workbench.editorAssociations": {
+      "*.ipynb": "jupyter.notebook.ipynb"
+    },
+    "editor.lightbulb.enabled": false,
+    "python.languageServer": "Microsoft",
+    "remote.SSH.lockfilesInTmp": true,
+    "C_Cpp.errorSquiggles": "Enabled",
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "terminal.integrated.profiles.osx": {
+      "/bin/bash (migrated)": {
+        "path": "/bin/bash",
+        "args": [
+          "-l"
+        ]
+      }
+    }
+  }

@@ -1,0 +1,77 @@
+# SSH ZSH PROFILE
+
+# open tmux session (reattach if one exists, create new otherwise)
+if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_CONNECTION" ]]; then
+  tmux attach || tmux new -s ssh
+fi
+alias dex='tmux detach -P'  # `d`etach tmux session and `ex`it ssh
+
+
+# ------------- local settings -------------
+# (template section for individual machines)
+# ------------------------------------------
+
+
+# environment setup
+source $HOME/ssh-env/functions-ssh
+source $HOME/ssh-env/zsh-aliases-ssh
+source $HOME/ssh-env/zsh-prompt-ssh
+
+# set paths
+export PATH="$HOME/ssh-env/bin:$PATH"  # add local bins to path
+
+# set environment variables
+export EDITOR=vim
+export VISUAL=vim
+export CLICOLOR=1                         # pretty colorful terminal
+export PYTHONDONTWRITEBYTECODE=1          # don't spew python bytecode everywhere
+stty -ixon  # enable forward cycling in bck-i-search by ^S
+bindkey -e  # emacs keybindings for command line
+setopt EXTENDED_GLOB
+
+# safe environment
+unsetopt CLOBBER    # don't overwrite existing file w/ redirect
+alias cp='cp -i'    # prompt before overwriting file
+alias mv='mv -i'    # prompt before overwriting file
+alias rm='rm -i'    # prompt before removing file
+alias ln='ln -i'    # prompt before overwriting files via 'ln'
+
+# history management
+HISTFILE=$HOME/.zsh_history     # set history file
+HISTSIZE=5000                # number of history commands to save
+SAVEHIST=$HISTSIZE
+setopt INC_APPEND_HISTORY    # set history options
+setopt SHARE_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_SAVE_NO_DUPS
+
+# The following lines were added by compinstall
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|[._-]=** r:|=**'
+zstyle :compinstall filename '/Users/dschreck/.zshrc'
+
+autoload -Uz compinit
+compinit
+autoload -Uz promptinit    # use prompt themes
+promptinit
+# End of lines added by compinstall
+
+# Add colors to man pages
+export LESS_TERMCAP_mb=$'\E[01;31m'     # enter blinking mode
+export LESS_TERMCAP_md=$'\E[01;31m'     # enter double-bright mode
+export LESS_TERMCAP_me=$'\E[0m'         # turn off all appearance modes         (mb, md, so, us)
+export LESS_TERMCAP_se=$'\E[0m'         # leave standout mode
+export LESS_TERMCAP_so=$'\E[01;44;33m'  # enter standout mode – yellow
+export LESS_TERMCAP_ue=$'\E[0m'         # leave underline mode
+export LESS_TERMCAP_us=$'\E[01;32m'     # enter underline mode
+
+# fasd
+eval "$(fasd --init auto)"  # initialization
+
+# syntax highlighting
+source ~/ssh-env/colors-ssh/zsh-syntax-highlighting.zsh
+export zle_highlight=('paste:none')  # don't highlight pasted items
+export EXA_COLORS="ln=38;5;171:lp=38;5;171:uu=38;5;214"
+export BAT_THEME="OneHalfDark"

@@ -1,0 +1,42 @@
+""" runtime config for iPython profile """
+import os
+import subprocess
+import IPython
+from IPython.core.magic import (Magics, magics_class, line_magic,
+                                register_line_magic)
+
+
+@magics_class
+class TestMagics(Magics):
+
+    @line_magic
+    def tmagic(self, line):
+        "EXAMPLE: my line magic"
+        print("Full access to the main IPython object:", self.shell)
+        print("Vars in the user namespace:", list(self.shell.user_ns.keys()))
+        return line
+
+    @line_magic
+    def z(self, line):
+        "ipython/fasd-cd integration"
+
+        if not line:
+            print("no directory given")
+            return
+        dest = subprocess.run(['sh', '-c', f'fasd -d {line}'],
+                              capture_output=True).stdout.decode().strip()
+        if dest:
+            print(dest)
+            os.chdir(dest)
+        else:
+            print(f"{line} not found")
+
+
+@line_magic
+def lmagic(line):
+    "EXAMPLE: my line magic"
+    print(line)
+    return 1 + 1
+
+
+IPython.get_ipython().register_magics(TestMagics)
