@@ -1,0 +1,5 @@
+# run on python interpreter launch
+
+from importlib import reload
+import numpy as np
+# import ipdb # messes up non-ipython REPL
