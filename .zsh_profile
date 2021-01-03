@@ -1,15 +1,16 @@
 # ZSH PROFILE
 
 # set environment
-source /Users/dschreck/Desktop/home/.dotfiles/.shfunctions
-source /Users/dschreck/Desktop/home/.dotfiles/.zsh_aliases
-source /Users/dschreck/Desktop/home/.dotfiles/.zsh_prompt
+source $HOME/.dotfiles/.shfunctions
+source $HOME/.dotfiles/.zsh_aliases
+source $HOME/.dotfiles/.zsh_prompt
 
 # set paths
-PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dschreck/desktop/home/.dotfiles/:/Users/dschreck/bin
-export PATH="$PATH:$HOME/desktop/home/.dotfiles/bin"
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/.dotfiles
+export PATH="$PATH:$HOME/.dotfiles/bin"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/Library/Frameworks/Python.framework/Versions/3.8/bin:${PATH}"
+export PATH="$PATH:/usr/local/lib/ruby/gems/3.0.0/bin"
 export PATH="$PATH:/usr/local/smlnj/bin"
 export PATH="$PATH:/Library/TeX/texbin"
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-14.0.2.jdk/Contents/Home
@@ -21,6 +22,15 @@ export BASH_SILENCE_DEPRECATION_WARNING=1 # yes yes we know zsh is default
 export PYTHONDONTWRITEBYTECODE=1          # don't spew python bytecode everywhere
 export PYTHONBREAKPOINT=ipdb.set_trace    # ipdb debugging
 export PYTHONSTARTUP="$dotfiles/.pyrc"  # auto import modules in REPL
+
+# history management
+HISTSIZE=5000               #How many lines of history to keep in memory
+HISTFILE=~/.zsh_history     #Where to save history to disk
+SAVEHIST=5000               #Number of history entries to save to disk
+#HISTDUP=erase               #Erase duplicates in the history file
+setopt    appendhistory     #Append history to the history file (no overwriting)
+setopt    sharehistory      #Share history across terminals
+setopt    incappendhistory  #Immediately append to the history file, not just when a term is killed
 
 # The following lines were added by compinstall
 zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|[._-]=** r:|=**'

@@ -14,28 +14,25 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 cs=~/Desktop/home/cs # any trouble with alias and var having same name?
-alias cs="cd ~/Desktop/home/cs"
-dotfiles=~/Desktop/home/.dotfiles
-alias dotfiles="cd ~/Desktop/home/.dotfiles"
-export zrc=~/Desktop/home/.dotfiles/.zsh_profile
-export vrc=~/Desktop/home/.dotfiles/.vimrc
-export pyrc=~/Desktop/home/.dotfiles/.pyrc
+# alias cs="cd ~/Desktop/home/cs"
+export zrc=~/.dotfiles/.zsh_profile
+export vrc=~/.dotfiles/.vimrc
+export pyrc=~/.dotfiles/.pyrc
 
 # command aliases
-# alias sourcezrc='source ~/.zshrc'
 alias srz='source ~/.zshrc'
 alias python='python3'
 alias ipy='ipython'
 alias pydoc='pydoc3'
 alias pyman='pydoc3'
 alias ll='exa -lah --color=always'
-alias ls='exa --color=always'
+# alias ls='exa --color=always'
 alias la='exa -a --color=always'
 alias grep='ggrep --color=auto' # GNU grep as default
 alias fd='fd -i'
 alias rmf='rm -f'
 alias hist='history'
-alias cat='bat'
+# alias cat='bat'
 alias vi='vim'
 alias rg='rg --smart-case'
 alias trash='trash -F'
