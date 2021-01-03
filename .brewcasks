@@ -1,0 +1,27 @@
+# homebrew casks
+
+brew install anki
+brew install atom
+brew install audacity
+brew install bettertouchtool
+brew install caffeine
+brew install firefox
+brew install github
+brew install google-chrome
+brew install intellij-idea-ce
+brew install magnet
+brew install numi
+brew install pycharm-ce
+brew install rstudio
+brew install skype
+brew install spotify
+brew install sublime
+brew install texpad
+brew install vanilla
+brew install visual-studio-code
+brew install vlc
+brew install zoom
+brew install --cask flux
+brew install --cask handbrake
+brew install --cask r
+brew install --cask transmission
