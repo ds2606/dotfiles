@@ -189,9 +189,9 @@ noremap <silent> <leader>dw mt:let _s=@/ <bar>
       \ <bar> :echom "deleted trailing whitespace"<cr>
 
 " file shortcuts for quick editing (last is for sourcing .vimrc)
-noremap <leader>ev  :tabedit ~/desktop/home/.dotfiles/.vimrc<cr>
-noremap <leader>ez  :tabedit ~/desktop/home/.dotfiles/.zsh_profile<cr>
-noremap <leader>es  :source ~/.vimrc
+noremap <leader>ev  :tabedit ~/.vimrc<cr>
+noremap <leader>es  :source  ~/.vimrc<cr>
+noremap <leader>ez  :tabedit ~/.dotfiles/.zsh_profile<cr>
 
 " terminal access
 noremap <leader>tn   :ter<cr>
