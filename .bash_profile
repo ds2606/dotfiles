@@ -1,7 +1,7 @@
 # BASH PROFILE
 
 # source functions
-source /Users/dschreck/Desktop/Dropbox/.dotfiles/functions
+source $HOME/.dotfiles/.shfunctions
 
 # set prompt
 PS1='\[\033[01;34m\](bash) \w> \[\033[00m\]'
@@ -34,9 +34,8 @@ alias ,="cd -"
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
-cs=~/Desktop/Dropbox/cs # any trouble with alias and var having same name?
+cs=~/Dropbox/cs # any trouble with alias and var having same name?
 alias cs="cd ~/Desktop/Dropbox/cs"
-dotfiles=~/Desktop/Dropbox/.dotfiles
 alias dotfiles="cd ~/Desktop/Dropbox/.dotfiles"
 
 # command aliases
