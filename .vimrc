@@ -197,7 +197,7 @@ noremap <leader>tn   :ter<cr>
       \<c-w>:exe          "resize" . (winheight(0) * 3/5) <cr>
 noremap <leader>to   :sb zsh<cr>
       \<c-w>:exe          "resize " . (winheight(0) * 3/5) <cr>
-tnoremap <leader>tn  <C-w>c:ter<cr>
+tnoremap `n  <C-w>c:ter<cr>
       \<c-w>:exe          "resize " . (winheight(0) * 3/5) <cr>
 tnoremap `c    <C-w>c
 tnoremap `d    <C-d>
@@ -368,6 +368,16 @@ let g:lightline.component_expand = {
 let g:lightline.component_type = {
       \ 'linter_ok': 'ok',
       \ }
+
+" fugitive
+set tags^=.git/tags;~
+noremap <leader>gc :Git commit -m
+noremap <leader>gd :Git diff<cr>
+noremap <leader>gl :Git log<cr>
+
+" gitgutter
+let g:gitgutter_enabled = 0
+noremap <leader>gg :GitGutterToggle<cr>
 
 " vim-smoothie
 let g:smoothie_update_interval = 15
