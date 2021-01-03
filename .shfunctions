@@ -42,7 +42,7 @@ spc() {
 		return 1
 	fi
 
-	local bg="/users/dschreck/desktop/dropbox/general/backgrounds/"
+	local bg="/Users/Daniel/Pictures/backgrounds/"
 	case $1 in
 		"221")
 			bg+="lights.jpg"
@@ -56,12 +56,12 @@ spc() {
 		"stat")
 			bg+="swirl.jpg"
 			;;
-		*) 
+		*)
 			echo "space not recognized"
 			return 1
 			;;
 	esac
-	
-	sqlite3 ~/Library/Application\ Support/Dock/desktoppicture.db "update data set value = '$bg'";	
+
+	sqlite3 ~/Library/Application\ Support/Dock/desktoppicture.db "update data set value = '$bg'";
 	killall Dock
 }

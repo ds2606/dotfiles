@@ -21,7 +21,7 @@ export CLICOLOR=1                         # pretty colorful terminal
 export BASH_SILENCE_DEPRECATION_WARNING=1 # yes yes we know zsh is default
 export PYTHONDONTWRITEBYTECODE=1          # don't spew python bytecode everywhere
 export PYTHONBREAKPOINT=ipdb.set_trace    # ipdb debugging
-export PYTHONSTARTUP="$dotfiles/.pyrc"  # auto import modules in REPL
+export PYTHONSTARTUP="$HOME/.dotfiles/.pyrc"  # auto import modules in REPL
 
 # history management
 HISTSIZE=5000               #How many lines of history to keep in memory
