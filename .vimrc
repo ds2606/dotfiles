@@ -254,9 +254,9 @@ let g:ale_lint_on_enter         = 0
 let g:ale_lint_on_insert_leave  = 1
 let g:ale_lint_on_save          = 1
 let g:ale_lint_on_text_changed  = 1
-let g:ale_linters               = {'python': ['flake8', 'pylint', 'pyls']}
+let g:ale_linters               = {'python': ['flake8', 'pylint']}
 let g:ale_python_flake8_options = "--ignore F403"  " allow 'import *'
-let g:ale_python_pylint_options = "-d C0116 --variable-rgx '..?' --argument-rgx '..?'" " allow 1-2 char variable names in pylint
+let g:ale_python_pylint_options = "-d C0115,C0116,WO401 --variable-rgx '..?' --argument-rgx '..?'" " allow 1-2 char variable names in pylint
 "" linting/debugging shortcuts
 noremap <leader>lr  :ALELint<cr>
 noremap <leader>lo  :lw<cr>
