@@ -1,5 +1,0 @@
-# run on python interpreter launch
-
-from importlib import reload
-import ipdb
-import numpy as np
