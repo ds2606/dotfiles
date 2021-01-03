@@ -193,18 +193,18 @@ noremap <leader>ez  :tabedit ~/desktop/home/.dotfiles/.zsh_profile<cr>
 noremap <leader>es  :source ~/.vimrc
 
 " terminal access
-noremap <leader>tn     :ter<cr>
+noremap <leader>tn   :ter<cr>
       \<c-w>:exe          "resize" . (winheight(0) * 3/5) <cr>
-noremap <leader>to     :sb zsh<cr>
+noremap <leader>to   :sb zsh<cr>
       \<c-w>:exe          "resize " . (winheight(0) * 3/5) <cr>
-tnoremap <leader>tn    <c-w>c:ter<cr>
+tnoremap <leader>tn  <C-w>c:ter<cr>
       \<c-w>:exe          "resize " . (winheight(0) * 3/5) <cr>
-tnoremap <leader>tc    <c-w>c
-tnoremap <leader>td    <c-d>
-tnoremap <leader><up>  <c-w>k
-tnoremap <leader>te    <c-w>N
-tnoremap <leader>-     <c-w>k <bar> :res +3 <cr> <bar> <c-w>j
-tnoremap <leader>=     <c-w>k <bar> :res -3 <cr> <bar> <c-w>j
+tnoremap `c    <C-w>c
+tnoremap `d    <C-d>
+tnoremap <C-k>  <C-w>k
+tnoremap `e    <C-w>N
+tnoremap `-     <C-w>k <bar> :res +3 <cr> <bar> <c-w>j
+tnoremap `=     <C-w>k <bar> :res -3 <cr> <bar> <c-w>j
 
 " quick insertion of \(\) in search-replace
 cmap ;\ \(\)<left><left>
@@ -317,6 +317,9 @@ map <leader>f <Plug>(easymotion-s2)
 
 " fugitive
 set tags^=.git/tags;~
+
+" gitgutter
+let g:gitgutter_enabled = 0
 
 " fzf
 noremap <leader><space> :FZF ~ <cr>
