@@ -265,11 +265,14 @@ noremap <leader>lo  :lw<cr>
 noremap <leader>lc  :lcl<cr>
 noremap <leader>lw  :match ExtraWhitespace /\s\+$/<cr>
 noremap <leader>lb  obreakpoint()<esc>k
-noremap <expr> <leader>lg &scl=="no" ?
-        \ :highlight ALEError cterm=underline ctermfg=204 <cr>
-        \ :highlight ALEWarning cterm=underline ctermfg=214 <cr>`t' :
-        \ :highlight ALEError cterm=none ctermfg=none <cr>
-        \ :highlight ALEWarning cterm=none ctermfg=none <cr>`t'
+let g:ale_hi = 1
+noremap <expr> <leader>lg g:ale_hi ?
+      \ 'mt:let g:ale_hi = 0<cr>
+            \ :highlight ALEError cterm=none ctermfg=none <cr>
+            \ :highlight ALEWarning cterm=none ctermfg=none <cr>`t' :
+      \ 'mt:let g:ale_hi = 1<cr>
+            \ :highlight ALEError cterm=underline ctermfg=204 <cr>
+            \ :highlight ALEWarning cterm=underline ctermfg=214 <cr>`t'
 "" fixers
 let g:ale_fixers = {'python': ['trim_whitespace']}
 "" lsp/completion settings

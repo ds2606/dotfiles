@@ -35,8 +35,8 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 cs=~/Dropbox/cs # any trouble with alias and var having same name?
-alias cs="cd ~/Desktop/Dropbox/cs"
-alias dotfiles="cd ~/Desktop/Dropbox/.dotfiles"
+alias cs="cd ~/Dropbox/cs"
+alias dotfiles="cd ~/.dotfiles"
 
 # command aliases
 alias python="python3"
@@ -50,6 +50,6 @@ alias chrome='open -a Google\ Chrome'
 alias finder='open -a Finder'
 
 # history tweaks
-shopt -s histappend # on shell exit, append instead of overwrite 
+shopt -s histappend # on shell exit, append instead of overwrite
 export HISTCONTROL=erasedups:ignoredups # ignore duplicate command lines.
 export HISTTIMEFORMAT="%F %T " # show dates and times.
