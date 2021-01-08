@@ -1,7 +1,7 @@
 #! /bin/zsh
 
 # get palette colors
-source $HOME/.dotfiles/colors/palenight_palette.sh
+source $HOME/.dotfiles/colors/pn-palette.sh
 
 # zsh-syntax-highlighting custom array
 : ${ZSH_HIGHLIGHT_STYLES[arg0]:=fg=$green,bold}

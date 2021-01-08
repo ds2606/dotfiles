@@ -10,7 +10,7 @@
     //"editor.quickSuggestions": false,
 
     // aesthetic
-    "workbench.colorTheme": "Solarized Light",
+    "workbench.colorTheme": "Palenight Theme",
     "workbench.iconTheme": null,
     "editor.fontSize": 12,
     "editor.wordWrap": "on",

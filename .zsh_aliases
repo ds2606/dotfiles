@@ -32,7 +32,6 @@ alias grep='ggrep --color=auto' # GNU grep as default
 alias fd='fd -i'
 alias rmf='rm -f'
 alias hist='history'
-alias cat='bat'
 alias vi='vim'
 alias rg='rg --smart-case'
 alias trash='trash -F'

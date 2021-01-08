@@ -1,6 +1,7 @@
 source ~/.zsh/git-prompt.zsh/git-prompt.zsh
+
 # set left prompt
-PROMPT='%B%F{blue}%1~ ❯%f%b '
+PROMPT='%B%F{69}%1~ ❯%f%b '
 
 
 # set right prompt
@@ -25,3 +26,5 @@ ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg_bold[green]%}✔"
 
 RPROMPT='$(gitprompt)'
 # RPROMPT+='%(?.%(!.%F{white}❯%F{yellow}❯%F{red}.%F{blue}❯%F{cyan}❯%F{green})❯%f.%F{red}❯❯❯%f) '
+
+unset -f colors
