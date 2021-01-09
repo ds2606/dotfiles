@@ -132,13 +132,13 @@ endfunction
 
 let s:colors = palenight#GetColors()
 
-let s:pn_orange = s:colors.pn_orange
 let s:pn_pink = s:colors.pn_pink
 let s:pn_purple = s:colors.pn_purple
 let s:pn_purpblue = s:colors.pn_purpblue
 let s:pn_purpdarker = s:colors.pn_purpdarker
 let s:ice = s:colors.ice
 let s:pnyellow = s:colors.pnyellow
+let s:softyellow = s:colors.softyellow
 let s:pn_highlight = s:colors.pn_highlight
 let s:red = s:colors.red
 let s:dark_red = s:colors.dark_red
@@ -192,15 +192,15 @@ call s:h("Label", { "fg": s:pink }) " case, default, etc.
 call s:h("Operator", { "fg": s:pink }) " sizeof", "+", "*", etc.
 call s:h("Keyword", { "fg": s:red }) " any other keyword
 call s:h("Exception", { "fg": s:pink }) " try, catch, throw
-call s:h("PreProc", { "fg": s:yellow }) " generic Preprocessor
+call s:h("PreProc", { "fg": s:softyellow }) " generic Preprocessor
 call s:h("Include", { "fg": s:blue }) " preprocessor #include
 call s:h("Define", { "fg": s:pink }) " preprocessor #define
 call s:h("Macro", { "fg": s:pink }) " same as Define
-call s:h("PreCondit", { "fg": s:yellow }) " preprocessor #if, #else, #endif, etc.
-call s:h("Type", { "fg": s:yellow }) " int, long, char, etc.
-call s:h("StorageClass", { "fg": s:yellow }) " static, register, volatile, etc.
-call s:h("Structure", { "fg": s:yellow }) " struct, union, enum, etc.
-call s:h("Typedef", { "fg": s:yellow }) " A typedef
+call s:h("PreCondit", { "fg": s:softyellow }) " preprocessor #if, #else, #endif, etc.
+call s:h("Type", { "fg": s:softyellow }) " int, long, char, etc.
+call s:h("StorageClass", { "fg": s:softyellow }) " static, register, volatile, etc.
+call s:h("Structure", { "fg": s:softyellow }) " struct, union, enum, etc.
+call s:h("Typedef", { "fg": s:softyellow }) " A typedef
 call s:h("Special", { "fg": s:blue }) " any special symbol
 call s:h("SpecialChar", { "fg": s:orange }) " special character in a constant
 call s:h("Tag", {}) " you can use CTRL-] on this
@@ -303,12 +303,12 @@ call s:h("pythonDottedName", { "fg": s:orange })
 call s:h("pythonExClass", { "fg": s:red })
 call s:h("pythonException", { "fg": s:pink })
 call s:h("pythonExceptions", { "fg": s:pink })
-call s:h("pythonFloat", { "fg": s:pn_orange })
+call s:h("pythonFloat", { "fg": s:orange })
 call s:h("pythonFunction", { "fg": s:pn_purpblue })
 call s:h("pythonFunctionCall", { "fg": s:ice })
 call s:h("pythonImport", { "fg": s:pink })
 call s:h("pythonInclude", { "fg": s:pink })
-call s:h("pythonNumber", { "fg": s:pn_orange })
+call s:h("pythonNumber", { "fg": s:orange })
 call s:h("pythonNone", { "fg": s:red })
 call s:h("pythonOperator", { "fg": s:pn_pink })
 call s:h("pythonRepeat", { "fg": s:pink })

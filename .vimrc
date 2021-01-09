@@ -10,6 +10,9 @@ noremap \, ,
 set history=500
 set wildmenu
 set showcmd              " show most recent command
+set splitbelow
+set splitright
+set nu                   " normal line numbering
 set formatoptions-=cro   " don't autoinsert newline comments from comments (BROKEN)
 set clipboard^=unnamed   " copy-paste across terminals
 set foldlevel=99         " file unfolded by default
@@ -45,17 +48,15 @@ noremap <cr> :noh<cr>
 
 " aesthetics
 colorscheme palenight
-let      g:onedark_termcolors   = 256
 let      g:palenight_termcolors = 256
-syntax   enable            " syntax highlighting
-set      showmatch         " show matching brachets
-set      ruler
 let      g:lightline = {
             \ 'colorscheme': 'palenight',
             \  }
+syntax   enable            " syntax highlighting
+set      showmatch         " show matching brachets
+set      ruler
 set      laststatus=2         " show status bar by default
 set      noshowmode           " hide --MODE-- (redundant with lightline)
-"" should move most of these into the pn colorscheme
 hi       Normal ctermbg=NONE
 hi       LineNr ctermfg=60
 hi       ExtraWhitespace ctermbg=18 guibg=#87005f
@@ -67,14 +68,6 @@ autocmd  BufWinLeave * call clearmatches()
 " set colorcolumn=80
 " highlight OverLength ctermfg=204
 " match OverLength /\%81v.\+/
-
-" open new split panes to right and bottom (more natural)
-set splitbelow
-set splitright
-
-" normal line numbering
-noremap <leader># :set nu!<cr>
-set nu
 
 
 " KEYBINDINGS
@@ -104,6 +97,9 @@ inoremap <down>  <C-o>:echoe "use l"<cr>i
 
 " bracket/paren matching
 noremap <leader>p %
+
+" toggle line numbering
+noremap <leader># :set nu!<cr>
 
 " move vertically by visual line (don't skip wrapped lines)
 nmap j gj
@@ -256,6 +252,7 @@ let g:ale_lint_on_text_changed  = 1
 let g:ale_linters               = {'python': ['flake8', 'pylint']}
 let g:ale_python_flake8_options = "--ignore F403"  " allow 'import *'
 let g:ale_python_pylint_options = "-d C0115,C0116,WO401 --variable-rgx '..?' --argument-rgx '..?'" " allow 1-2 char variable names in pylint
+let g:ale_sh_shellcheck_options = "-e SC2039"
 "" linting/debugging shortcuts
 noremap <leader>lr  :ALELint<cr>
 noremap <leader>lo  :lw<cr>

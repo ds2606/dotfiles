@@ -3,9 +3,8 @@
 let s:overrides = get(g:, "palenight_color_overrides", {})
 
 let s:colors = {
-    \ "pn_orange": get(s:overrides, "pn_orange", { "gui": "#FF8663", "cterm": "202",      "cterm16": "1" }),
     \ "pnyellow": get(s:overrides, "pnyellow", { "gui": "#FAC056", "cterm": "214", "cterm16": "1" }),
-    \ "pn_highlight": get(s:overrides, "pn_highlight", { "gui": "#FAC056", "cterm": "103", "cterm16": "1" }),
+    \ "pn_highlight": get(s:overrides, "pn_highlight", { "gui": "#FAC056", "cterm": "104", "cterm16": "1" }),
     \ "pn_purpdarker": get(s:overrides, "pn_purpdarker", { "gui": "#FAC056", "cterm": "63", "cterm16": "1" }),
     \ "pn_pink": get(s:overrides, "pn_pink", { "gui": "#D18DF0", "cterm": "219", "cterm16": "1" }),
     \ "pn_purple": get(s:overrides, "pn_purple", { "gui": "#D18DF0", "cterm": "147", "cterm16": "1" }),
@@ -17,7 +16,8 @@ let s:colors = {
     \ "dark_red": get(s:overrides, "dark_red", { "gui": "#BE5046", "cterm": "196", "cterm16": "9" }),
     \ "green": get(s:overrides, "green", { "gui": "#98C379", "cterm": "114", "cterm16": "2" }),
     \ "yellow": get(s:overrides, "yellow", { "gui": "#E5C07B", "cterm": "221", "cterm16": "3" }),
-    \ "orange": get(s:overrides, "orange", { "gui": "#D19A66", "cterm": "216", "cterm16": "11" }),
+    \ "softyellow": get(s:overrides, "softyellow", { "gui": "#E5C07B", "cterm": "180", "cterm16": "3" }),
+    \ "orange": get(s:overrides, "orange", { "gui": "#D19A66", "cterm": "209", "cterm16": "11" }),
     \ "blue": get(s:overrides, "blue", { "gui": "#61AFEF", "cterm": "81", "cterm16": "4" }),
     \ "purple": get(s:overrides, "purple", { "gui": "#C678DD", "cterm": "213", "cterm16": "5" }),
     \ "cyan": get(s:overrides, "cyan", { "gui": "#56B6C2", "cterm": "14", "cterm16": "6" }),
@@ -33,6 +33,7 @@ let s:colors = {
     \ "vertsplit": get(s:overrides, "vertsplit", { "gui": "#181A1F", "cterm": "102", "cterm16": "15" }),
     \ "test": get(s:overrides, "test", { "gui": "#181A1F", "cterm": "237", "cterm16": "15" }),
     \ "term_grey": get(s:overrides, "term_grey", { "gui": "#181A1F", "cterm": "249", "cterm16": "15" }),
+    \ "warning_orange": get(s:overrides, "warning_orange", { "gui": "#FF8663", "cterm": "202",      "cterm16": "1" }),
     \}
 
 function! palenight#GetColors()

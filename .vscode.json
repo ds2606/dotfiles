@@ -142,5 +142,6 @@
       "<C-a>": false,
       "<C-f>": false
     },
-    "latex-workshop.view.pdf.viewer": "tab"
+    "latex-workshop.view.pdf.viewer": "tab",
+    "python.defaultInterpreterPath": "/Library/Developer/CommandLineTools/usr/bin/python3"
   }
