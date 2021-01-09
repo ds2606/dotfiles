@@ -1,3 +1,0 @@
-heelo() {
-echo heelo
-}

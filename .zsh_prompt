@@ -2,7 +2,7 @@
 
 
 source ~/.zsh/git-prompt.zsh/git-prompt.zsh
-source ~/.dotfiles/colors/pn-palette.sh && pn_colors 256
+source ~/.dotfiles/colors/palenight/pn-palette.zsh && pn_colors 256
 
 # set left prompt
 PROMPT='%B%F{69}%1~ ❯%f%b '
