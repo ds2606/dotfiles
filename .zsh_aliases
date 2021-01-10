@@ -13,33 +13,34 @@ alias ,="cd -"
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
-cs=~/Dropbox/cs # any trouble with alias and var having same name?
-alias cs="cd ~/Dropbox/cs"
 export zrc=~/.dotfiles/.zsh_profile
 export vrc=~/.dotfiles/.vimrc
-export pyrc=~/.dotfiles/.pyrc
 
-# command aliases
+# built-ins aliases
 alias srz='source ~/.zshrc'
+alias rmf='rm -f'
+alias hist='history'
+alias vi='vim'
+alias gs='git status'
+alias gb='git branch'
+alias gc='git checkout'
+alias gcb='git checkout -b'
+
+# 3rd-party aliases
 alias python='python3'
-alias ipy='ipython'
 alias pydoc='pydoc3'
 alias pyman='pydoc3'
+alias ipy='ipython'
 alias ll='exa -lah --color=always'
 alias ls='exa --color=always'
 alias la='exa -a --color=always'
 alias grep='ggrep --color=auto' # GNU grep as default
 alias fd='fd -i'
-alias rmf='rm -f'
-alias hist='history'
-alias vi='vim'
 alias rg='rg --smart-case'
 alias trash='trash -F'
-alias gs='git status'
-alias gb='git branch'
-alias gc='git checkout'
-alias gcb='git checkout -b'
 alias moo='fortune | cowsay | lolcat'
+alias v='f -e vim'
+alias vv='sf -e vim'
 
 # application shortcuts
 alias chrome='open -a Google\ Chrome'

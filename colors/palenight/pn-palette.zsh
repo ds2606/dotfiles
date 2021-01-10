@@ -5,8 +5,8 @@ pn_colors () {
             [blue]=81
             [cyan]=14
             [darkpurp]=63
-            [green]=120  # testing in place of 114
-            [ice]=153
+            [green]=114  # 120 is vivid
+            [ice]=153  # 159 is vivid
             [orange]=209
             [pink]=213
             [pnhighlight]=104  # 04 is good too

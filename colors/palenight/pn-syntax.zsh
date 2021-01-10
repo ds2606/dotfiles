@@ -30,7 +30,7 @@ source $HOME/.dotfiles/colors/palenight/pn-palette.zsh && pn_colors 256
 : ${ZSH_HIGHLIGHT_STYLES[process-substitution]:=fg=$c[pnpurpblue]}
 : ${ZSH_HIGHLIGHT_STYLES[rc-quote]:=fg=$c[testval]}
 : ${ZSH_HIGHLIGHT_STYLES[redirection]:=fg=$c[ice],bold}
-: ${ZSH_HIGHLIGHT_STYLES[reserved-word]:=fg=$c[softyellow]}
+: ${ZSH_HIGHLIGHT_STYLES[reserved-word]:=fg=$c[softyellow],bold}
 : ${ZSH_HIGHLIGHT_STYLES[single-hyphen-option]:=fg=$c[softyellow],bold}
 : ${ZSH_HIGHLIGHT_STYLES[single-quoted-argument]:=fg=$c[green]}
 : ${ZSH_HIGHLIGHT_STYLES[suffix-alias]:=fg=$c[testval]}

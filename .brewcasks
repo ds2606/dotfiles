@@ -1,5 +1,3 @@
-# homebrew casks
-
 brew install anki
 brew install atom
 brew install audacity

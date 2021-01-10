@@ -1,5 +1,3 @@
-# homebrew packages
-
 brew install bat
 brew install fasd
 brew install fd

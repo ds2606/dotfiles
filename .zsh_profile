@@ -53,9 +53,6 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'  # enter standout mode – yellow
 export LESS_TERMCAP_ue=$'\E[0m'         # leave underline mode
 export LESS_TERMCAP_us=$'\E[01;32m'     # enter underline mode
 
-# bat syntax colors
-export BAT_THEME="OneHalfDark"
-
 # initialize fasd
 eval "$(fasd --init auto)"
 
@@ -77,6 +74,8 @@ bindkey '^F' fzf-file-widget
 # syntax highlighting
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 export zle_highlight=('paste:none') # don't highlight pasted items
+export BAT_THEME="OneHalfDark"
+export EXA_COLORS="ln=38;5;171:lp=38;5;171:uu=38;5;214"
 
 # history substring search
 source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
@@ -84,3 +83,7 @@ bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='underline'
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=204'
+
+# iterm2 shell integration
+source ~/.iterm2_shell_integration.zsh
+export ITERM2_SQUELCH_MARK=0

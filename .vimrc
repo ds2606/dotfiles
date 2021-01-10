@@ -137,7 +137,7 @@ noremap <leader>c :close<cr>
 set hidden  " hide a buffer instead of closing it
 noremap ]b          :bnext<cr>
 noremap [b          :bprev<cr>
-noremap <leader>bc  :bd<cr>
+noremap <leader>bc  :BD<cr>
 noremap <leader>bl  :buffers<cr>
 
 " tab management
@@ -146,6 +146,7 @@ noremap ]t          :tabn<cr>
 noremap [t          :tabp<cr>
 noremap <leader>wo  :tabedit <C-r>=expand("%:p:h")<cr>/
 noremap <leader>wO  :tabedit
+noremap <leader>ws  :W<cr>
 
 " window management
 noremap <leader>wv  :vsp<cr>
@@ -160,6 +161,7 @@ noremap  <leader>-  :res -3 <cr>
 noremap  <leader>=  :res +3 <cr>
 noremap  <leader>9  :vertical resize -6 <cr>
 noremap  <leader>0  :vertical resize +6 <cr>
+" try to implement <leader>w-number at some point to split a given buffer number into a new tab?
 
 " quickfix/location-list navigation
 nnoremap ]q :cnext<cr>zz
@@ -186,7 +188,7 @@ noremap <silent> <leader>dw mt:let _s=@/ <bar>
 
 " file shortcuts for quick editing (last is for sourcing .vimrc)
 noremap <leader>ev  :tabedit ~/.vimrc<cr>
-noremap <leader>es  :source  ~/.vimrc<cr>
+noremap <leader>es  :source  ~/.vimrc
 noremap <leader>ez  :tabedit ~/.dotfiles/.zsh_profile<cr>
 
 " terminal access
@@ -211,6 +213,7 @@ cmap ;\ \(\)<left><left>
 
 " vim-plug (to disable, append `{ 'on': [] }`
 call plug#begin('~/.vim/plugged')
+Plug 'uiiaoo/java-syntax.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'easymotion/vim-easymotion'
@@ -227,6 +230,7 @@ Plug 'neoclide/coc.nvim', {'on': [], 'branch': 'release'}
 Plug 'preservim/nerdtree'
 Plug 'psliwka/vim-smoothie'
 Plug 'preservim/tagbar'
+Plug 'qpkorr/vim-bufkill'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
@@ -260,12 +264,14 @@ noremap <leader>lw  :match ExtraWhitespace /\s\+$/<cr>
 noremap <leader>lb  obreakpoint()<esc>k
 let g:ale_hi = 1
 noremap <expr> <leader>lg g:ale_hi ?
-      \ 'mt:let g:ale_hi = 0<cr>
-            \ :highlight ALEError cterm=none ctermfg=none <cr>
-            \ :highlight ALEWarning cterm=none ctermfg=none <cr>`t' :
-      \ 'mt:let g:ale_hi = 1<cr>
-            \ :highlight ALEError cterm=underline ctermfg=204 <cr>
-            \ :highlight ALEWarning cterm=underline ctermfg=214 <cr>`t'
+      \'mt:let g:ale_hi = 0<cr>
+            \:hi ALEError cterm=none ctermfg=none <cr>
+            \:hi ALEWarning cterm=none ctermfg=none <cr>`t
+            \:echom "ALE highlighting disabled"<cr>' :
+      \'mt:let g:ale_hi = 1<cr>
+            \:hi ALEError cterm=underline ctermfg=204 <cr>
+            \:hi ALEWarning cterm=underline ctermfg=214 <cr>`t
+            \:echom "ALE highlighting enabled"<cr>'
 "" fixers
 let g:ale_fixers = {'python': ['trim_whitespace']}
 "" lsp/completion settings
