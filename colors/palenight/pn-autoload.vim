@@ -30,7 +30,7 @@ let s:colors = {
     \ "visual_grey": get(s:overrides, "visual_grey", { "gui": "#3E4452", "cterm": "237", "cterm16": "15" }),
     \ "menu_grey": get(s:overrides, "menu_grey", { "gui": "#3E4452", "cterm": "238", "cterm16": "8" }),
     \ "special_grey": get(s:overrides, "special_grey", { "gui": "#3B4048", "cterm": "61", "cterm16": "15" }),
-    \ "vertsplit": get(s:overrides, "vertsplit", { "gui": "#181A1F", "cterm": "102", "cterm16": "15" }),
+    \ "vertsplit": get(s:overrides, "vertsplit", { "gui": "#181A1F", "cterm": "236", "cterm16": "15" }),
     \ "test": get(s:overrides, "test", { "gui": "#181A1F", "cterm": "237", "cterm16": "15" }),
     \ "term_grey": get(s:overrides, "term_grey", { "gui": "#181A1F", "cterm": "249", "cterm16": "15" }),
     \ "warning_orange": get(s:overrides, "warning_orange", { "gui": "#FF8663", "cterm": "202",      "cterm16": "1" }),

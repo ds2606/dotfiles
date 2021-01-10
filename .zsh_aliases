@@ -39,8 +39,7 @@ alias fd='fd -i'
 alias rg='rg --smart-case'
 alias trash='trash -F'
 alias moo='fortune | cowsay | lolcat'
-alias v='f -e vim'
-alias vv='sf -e vim'
+alias v='sf -e vim'
 
 # application shortcuts
 alias chrome='open -a Google\ Chrome'
