@@ -1,3 +1,5 @@
+# homebrew formulae
+
 brew install bat
 brew install fasd
 brew install fd

@@ -79,6 +79,10 @@ noremap \; ;
 " jk for insertion escape
 inoremap jk <esc>l
 
+" quick quit, write, and write-quit
+noremap <leader>q :q<cr>
+noremap <leader>x :wq<cr>
+
 " Y behaves like other capitals
 noremap Y y$
 
@@ -90,10 +94,10 @@ noremap  <left>  :echoe "use h"<cr>
 noremap  <right> :echoe "use l"<cr>
 noremap  <up>    :echoe "use k"<cr>
 noremap  <down>  :echoe "use l"<cr>
-inoremap <left>  <C-o>:echoe "use h"<cr>i
-inoremap <right> <C-o>:echoe "use l"<cr>i
-inoremap <up>    <C-o>:echoe "use k"<cr>i
-inoremap <down>  <C-o>:echoe "use l"<cr>i
+inoremap <left>  <C-o>:echoe "use ^h"<cr>i
+inoremap <right> <C-o>:echoe "use ^l"<cr>i
+inoremap <up>    <C-o>:echoe "use ^k"<cr>i
+inoremap <down>  <C-o>:echoe "use ^l"<cr>i
 
 " bracket/paren matching
 noremap <leader>p %
@@ -141,26 +145,22 @@ noremap <leader>bc  :BD<cr>
 noremap <leader>bl  :buffers<cr>
 
 " tab management
-noremap <leader>wt  :tabnew<cr>
+noremap <leader>tt  :tabnew<cr>
 noremap ]t          :tabn<cr>
 noremap [t          :tabp<cr>
-noremap <leader>wo  :tabedit <C-r>=expand("%:p:h")<cr>/
-noremap <leader>wO  :tabedit
-noremap <leader>ws  :W<cr>
+noremap <leader>to  :tabedit <C-r>=expand("%:p:h")<cr>/
+noremap <leader>tO  :tabedit
+noremap <leader>ts  :W<cr>
 
 " window management
-noremap <leader>wv  :vsp<cr>
-noremap <leader>wh  :sp<cr>
-noremap      <C-h>  <C-w>h
-noremap      <C-j>  <C-w>j
-noremap      <C-l>  <C-w>l
-noremap      <C-k>  <C-w>k
-noremap      <tab>  <c-w>w
-noremap    <S-tab>  <c-w>W
-noremap  <leader>-  :res -3 <cr>
-noremap  <leader>=  :res +3 <cr>
-noremap  <leader>9  :vertical resize -6 <cr>
-noremap  <leader>0  :vertical resize +6 <cr>
+noremap  <leader>\   :vsp<cr>
+noremap  <leader>-   :sp<cr>
+noremap  <C-h>       <C-w>h
+noremap  <C-j>       <C-w>j
+noremap  <C-l>       <C-w>l
+noremap  <C-k>       <C-w>k
+noremap  ]p          <c-w>w
+noremap  [p          <c-w>W
 " try to implement <leader>w-number at some point to split a given buffer number into a new tab?
 
 " quickfix/location-list navigation
@@ -176,6 +176,7 @@ nnoremap <leader>O O<esc>
 " insert mode write/quit
 inoremap ;ww  <esc>:w<cr>li
 inoremap ;wq  <esc>:wq
+inoremap ;x  <esc>:x
 inoremap ;q   <esc>:q
 
 " easier macro repitition
@@ -214,6 +215,7 @@ cmap ;\ \(\)<left><left>
 " vim-plug (to disable, append `{ 'on': [] }`
 call plug#begin('~/.vim/plugged')
 Plug 'uiiaoo/java-syntax.vim'
+Plug 'simeji/winresizer'
 Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'easymotion/vim-easymotion'
@@ -246,6 +248,11 @@ noremap <leader>u :UndotreeToggle<cr>
 " easy-align
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
+
+" winresizer
+let g:winresizer_horiz_resize   = 1
+let g:winresizer_vert_resize    = 3
+noremap <leader>r :WinResizerStartResize<cr>
 
 " ALE
 "" linting settings
