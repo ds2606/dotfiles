@@ -1,15 +1,9 @@
 # SSH ZSH PROFILE
 
 
-# Stanford-local settings -----------
-umask 077   # file protection no read or write for others
-            # umask 022 is no write but read for others
-ulimit -c 0
-# Some programs honor VISUAL, so set this if EDITOR is set.
-if [ ! -z "$EDITOR" ] ; then
-   export VISUAL=$EDITOR
-fi
-# -----------------------------------
+# ----------- local settings -----------
+
+# --------------------------------------
 
 # environment setup
 source $HOME/ssh-env/functions-ssh
@@ -17,15 +11,12 @@ source $HOME/ssh-env/zsh-aliases-ssh
 source $HOME/ssh-env/zsh-prompt-ssh
 
 # set paths
-export PATH="$HOME/ssh-env/bin:$PATH"  # add local bin path
+export PATH="$HOME/ssh-env/bin:$PATH"
 
 # set environment variables
 export editor=vim
 export CLICOLOR=1                         # pretty colorful terminal
-export BASH_SILENCE_DEPRECATION_WARNING=1 # yes yes we know zsh is default
 export PYTHONDONTWRITEBYTECODE=1          # don't spew python bytecode everywhere
-export PYTHONBREAKPOINT=ipdb.set_trace    # ipdb debugging
-export PYTHONSTARTUP="$HOME/.dotfiles/.pyrc"  # auto import modules in REPL
 
 # safe environment
 unsetopt CLOBBER    # don't overwrite existing file w/ redirect
@@ -65,10 +56,11 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'  # enter standout mode – yellow
 export LESS_TERMCAP_ue=$'\E[0m'         # leave underline mode
 export LESS_TERMCAP_us=$'\E[01;32m'     # enter underline mode
 
-# fasd
-eval "$(fasd --init auto)"  # initialization
-alias v='sf -e vim'
+# fasd initialization
+eval "$(fasd --init auto)"
 
 # syntax highlighting
 source ~/ssh-env/colors-ssh/zsh-syntax-highlighting.zsh
-export zle_highlight=('paste:none') # don't highlight pasted items
+export zle_highlight=('paste:none')  # don't highlight pasted items
+export EXA_COLORS="ln=38;5;171:lp=38;5;171:uu=38;5;214"
+export BAT_THEME="OneHalfDark"

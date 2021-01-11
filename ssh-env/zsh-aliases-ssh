@@ -1,11 +1,5 @@
 # SSH ZSH ALIASES
 
-# local settings -----------
-# until exa add
-alias ll='ls -lah --color=always'
-alias ls='ls --color=always'
-alias la='ls -a --color=always'
-# -----------------------------------
 
 # navigation shortcuts
 alias ,="cd -"
@@ -26,11 +20,11 @@ alias gc='git checkout'
 alias gcb='git checkout -b'
 
 # 3rd-party aliases
-# alias fd='fd -i'
-alias v='f -e vim'  # fasd quick file open with vim
+alias fd='fd -i'
+alias v='f -e vim'    # fasd quick file open with vim
 alias vv='sf -e vim'  # 'v' but interactive
-# alias rg='rg --smart-case'
-# alias ll='exa -lah --color=always'
-# alias ls='exa --color=always'
-# alias la='exa -a --color=always'
+alias rg='rg --smart-case'
+alias ll='exa -lah --color=always'
+alias ls='exa --color=always'
+alias la='exa -a --color=always'
 alias ipy='ipython'

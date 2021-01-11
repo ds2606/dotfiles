@@ -30,3 +30,4 @@ brew install lolcat
 brew install eth-p/software/bat-extras
 brew install gh
 brew install st
+brew install coreutils

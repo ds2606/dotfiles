@@ -35,11 +35,13 @@ alias ll='exa -lah --color=always'
 alias ls='exa --color=always'
 alias la='exa -a --color=always'
 alias grep='ggrep --color=auto' # GNU grep as default
+alias htop='htop-vim'
 alias fd='fd -i'
 alias rg='rg --smart-case'
 alias trash='trash -F'
 alias moo='fortune | cowsay | lolcat'
-alias v='sf -e vim'
+alias v='f -e vim'  # fasd quick file open with vim
+alias vv='sf -e vim'  # 'v' but interactive
 
 # application shortcuts
 alias chrome='open -a Google\ Chrome'
