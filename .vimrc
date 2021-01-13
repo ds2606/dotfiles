@@ -186,6 +186,7 @@ inoremap ;q   <esc>:q
 noremap Q @@
 
 " delete trailing whitespace
+" noremap <leader>lw  :match ExtraWhitespace /\s\+$/<cr>  "show trailing whitespace
 noremap <silent> <leader>dw mt:let _s=@/ <bar>
       \ :%s/\s\+$//e<bar>:let @/=_s<cr>`t
       \ <bar> :echom "deleted trailing whitespace"<cr>
@@ -257,51 +258,28 @@ let g:winresizer_vert_resize    = 3
 noremap <leader>r :WinResizerStartResize<cr>
 
 " ALE
-"" linting settings
-let g:ale_lint_on_enter         = 0
-let g:ale_lint_on_insert_leave  = 1
-let g:ale_lint_on_save          = 1
-let g:ale_lint_on_text_changed  = 0
+let g:ale_enabled = 0  " ale disabled by default
 let g:ale_linters               = {'python': ['flake8', 'pylint']}
 let g:ale_python_flake8_options = "--ignore F403"  " allow 'import *'
-let g:ale_python_pylint_options = "-d C0115,C0116,WO401 --variable-rgx '..?' --argument-rgx '..?'" " allow 1-2 char variable names in pylint
-"" linting/debugging shortcuts
-noremap <leader>lr  :ALELint<cr>
-noremap <leader>lo  :lw<cr>
-noremap <leader>lc  :lcl<cr>
-noremap <leader>lw  :match ExtraWhitespace /\s\+$/<cr>
-noremap <leader>lb  obreakpoint()<esc>k
-let g:ale_hi = 1
-noremap <expr> <leader>lg g:ale_hi ?
-      \'mt:let g:ale_hi = 0<cr>
-            \:hi ALEError cterm=none ctermfg=none <cr>
-            \:hi ALEWarning cterm=none ctermfg=none <cr>`t
-            \:echom "ALE highlighting disabled"<cr>' :
-      \'mt:let g:ale_hi = 1<cr>
-            \:hi ALEError cterm=underline ctermfg=204 <cr>
-            \:hi ALEWarning cterm=underline ctermfg=214 <cr>`t
-            \:echom "ALE highlighting enabled"<cr>'
-"" fixers
-let g:ale_fixers = {'python': ['trim_whitespace']}
-"" lsp/completion settings
+let g:ale_python_pylint_options =
+    \ "-d C0115,C0116,WO401 --variable-rgx '..?' --argument-rgx '..?'"  " allow 1-2 char variable names in pylint
 set completeopt=menuone,noinsert
 set omnifunc=ale#completion#OmniFunc
 let g:ale_completion_enabled    = 0
-let g:ale_completion_autoimport = 1  " don't think this is working
+" let g:ale_completion_autoimport = 1  " don't think this is working
 let g:ale_hover_cursor          = 0
 let g:ale_set_balloons          = 0
-"" lsp/completion shortcuts
+noremap <leader>lt  :ALEToggle<cr>
+noremap <leader>lo  :lw<cr>
+noremap <leader>lc  :lcl<cr>
+noremap <leader>lb  obreakpoint()<esc>k
+noremap <leader>ld  :alegotodefinition<cr>
+noremap <leader>lR  :alerename<cr>
 inoremap `           <c-x><c-o>
 inoremap ~~          ~
 inoremap ~`          `
 inoremap ;-          <down>
 inoremap ;=          <up>
-noremap  <leader>ld  :alegotodefinition<cr>
-noremap  <leader>lR  :alerename<cr>
-"" hover config
-noremap <expr> <leader>lh getwinvar(winnr('#'), "&pvw") ?
-      \ '<C-w>j <bar> :close<cr>`t' :
-      \ 'mt:ALEHover<cr>'
 
 " NERDTree
 noremap <leader>n :NERDTreeToggle<cr>
