@@ -29,6 +29,7 @@ alias gc='git checkout'
 alias gcb='git checkout -b'
 alias gl='git log --all --oneline --graph -n 10'
 alias gd='git diff'
+alias gld='git log --all --oneline --graph -n 10 -p'
 
 # 3rd-party
 alias python='python3'

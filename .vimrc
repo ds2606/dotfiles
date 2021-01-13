@@ -19,7 +19,7 @@ set foldlevel=99         " file unfolded by default
 set matchtime=0
 set encoding=utf8
 set wrap
-set tw=120               " inserted text automatically linebroken after 120 chars
+set textwidth=80         " inserted text automatically linebroken after 120 chars
 set linebreak            " wrap lines at whitespace and punctuation, not mid-word
 set breakindent          " wrap lines to same indent level
 let &showbreak='  '      " little extra break for wrapped lines
@@ -108,6 +108,9 @@ noremap <leader># :set nu!<cr>
 " move vertically by visual line (don't skip wrapped lines)
 nmap j gj
 nmap k gk
+
+" 'go to line' without reaching for shift
+noremap gl G
 
 " easier scrolling (remap = to accomodate)
 noremap -           :call smoothie#downwards()<cr>
@@ -258,7 +261,7 @@ noremap <leader>r :WinResizerStartResize<cr>
 let g:ale_lint_on_enter         = 0
 let g:ale_lint_on_insert_leave  = 1
 let g:ale_lint_on_save          = 1
-let g:ale_lint_on_text_changed  = 1
+let g:ale_lint_on_text_changed  = 0
 let g:ale_linters               = {'python': ['flake8', 'pylint']}
 let g:ale_python_flake8_options = "--ignore F403"  " allow 'import *'
 let g:ale_python_pylint_options = "-d C0115,C0116,WO401 --variable-rgx '..?' --argument-rgx '..?'" " allow 1-2 char variable names in pylint

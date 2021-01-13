@@ -16,13 +16,14 @@ export PATH="$PATH:/usr/local/smlnj/bin"
 export PATH="$PATH:/Library/TeX/texbin"
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-14.0.2.jdk/Contents/Home
 
-# set environment variables
+# set environment
 export editor=vim
 export CLICOLOR=1                         # pretty colorful terminal
 export BASH_SILENCE_DEPRECATION_WARNING=1 # yes yes we know zsh is default
 export PYTHONDONTWRITEBYTECODE=1          # don't spew python bytecode everywhere
 export PYTHONBREAKPOINT=ipdb.set_trace    # ipdb debugging
 export PYTHONSTARTUP="$HOME/.dotfiles/.pyrc"  # auto import modules in REPL
+stty -ixon  # enable forward cycling in bck-i-search by ^S
 
 # history management
 HISTFILE=~/.zsh_history
@@ -75,7 +76,7 @@ export FZF_DEFAULT_OPTS='
 '
 export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || bat {} || tree -C {}) 2> /dev/null | head -200'"
 export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
-bindkey '^R' fzf-history-widget
+bindkey '^X^R' fzf-history-widget
 bindkey '^O' fzf-cd-widget
 bindkey '^F' fzf-file-widget
 
