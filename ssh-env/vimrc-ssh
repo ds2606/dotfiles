@@ -1,8 +1,5 @@
-" SSH VIMRC
+" VIMRC
 
-
-" Stanford-local settings -----------
-" -----------------------------------
 
 " ENVIRONMENT
 
@@ -13,13 +10,16 @@ noremap \, ,
 set history=500
 set wildmenu
 set showcmd              " show most recent command
+set splitbelow
+set splitright
+set nu                   " normal line numbering
 set formatoptions-=cro   " don't autoinsert newline comments from comments (BROKEN)
 set clipboard^=unnamed   " copy-paste across terminals
 set foldlevel=99         " file unfolded by default
 set matchtime=0
 set encoding=utf8
 set wrap
-set tw=120               " inserted text automatically linebroken after 120 chars
+set textwidth=80         " inserted text automatically linebroken after 120 chars
 set linebreak            " wrap lines at whitespace and punctuation, not mid-word
 set breakindent          " wrap lines to same indent level
 let &showbreak='  '      " little extra break for wrapped lines
@@ -49,15 +49,14 @@ noremap <cr> :noh<cr>
 " aesthetics
 colorscheme palenight
 let      g:palenight_termcolors = 256
-syntax   enable            " syntax highlighting
-set      showmatch         " show matching brachets
-set      ruler
 let      g:lightline = {
             \ 'colorscheme': 'palenight',
             \  }
+syntax   enable            " syntax highlighting
+set      showmatch         " show matching brachets
+set      ruler
 set      laststatus=2         " show status bar by default
 set      noshowmode           " hide --MODE-- (redundant with lightline)
-"" should move most of these into the pn colorscheme
 hi       Normal ctermbg=NONE
 hi       LineNr ctermfg=60
 hi       ExtraWhitespace ctermbg=18 guibg=#87005f
@@ -69,14 +68,6 @@ autocmd  BufWinLeave * call clearmatches()
 " set colorcolumn=80
 " highlight OverLength ctermfg=204
 " match OverLength /\%81v.\+/
-
-" open new split panes to right and bottom (more natural)
-set splitbelow
-set splitright
-
-" normal line numbering
-noremap <leader># :set nu!<cr>
-set nu
 
 
 " KEYBINDINGS
@@ -103,17 +94,23 @@ noremap  <left>  :echoe "use h"<cr>
 noremap  <right> :echoe "use l"<cr>
 noremap  <up>    :echoe "use k"<cr>
 noremap  <down>  :echoe "use l"<cr>
-inoremap <left>  <C-o>:echoe "use h"<cr>i
-inoremap <right> <C-o>:echoe "use l"<cr>i
-inoremap <up>    <C-o>:echoe "use k"<cr>i
-inoremap <down>  <C-o>:echoe "use l"<cr>i
+inoremap <left>  <C-o>:echoe "use ^h"<cr>i
+inoremap <right> <C-o>:echoe "use ^l"<cr>i
+inoremap <up>    <C-o>:echoe "use ^k"<cr>i
+inoremap <down>  <C-o>:echoe "use ^l"<cr>i
 
 " bracket/paren matching
 noremap <leader>p %
 
+" toggle line numbering
+noremap <leader># :set nu!<cr>
+
 " move vertically by visual line (don't skip wrapped lines)
 nmap j gj
 nmap k gk
+
+" 'go to line' without reaching for shift
+noremap gl G
 
 " easier scrolling (remap = to accomodate)
 noremap -           :call smoothie#downwards()<cr>
@@ -174,6 +171,10 @@ nnoremap ]q :cnext<cr>zz
 nnoremap [q :cprev<cr>zz
 nnoremap ]l :lnext<cr>zz
 nnoremap [l :lprev<cr>zz
+noremap <leader>qo  :cw<cr>
+noremap <leader>qc  :ccl<cr>
+noremap <leader>lo  :lw<cr>
+noremap <leader>lc  :lcl<cr>
 
 " normal mode newline
 nnoremap <leader>o o<esc>
@@ -189,6 +190,7 @@ inoremap ;q   <esc>:q
 noremap Q @@
 
 " delete trailing whitespace
+" noremap <leader>lw  :match ExtraWhitespace /\s\+$/<cr>  "show trailing whitespace
 noremap <silent> <leader>dw mt:let _s=@/ <bar>
       \ :%s/\s\+$//e<bar>:let @/=_s<cr>`t
       \ <bar> :echom "deleted trailing whitespace"<cr>
@@ -224,11 +226,11 @@ Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'easymotion/vim-easymotion'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'gillyb/stable-windows', { 'on': [] }
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/fzf.vim'
+Plug 'maximbaz/lightline-ale'
 Plug 'mbbill/undotree'
 Plug 'mhinz/vim-startify'
 Plug 'preservim/nerdtree'
@@ -241,6 +243,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
+Plug 'w0rp/ale'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 call plug#end()
 
@@ -255,6 +258,28 @@ xmap ga <Plug>(EasyAlign)
 let g:winresizer_horiz_resize   = 1
 let g:winresizer_vert_resize    = 3
 noremap <leader>r :WinResizerStartResize<cr>
+
+" ALE
+let g:ale_enabled = 0  " ale disabled by default
+let g:ale_linters               = {'python': ['flake8', 'pylint']}
+let g:ale_python_flake8_options = "--ignore F403"  " allow 'import *'
+let g:ale_python_pylint_options =
+    \ "-d C0115,C0116,WO401 --variable-rgx '..?' --argument-rgx '..?'"  " allow 1-2 char variable names in pylint
+set completeopt=menuone,noinsert
+set omnifunc=ale#completion#OmniFunc
+let g:ale_completion_enabled    = 0
+" let g:ale_completion_autoimport = 1  " don't think this is working
+let g:ale_hover_cursor          = 0
+let g:ale_set_balloons          = 0
+noremap <leader>lt  :ALEToggle<cr>
+noremap <leader>lb  obreakpoint()<esc>k
+noremap <leader>ld  :alegotodefinition<cr>
+noremap <leader>lR  :alerename<cr>
+inoremap `           <c-x><c-o>
+inoremap ~~          ~
+inoremap ~`          `
+inoremap ;-          <down>
+inoremap ;=          <up>
 
 " NERDTree
 noremap <leader>n :NERDTreeToggle<cr>
@@ -302,7 +327,6 @@ let g:fzf_colors = {
 " noremap <leader>/ :Rg<cr>,
 noremap <leader>bs :Buffers<cr>,
 
-
 " lightline integration with ale and fugitive
 let g:lightline = {
       \ 'colorscheme': 'palenight',
@@ -327,6 +351,15 @@ let g:lightline.component_expand = {
 let g:lightline.component_type = {
       \ 'linter_ok': 'ok',
       \ }
+
+" fugitive
+set tags^=.git/tags;~
+noremap <leader>gc :Git commit -m
+noremap <leader>gd :Git diff<cr>
+noremap <leader>gl :Git log<cr>
+
+" gitgutter
+noremap <leader>gg :GitGutterToggle<cr>
 
 " vim-smoothie
 let g:smoothie_update_interval = 15
