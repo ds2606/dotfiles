@@ -171,6 +171,10 @@ nnoremap ]q :cnext<cr>zz
 nnoremap [q :cprev<cr>zz
 nnoremap ]l :lnext<cr>zz
 nnoremap [l :lprev<cr>zz
+noremap <leader>qo  :cw<cr>
+noremap <leader>qc  :ccl<cr>
+noremap <leader>lo  :lw<cr>
+noremap <leader>lc  :lcl<cr>
 
 " normal mode newline
 nnoremap <leader>o o<esc>
@@ -270,8 +274,6 @@ let g:ale_completion_enabled    = 0
 let g:ale_hover_cursor          = 0
 let g:ale_set_balloons          = 0
 noremap <leader>lt  :ALEToggle<cr>
-noremap <leader>lo  :lw<cr>
-noremap <leader>lc  :lcl<cr>
 noremap <leader>lb  obreakpoint()<esc>k
 noremap <leader>ld  :alegotodefinition<cr>
 noremap <leader>lR  :alerename<cr>
