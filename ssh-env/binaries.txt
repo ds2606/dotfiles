@@ -1,5 +1,3 @@
-# useful binaries for ssh environments
-
 bat
 exa
 fasd

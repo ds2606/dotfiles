@@ -1,1 +1,0 @@
-../../colors/palenight/pn-autoload.vim

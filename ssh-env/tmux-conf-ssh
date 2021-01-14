@@ -4,7 +4,7 @@
 # prefix
 unbind C-b
 set-option -g prefix `
-bind `  send-prefix
+bind ` send-prefix
 
 # environment
 set -g default-terminal "xterm-256color" # color compatibility

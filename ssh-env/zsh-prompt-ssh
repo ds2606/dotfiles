@@ -1,14 +1,14 @@
 # SSH ZSH PROMPT
 
 
-# local settings -----------
+# --------- local settings ---------
 PROMPT='%F{green}dschreck@INSERT%f %B%F{69}%1~ ❯%f%b '
-# -----------------------------------
+# ----------------------------------
 
 # git right-prompt
 autoload -Uz vcs_info
 precmd_vcs_info() { vcs_info }
 precmd_functions+=( precmd_vcs_info )
 setopt prompt_subst
-RPROMPT="%F{211}\$vcs_info_msg_0_%f"
+RPROMPT="%F{153}\$vcs_info_msg_0_%f"
 zstyle ':vcs_info:git:*' formats '%b'

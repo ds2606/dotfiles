@@ -1,28 +1,8 @@
 # SSH BASH PROFILE
-#
-# default to zsh on startup (future switches to original default go through)
-# if [[ $(ps | grep -c zsh) == 0 ]]; then
-# fi
 
-# Stanford-local settings -----------
-umask 077  # file protection: no read or write for others (022 is read but no write for others)
-ulimit -c 0
-export PATH="$PATH:/afs/ir/class/cs107/tools"  # CS107 tools
-# (idk what this does) Some programs honor VISUAL, so set this if EDITOR is set.
-if [ ! -z "$EDITOR" ] ; then
-   export VISUAL=$EDITOR
-fi
 
-# fancy prompt
-case "$TERM" in
-   xterm*)
-     PSSUF='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '     PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PSSUF"
-    ;;
-   *)
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-    ;;
-esac
-# -----------------------------------
+# --------- local settings ---------
+# ----------------------------------
 
 # append to the history file, don't overwrite it
 shopt -s histappend

@@ -1,9 +1,21 @@
 # SSH ZSH PROFILE
 
+# open tmux session (reattach if one exists, create new otherwise)
+if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_CONNECTION" ]]; then
+  tmux attach || tmux new -s ssh_tmux
+fi
+alias dex='tmux detach -P'  # `d`etach tmux session and `ex`it ssh
 
-# ----------- local settings -----------
 
-# --------------------------------------
+# -------- local settings --------
+umask 077  # file protection: no read or write for others (022 is read but no write for others)
+ulimit -c 0
+export PATH="$PATH:/afs/ir/class/cs107/tools"  # CS107 tools
+# (idk what this does) Some programs honor VISUAL, so set this if EDITOR is set.
+if [ ! -z "$EDITOR" ] ; then
+   export VISUAL=$EDITOR
+fi
+# --------------------------------
 
 # environment setup
 source $HOME/ssh-env/functions-ssh
@@ -11,7 +23,7 @@ source $HOME/ssh-env/zsh-aliases-ssh
 source $HOME/ssh-env/zsh-prompt-ssh
 
 # set paths
-export PATH="$HOME/ssh-env/bin:$PATH"
+export PATH="$HOME/ssh-env/bin:$PATH"  # add local bin path
 
 # set environment variables
 export editor=vim
@@ -56,8 +68,8 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'  # enter standout mode – yellow
 export LESS_TERMCAP_ue=$'\E[0m'         # leave underline mode
 export LESS_TERMCAP_us=$'\E[01;32m'     # enter underline mode
 
-# fasd initialization
-eval "$(fasd --init auto)"
+# fasd
+eval "$(fasd --init auto)"  # initialization
 
 # syntax highlighting
 source ~/ssh-env/colors-ssh/zsh-syntax-highlighting.zsh
