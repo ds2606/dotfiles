@@ -1,5 +1,7 @@
 # ZSH ALIASES
 
+# temp
+win21=~/desktop/home/cs/dropbox/21winter
 
 # safe environment
 set -o noclobber
@@ -27,9 +29,10 @@ alias gs='git status'
 alias gb='git branch'
 alias gc='git checkout'
 alias gcb='git checkout -b'
-alias gl='git log --all --oneline --graph -n 10'
 alias gd='git diff'
+alias gl='git log --all --oneline --graph -n 10'
 alias gld='git log --all --oneline --graph -n 10 -p'
+alias rsync='rsync -havzP --stats'
 
 # 3rd-party
 alias python='python3'

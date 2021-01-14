@@ -3,3 +3,4 @@ exa
 fasd
 fd
 rg
+tldr

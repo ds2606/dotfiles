@@ -53,7 +53,7 @@ spc() {
 		"230")
 			bg+="stars.jpg"
 			;;
-		"stat")
+		"107")
 			bg+="swirl.jpg"
 			;;
 		*)
@@ -61,7 +61,5 @@ spc() {
 			return 1
 			;;
 	esac
-
-	sqlite3 ~/Library/Application\ Support/Dock/desktoppicture.db "update data set value = '$bg'";
-	killall Dock
+    osascript -e "tell application \"Finder\" to set desktop picture to POSIX file \"$bg\""
 }

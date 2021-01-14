@@ -256,11 +256,18 @@ let g:winresizer_vert_resize    = 3
 noremap <leader>r :WinResizerStartResize<cr>
 
 " ALE
-let g:ale_enabled = 0  " ale disabled by default
+let g:ale_enabled               = 0  " ale disabled by default
 let g:ale_linters               = {'python': ['flake8', 'pylint']}
 let g:ale_python_flake8_options = "--ignore F403"  " allow 'import *'
 let g:ale_python_pylint_options =
     \ "-d C0115,C0116,WO401 --variable-rgx '..?' --argument-rgx '..?'"  " allow 1-2 char variable names in pylint
+"" linting/debugging shortcuts
+noremap <leader>lt  :ALEToggle<cr>
+noremap <leader>lo  :lw<cr>
+noremap <leader>lc  :lcl<cr>
+noremap <leader>lw  :match ExtraWhitespace /\s\+$/<cr>
+noremap <leader>lb  obreakpoint()<esc>k
+noremap <expr> <leader>lg &scl=="no" ?
 set completeopt=menuone,noinsert
 set omnifunc=ale#completion#OmniFunc
 let g:ale_completion_enabled    = 0
