@@ -147,23 +147,17 @@ noremap [b          :bprev<cr>
 noremap <leader>bc  :BD<cr>
 noremap <leader>bl  :buffers<cr>
 
-" tab management
-noremap <leader>tt  :tabnew<cr>
+" tab/window management
+noremap <leader>\   :vsp<cr>
+noremap <leader>-   :sp<cr>
+noremap ]p          <c-w>w
+noremap [p          <c-w>W
+noremap <leader>wt  :tabnew<cr>
+noremap <leader>wo  :tabedit <C-r>=expand("%:p:h")<cr>/
+noremap <leader>wO  :tabedit
+noremap <leader>ws  :W<cr>
 noremap ]t          :tabn<cr>
 noremap [t          :tabp<cr>
-noremap <leader>to  :tabedit <C-r>=expand("%:p:h")<cr>/
-noremap <leader>tO  :tabedit
-noremap <leader>ts  :W<cr>
-
-" window management
-noremap  <leader>\   :vsp<cr>
-noremap  <leader>-   :sp<cr>
-noremap  <C-h>       <C-w>h
-noremap  <C-j>       <C-w>j
-noremap  <C-l>       <C-w>l
-noremap  <C-k>       <C-w>k
-noremap  ]p          <c-w>w
-noremap  [p          <c-w>W
 " try to implement <leader>w-number at some point to split a given buffer number into a new tab?
 
 " quickfix/location-list navigation
@@ -171,10 +165,10 @@ nnoremap ]q :cnext<cr>zz
 nnoremap [q :cprev<cr>zz
 nnoremap ]l :lnext<cr>zz
 nnoremap [l :lprev<cr>zz
-noremap <leader>qo  :cw<cr>
-noremap <leader>qc  :ccl<cr>
-noremap <leader>lo  :lw<cr>
-noremap <leader>lc  :lcl<cr>
+noremap <leader>wqo  :cw<cr>
+noremap <leader>wqc  :ccl<cr>
+noremap <leader>wlo  :lw<cr>
+noremap <leader>wlc  :lcl<cr>
 
 " normal mode newline
 nnoremap <leader>o o<esc>
@@ -190,10 +184,10 @@ inoremap ;q   <esc>:q
 noremap Q @@
 
 " delete trailing whitespace
-" noremap <leader>lw  :match ExtraWhitespace /\s\+$/<cr>  "show trailing whitespace
 noremap <silent> <leader>dw mt:let _s=@/ <bar>
       \ :%s/\s\+$//e<bar>:let @/=_s<cr>`t
       \ <bar> :echom "deleted trailing whitespace"<cr>
+" noremap <leader>lw  :match ExtraWhitespace /\s\+$/<cr>  "show trailing whitespace
 
 " file shortcuts for quick editing (last is for sourcing .vimrc)
 noremap <leader>ev  :tabedit ~/.vimrc<cr>
