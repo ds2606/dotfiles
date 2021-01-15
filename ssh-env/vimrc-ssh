@@ -1,4 +1,4 @@
-" VIMRC
+" SSH-VIMRC
 
 
 " ENVIRONMENT
@@ -83,6 +83,9 @@ inoremap jk <esc>l
 noremap <leader>q :q<cr>
 noremap <leader>x :wq<cr>
 
+" new file
+noremap <leader>n :new<cr>
+
 " Y behaves like other capitals
 noremap Y y$
 
@@ -147,34 +150,46 @@ noremap [b          :bprev<cr>
 noremap <leader>bc  :BD<cr>
 noremap <leader>bl  :buffers<cr>
 
-" tab management
-noremap <leader>tt  :tabnew<cr>
+" tab/window management
+noremap ]p          <C-w>w
+noremap [p          <C-w>W
+noremap <leader>\   :vsp<cr>
+noremap <leader>-   :sp<cr>
+noremap <leader>wv  <C-w>H
+noremap <leader>wh  <C-w>J
+noremap <leader>wt  :tabnew<cr>
+noremap <leader>wo  :tabedit <C-r>=expand("%:p:h")<cr>/
+noremap <leader>wO  :tabedit
+noremap <leader>ws  :W<cr>
 noremap ]t          :tabn<cr>
 noremap [t          :tabp<cr>
-noremap <leader>to  :tabedit <C-r>=expand("%:p:h")<cr>/
-noremap <leader>tO  :tabedit
-noremap <leader>ts  :W<cr>
-
-" window management
-noremap  <leader>\   :vsp<cr>
-noremap  <leader>-   :sp<cr>
-noremap  <C-h>       <C-w>h
-noremap  <C-j>       <C-w>j
-noremap  <C-l>       <C-w>l
-noremap  <C-k>       <C-w>k
-noremap  ]p          <c-w>w
-noremap  [p          <c-w>W
-" try to implement <leader>w-number at some point to split a given buffer number into a new tab?
+noremap <leader>wb <C-w>T
+noremap <leader>wm :call MaximizeToggle()<CR>
+function! MaximizeToggle()
+  if exists("s:maximize_session")
+    exec "source " . s:maximize_session
+    call delete(s:maximize_session)
+    unlet s:maximize_session
+    let &hidden=s:maximize_hidden_save
+    unlet s:maximize_hidden_save
+  else
+    let s:maximize_hidden_save = &hidden
+    let s:maximize_session = tempname()
+    set hidden
+    exec "mksession! " . s:maximize_session
+    only
+  endif
+endfunction
 
 " quickfix/location-list navigation
 nnoremap ]q :cnext<cr>zz
 nnoremap [q :cprev<cr>zz
 nnoremap ]l :lnext<cr>zz
 nnoremap [l :lprev<cr>zz
-noremap <leader>qo  :cw<cr>
-noremap <leader>qc  :ccl<cr>
-noremap <leader>lo  :lw<cr>
-noremap <leader>lc  :lcl<cr>
+noremap <leader>wqo  :cw<cr>
+noremap <leader>wqc  :ccl<cr>
+noremap <leader>wlo  :lw<cr>
+noremap <leader>wlc  :lcl<cr>
 
 " normal mode newline
 nnoremap <leader>o o<esc>
@@ -190,10 +205,10 @@ inoremap ;q   <esc>:q
 noremap Q @@
 
 " delete trailing whitespace
-" noremap <leader>lw  :match ExtraWhitespace /\s\+$/<cr>  "show trailing whitespace
 noremap <silent> <leader>dw mt:let _s=@/ <bar>
       \ :%s/\s\+$//e<bar>:let @/=_s<cr>`t
       \ <bar> :echom "deleted trailing whitespace"<cr>
+" noremap <leader>lw  :match ExtraWhitespace /\s\+$/<cr>  "show trailing whitespace
 
 " file shortcuts for quick editing (last is for sourcing .vimrc)
 noremap <leader>ev  :tabedit ~/.vimrc<cr>
@@ -226,6 +241,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'easymotion/vim-easymotion'
 Plug 'editorconfig/editorconfig-vim'
+Plug 'gillyb/stable-windows', { 'on': [] }
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf'
 Plug 'junegunn/vim-easy-align'
@@ -233,6 +249,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'maximbaz/lightline-ale'
 Plug 'mbbill/undotree'
 Plug 'mhinz/vim-startify'
+Plug 'neoclide/coc.nvim', {'on': [], 'branch': 'release'}
 Plug 'preservim/nerdtree'
 Plug 'psliwka/vim-smoothie'
 Plug 'preservim/tagbar'
@@ -260,11 +277,18 @@ let g:winresizer_vert_resize    = 3
 noremap <leader>r :WinResizerStartResize<cr>
 
 " ALE
-let g:ale_enabled = 0  " ale disabled by default
+let g:ale_enabled               = 0  " ale disabled by default
 let g:ale_linters               = {'python': ['flake8', 'pylint']}
 let g:ale_python_flake8_options = "--ignore F403"  " allow 'import *'
 let g:ale_python_pylint_options =
     \ "-d C0115,C0116,WO401 --variable-rgx '..?' --argument-rgx '..?'"  " allow 1-2 char variable names in pylint
+"" linting/debugging shortcuts
+noremap <leader>lt  :ALEToggle<cr>
+noremap <leader>lo  :lw<cr>
+noremap <leader>lc  :lcl<cr>
+noremap <leader>lw  :match ExtraWhitespace /\s\+$/<cr>
+noremap <leader>lb  obreakpoint()<esc>k
+noremap <expr> <leader>lg &scl=="no" ?
 set completeopt=menuone,noinsert
 set omnifunc=ale#completion#OmniFunc
 let g:ale_completion_enabled    = 0
@@ -352,14 +376,15 @@ let g:lightline.component_type = {
       \ 'linter_ok': 'ok',
       \ }
 
-" fugitive
+" fugitive/gitgutter
 set tags^=.git/tags;~
-noremap <leader>gc :Git commit -m
+noremap <leader>gg :Git<cr>
+noremap <leader>gc :Git commit
 noremap <leader>gd :Git diff<cr>
 noremap <leader>gl :Git log<cr>
-
-" gitgutter
-noremap <leader>gg :GitGutterToggle<cr>
+noremap <leader>gt :GitGutterToggle<cr>
+noremap ]g         :GitGutterNextHunk<cr>
+noremap [g         :GitGutterPrevHunk<cr>
 
 " vim-smoothie
 let g:smoothie_update_interval = 15

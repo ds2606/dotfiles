@@ -1,7 +1,5 @@
 # ZSH ALIASES
 
-# temp
-win21=~/desktop/home/cs/dropbox/21winter
 
 # safe environment
 set -o noclobber
@@ -17,6 +15,7 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 export zrc=~/.dotfiles/.zsh_profile
 export vrc=~/.dotfiles/.vimrc
+cs=~/desktop/home/cs
 
 # built-ins
 alias srz='source ~/.zshrc'
@@ -24,20 +23,10 @@ alias rmf='rm -f'
 alias hist='history'
 alias vi='vim'
 alias rsync='rsync -havz --stats'
-
-# git
-alias gs='git status'
-alias gb='git branch'
-alias gc='git commit -am'
-alias gco='git checkout'
-alias gd='git diff'
-alias gcat='git cat-file -p'
-alias gl='git log --all --oneline --graph -n 10'
-alias gld='git log --all --oneline --graph -n 10 -p'
-alias gm='git merge'
+alias g='git'
 
 # 3rd-party
-alias python='python3'
+alias python='/usr/local/bin/python3'  # homebrew managed python
 alias pydoc='pydoc3'
 alias pyman='pydoc3'
 alias ipy='ipython'

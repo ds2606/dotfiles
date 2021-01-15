@@ -15,17 +15,33 @@
 [color]
     ui = true
 [alias]
-	c = commit
-	s = status
-	st = status
-	lg = log --oneline
-	last = log -1 HEAD
-	cl = log -p -- ':(exclude)Cargo.lock'
-	f = push --force-with-lease
-	# https://stackoverflow.com/a/11688523/472927
-	ss = "!f() { git stash show stash^{/$*} -p; }; f"
-	sa = "!f() { git stash apply stash^{/$*}; }; f"
-	sl = stash list
+    a    = a
+    aa   = add .
+    b    = branch
+    c    = commit
+    cam  = commit -am
+    cat  = cat-file -p
+    d    = diff
+    h    = help
+    l    = log --all --oneline --graph -10
+    ld   = log --all --oneline --graph -10 -p
+	last = log -1 head
+    m    = merge
+    rs   = reset
+    rt   = restore
+    rv   = revert
+    s    = status
+    sh   = show
+    st   = stash
+    sw   = switch
+    swc  = switch -c
+	cl   = log -p -- ':(exclude)cargo.lock'
+    # from jonhoo, not exactly sure what they do yet
+	f    = push --force-with-lease
+	## https://stackoverflow.com/a/11688523/472927
+	ss   = "!f() { git stash show stash^{/$*} -p; }; f"
+	sa   = "!f() { git stash apply stash^{/$*}; }; f"
+	sl   = stash list
 [pull]
 	ff = only
 [push]

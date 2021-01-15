@@ -288,17 +288,14 @@ noremap <leader>lo  :lw<cr>
 noremap <leader>lc  :lcl<cr>
 noremap <leader>lw  :match ExtraWhitespace /\s\+$/<cr>
 noremap <leader>lb  obreakpoint()<esc>k
-noremap <expr> <leader>lg &scl=="no" ?
-set completeopt=menuone,noinsert
-set omnifunc=ale#completion#OmniFunc
-let g:ale_completion_enabled    = 0
-" let g:ale_completion_autoimport = 1  " don't think this is working
-let g:ale_hover_cursor          = 0
-let g:ale_set_balloons          = 0
-noremap <leader>lt  :ALEToggle<cr>
-noremap <leader>lb  obreakpoint()<esc>k
 noremap <leader>ld  :alegotodefinition<cr>
 noremap <leader>lR  :alerename<cr>
+set completeopt=menuone,noinsert
+set omnifunc=ale#completion#OmniFunc
+let g:ale_completion_enabled    = 1
+let g:ale_completion_autoimport = 1  " don't think this is working
+let g:ale_hover_cursor          = 0
+let g:ale_set_balloons          = 0
 inoremap `           <c-x><c-o>
 inoremap ~~          ~
 inoremap ~`          `
