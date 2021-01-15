@@ -83,6 +83,9 @@ inoremap jk <esc>l
 noremap <leader>q :q<cr>
 noremap <leader>x :wq<cr>
 
+" new file
+noremap <leader>n :new<cr>
+
 " Y behaves like other capitals
 noremap Y y$
 
@@ -148,17 +151,35 @@ noremap <leader>bc  :BD<cr>
 noremap <leader>bl  :buffers<cr>
 
 " tab/window management
+noremap ]p          <C-w>w
+noremap [p          <C-w>W
 noremap <leader>\   :vsp<cr>
 noremap <leader>-   :sp<cr>
-noremap ]p          <c-w>w
-noremap [p          <c-w>W
+noremap <leader>wv  <C-w>H
+noremap <leader>wh  <C-w>J
 noremap <leader>wt  :tabnew<cr>
 noremap <leader>wo  :tabedit <C-r>=expand("%:p:h")<cr>/
 noremap <leader>wO  :tabedit
 noremap <leader>ws  :W<cr>
 noremap ]t          :tabn<cr>
 noremap [t          :tabp<cr>
-" try to implement <leader>w-number at some point to split a given buffer number into a new tab?
+noremap <leader>wb <C-w>T
+noremap <leader>wm :call MaximizeToggle()<CR>
+function! MaximizeToggle()
+  if exists("s:maximize_session")
+    exec "source " . s:maximize_session
+    call delete(s:maximize_session)
+    unlet s:maximize_session
+    let &hidden=s:maximize_hidden_save
+    unlet s:maximize_hidden_save
+  else
+    let s:maximize_hidden_save = &hidden
+    let s:maximize_session = tempname()
+    set hidden
+    exec "mksession! " . s:maximize_session
+    only
+  endif
+endfunction
 
 " quickfix/location-list navigation
 nnoremap ]q :cnext<cr>zz
@@ -355,14 +376,15 @@ let g:lightline.component_type = {
       \ 'linter_ok': 'ok',
       \ }
 
-" fugitive
+" fugitive/gitgutter
 set tags^=.git/tags;~
-noremap <leader>gc :Git commit -m
+noremap <leader>gg :Git<cr>
+noremap <leader>gc :Git commit
 noremap <leader>gd :Git diff<cr>
 noremap <leader>gl :Git log<cr>
-
-" gitgutter
-noremap <leader>gg :GitGutterToggle<cr>
+noremap <leader>gt :GitGutterToggle<cr>
+noremap ]g         :GitGutterNextHunk<cr>
+noremap [g         :GitGutterPrevHunk<cr>
 
 " vim-smoothie
 let g:smoothie_update_interval = 15
