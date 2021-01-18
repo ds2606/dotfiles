@@ -1,32 +1,15 @@
-# .pdbrc 
+# .pdbrc
 
 
-# Next and list, and step and list.
+# quicker temp breakpoint
+# alias tb tbreak  # not working
+
+# next and list, and step and list.
 alias nl n;;l
 alias sl s;;l
 
-# Print instance variables (usage "pi classInst")
+# print instance variables (usage "pi classInst")
 alias p_ for k in %1.__dict__.keys(): print("%1.",k,"=",%1.__dict__[k])
-
-# Print instance variables in self
-alias ps p_ self
-
-# Aliases for looking around
-alias pd for key, value in %1.items(): print(f"{key}: {value}")
-
-# Print instance variables in self
-alias pl pd locals()
-
-# stepwatch, nextwatch (nyergler/in-depth-pdb)
-# !global __currentframe, __stack; from inspect import currentframe as __currentframe, stack as __stack
-# !global __copy; from copy import copy as __copy
-# !global __Pdb; from pdb import Pdb as __Pdb
-# !global __pdb; __pdb = [__framerec[0].f_locals.get("pdb") or __framerec[0].f_locals.get("self") for __framerec in __stack() if (__framerec[0].f_locals.get("pdb") or __framerec[0].f_locals.get("self")).__class__ == __Pdb][-1]
-
-# alias _setup_watchpoint !global __key, __dict, __val; __key = '%1'; __dict = __currentframe().f_locals if __currentframe().f_locals.has_key(__key) else __currentframe().f_globals; __val = __copy(%1)
-
-# alias _nextwatch_internal next;; !if __dict[__key] == __val: __pdb.cmdqueue.append("_nextwatch_internal %1")
-# alias _stepwatch_internal step;; !if __dict[__key] == __val: __pdb.cmdqueue.append("_stepwatch_internal %1")
-
-# alias nextwatch __pdb.cmdqueue.extend(["_setup_watchpoint %1", "_nextwatch_internal"])
-# alias stepwatch __pdb.cmdqueue.extend(["_setup_watchpoint %1", "_stepwatch_internal"])
+alias ps p_ self  # print instance variables in self
+alias pd for key, value in %1.items(): print(f"{key}: {value}")  # print dict
+alias pl pd locals()  # print local vars

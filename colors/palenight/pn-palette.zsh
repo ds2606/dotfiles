@@ -8,7 +8,7 @@ pn_colors () {
             [green]=114  # 120 is vivid
             [ice]=153  # 159 is vivid
             [orange]=209
-            [pink]=213
+            [pink]=213  # 219 for softer pink
             [pnhighlight]=104  # 04 is good too
             [pnpurpblue]=111
             [pnpurple]=147

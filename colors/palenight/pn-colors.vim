@@ -242,14 +242,14 @@ call s:h("FoldColumn", {}) " 'foldcolumn'
 call s:h("SignColumn", {}) " column where signs are displayed
 call s:h("IncSearch", { "fg": s:red, "cterm": "bold", "bg": s:test }) " 'incsearch' highlighting; also used for the text replaced with ":s///c"
 call s:h("LineNr", { "fg": s:gutter_fg_grey }) " Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
-call s:h("CursorLineNr", {}) " Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
-call s:h("MatchParen", { "fg": s:cyan, "gui": "underline", "cterm": "underline" }) " The character under the cursor or just before it, if it is a paired bracket, and its match.
+call s:h("cursorlinenr", {}) " like linenr when 'cursorline' or 'relativenumber' is set for the cursor line.
+call s:h("matchparen", { "fg": s:cyan, "gui": "underline", "cterm": "underline" }) " the character under the cursor or just before it, if it is a paired bracket, and its match.
 call s:h("ModeMsg", {}) " 'showmode' message (e.g., "-- INSERT --")
 call s:h("MoreMsg", {}) " more-prompt
 call s:h("NonText", { "fg": s:special_grey }) " '~' and '@' at the end of the window, characters from 'showbreak' and other characters that do not really exist in the text (e.g., ">" displayed when a double-wide character doesn't fit at the end of the line).
 call s:h("Normal", { "fg": s:white, "bg": s:black }) " normal text
 call s:h("Pmenu", { "bg": s:menu_grey }) " Popup menu: normal item.
-call s:h("PmenuSel", { "fg": s:pn_highlight, "bg": s:pn_purpblue }) " Popup menu: selected item.
+call s:h("PmenuSel", { "fg": s:cursor_grey, "bg": s:pn_purpblue }) " Popup menu: selected item.
 call s:h("PmenuSbar", { "bg": s:special_grey }) " Popup menu: scrollbar.
 call s:h("PmenuThumb", { "bg": s:white }) " Popup menu: Thumb of the scrollbar.
 call s:h("Question", { "fg": s:pink }) " hit-enter prompt and yes/no questions
@@ -295,24 +295,24 @@ call s:h("pythonBuiltinType", { "fg": s:pnyellow })
 call s:h("pythonClass", { "fg": s:yellow, "cterm": "bold" })
 call s:h("pythonClassVar", { "fg": s:ice })
 call s:h("pythonCoding", { "fg": s:comment_grey })
-call s:h("pythonConditional", { "fg": s:pink })
+call s:h("pythonConditional", { "fg": s:pn_pink })
 call s:h("pythonDecorator", { "fg": s:orange })
 call s:h("pythonDecoratorName", { "fg": s:orange })
 call s:h("pythonDot", { "fg": s:comment_grey })
 call s:h("pythonDottedName", { "fg": s:orange })
 call s:h("pythonExClass", { "fg": s:red })
-call s:h("pythonException", { "fg": s:pink })
-call s:h("pythonExceptions", { "fg": s:pink })
+call s:h("pythonException", { "fg": s:pn_pink })
+call s:h("pythonExceptions", { "fg": s:pn_pink })
 call s:h("pythonFloat", { "fg": s:orange })
 call s:h("pythonFunction", { "fg": s:pn_purpblue })
 call s:h("pythonFunctionCall", { "fg": s:ice })
-call s:h("pythonImport", { "fg": s:pink })
-call s:h("pythonInclude", { "fg": s:pink })
+call s:h("pythonImport", { "fg": s:pn_pink })
+call s:h("pythonInclude", { "fg": s:pn_pink })
 call s:h("pythonNumber", { "fg": s:orange })
 call s:h("pythonNone", { "fg": s:red })
 call s:h("pythonOperator", { "fg": s:pn_pink })
-call s:h("pythonRepeat", { "fg": s:pink })
-call s:h("pythonStatement", { "fg": s:pink })
+call s:h("pythonRepeat", { "fg": s:pn_pink })
+call s:h("pythonStatement", { "fg": s:pn_pink })
 call s:h("pythonStrFormat", { "fg": s:term_grey })
 call s:h("pythonStrInterpRegion", { "fg": s:pn_purpdarker })
 
