@@ -369,9 +369,8 @@ let g:ale_python_pylint_options =
     \ "-d C0115,C0116,WO401 --variable-rgx '..?' --argument-rgx '..?'"  " allow 1-2 char variable names in pylint
 
 " COC (completion/lsp)
-set updatetime=300  " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
+set updatetime=300  " (for some reason, LSP/completion broken without this)
 set shortmess+=c " Don't pass messages to \|ins-completion-menu\|.
-"" completion/lsp (COC)
 inoremap ~~ ~
 inoremap ~` `
 inoremap <silent><expr> `
@@ -385,8 +384,8 @@ function! s:check_back_space() abort
 endfunction
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-noremap <silent>ld  <Plug>(coc-definition)
-noremap <silent>lk  :call <SID>show_documentation()<CR>
+noremap <silent><leader>ld  <Plug>(coc-definition)
+noremap <silent><leader>lk  :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
@@ -396,13 +395,11 @@ function! s:show_documentation()
     execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
-"""""""" COC out-of-commission settings """"""""
 "" Some servers have issues with backup files, see #649.
 " set nobackup
 " set nowritebackup
 "" Use backtick to trigger completion.
 " inoremap <silent><expr> <c-space> coc#refresh()
-"""""""""""""""""""""""""""""""""""""""""""""""""
 
 
 " tab options (at end to prevent plugin overriding

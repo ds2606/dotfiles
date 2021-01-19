@@ -18,27 +18,27 @@ export vrc=~/.dotfiles/.vimrc
 cs=~/desktop/home/cs
 
 # built-ins
-alias srz='source ~/.zshrc'
-alias rmf='rm -f'
-alias hist='history'
-alias vi='vim'
-alias rsync='rsync -havz --stats'
 alias g='git'
+alias hist='history'
+alias rmf='rm -f'
+alias rsync='rsync -havz --stats'
+alias srz='source ~/.zshrc'
+alias vi='vim'
 
 # 3rd-party
-alias python='/usr/local/bin/python3'  # homebrew managed python
-alias pydoc='pydoc3'
-alias pyman='pydoc3'
-alias ipy='ipython'
-alias ll='exa -lah --color=always'
-alias ls='exa --color=always'
-alias la='exa -a --color=always'
+alias bd='batdiff'
+alias fd='fd -i'
 alias grep='ggrep --color=auto' # GNU grep as default
 alias htop='htop-vim'
-alias fd='fd -i'
+alias ipy='ipython'
+alias la='exa -a --color=always'
+alias ll='exa -lah --color=always'
+alias ls='exa --color=always'
+alias moo='fortune | cowsay | lolcat'
+alias pydoc='pydoc3'
+alias python='/usr/local/bin/python3'  # homebrew managed python
 alias rg='rg --smart-case'
 alias trash='trash -F'
-alias moo='fortune | cowsay | lolcat'
 alias v='f -e vim'  # fasd quick file open with vim
 alias vv='sf -e vim'  # 'v' but interactive
 
