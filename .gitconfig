@@ -27,21 +27,22 @@
     ld   = log --all --oneline --graph -10 -p
 	last = log -1 head
     m    = merge
-    rs   = reset
-    rt   = restore
-    rv   = revert
+    ; rs   = reset
+    ; rt   = restore
+    ; rv   = revert
     s    = status
+    ss   = status -s
     sh   = show
     st   = stash
     sw   = switch
     swc  = switch -c
 	cl   = log -p -- ':(exclude)cargo.lock'
-    # from jonhoo, not exactly sure what they do yet
-	f    = push --force-with-lease
-	## https://stackoverflow.com/a/11688523/472927
-	ss   = "!f() { git stash show stash^{/$*} -p; }; f"
-	sa   = "!f() { git stash apply stash^{/$*}; }; f"
-	sl   = stash list
+    ; # from jonhoo, not exactly sure what they do yet
+	; f    = push --force-with-lease
+	; ## https://stackoverflow.com/a/11688523/472927
+	; ss   = "!f() { git stash show stash^{/$*} -p; }; f"
+	; sa   = "!f() { git stash apply stash^{/$*}; }; f"
+	; sl   = stash list
 [pull]
 	ff = only
 [push]

@@ -2,20 +2,16 @@
 
 # open tmux session (reattach if one exists, create new otherwise)
 if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_CONNECTION" ]]; then
-  tmux attach || tmux new -s ssh_tmux
+  tmux attach || tmux new -s ssh
 fi
 alias dex='tmux detach -P'  # `d`etach tmux session and `ex`it ssh
 
 
-# -------- local settings --------
+# -------- local settings (stanford) --------
 umask 077  # file protection: no read or write for others (022 is read but no write for others)
 ulimit -c 0
-export PATH="$PATH:/afs/ir/class/cs107/tools"  # CS107 tools
-# (idk what this does) Some programs honor VISUAL, so set this if EDITOR is set.
-if [ ! -z "$EDITOR" ] ; then
-   export VISUAL=$EDITOR
-fi
-# --------------------------------
+export PATH="$PATH:/afs/ir/class/cs110/tools"  # CS110 tools
+# ------------------------------------------
 
 # environment setup
 source $HOME/ssh-env/functions-ssh
@@ -23,12 +19,16 @@ source $HOME/ssh-env/zsh-aliases-ssh
 source $HOME/ssh-env/zsh-prompt-ssh
 
 # set paths
-export PATH="$HOME/ssh-env/bin:$PATH"  # add local bin path
+export PATH="$HOME/ssh-env/bin:$PATH"  # add local bins to path
 
 # set environment variables
-export editor=vim
+export EDITOR=vim
+export VISUAL=vim
 export CLICOLOR=1                         # pretty colorful terminal
 export PYTHONDONTWRITEBYTECODE=1          # don't spew python bytecode everywhere
+stty -ixon  # enable forward cycling in bck-i-search by ^S
+bindkey -e  # emacs keybindings for command line
+setopt EXTENDED_GLOB
 
 # safe environment
 unsetopt CLOBBER    # don't overwrite existing file w/ redirect

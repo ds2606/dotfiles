@@ -25,3 +25,4 @@ brew install --cask flux
 brew install --cask handbrake
 brew install --cask r
 brew install --cask transmission
+brew install slack

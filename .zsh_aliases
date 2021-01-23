@@ -16,13 +16,23 @@ alias ....='cd ../../..'
 export zrc=~/.dotfiles/.zsh_profile
 export vrc=~/.dotfiles/.vimrc
 cs=~/desktop/home/cs
+dots=~/.dotfiles
+alias myth='ssh myth'
 
 # built-ins
+alias cl='clear'
+alias du1='du -sh'
 alias g='git'
 alias hist='history'
+alias mirror='wget -r -p -E -l inf -k -np'
+alias pe='printenv'
 alias rmf='rm -f'
 alias rsync='rsync -havz --stats'
 alias srz='source ~/.zshrc'
+alias stat='gstat'
+alias t='tmux'
+alias ta='tmux attach'
+alias tn='tmux new-session'
 alias vi='vim'
 
 # 3rd-party
@@ -36,12 +46,12 @@ alias ll='exa -lah --color=always'
 alias ls='exa --color=always'
 alias moo='fortune | cowsay | lolcat'
 alias pydoc='pydoc3'
-alias python='/usr/local/bin/python3'  # homebrew managed python
+# alias python='/usr/local/bin/python3'  # homebrew managed python
 alias rg='rg --smart-case'
 alias trash='trash -F'
 alias v='f -e vim'  # fasd quick file open with vim
 alias vv='sf -e vim'  # 'v' but interactive
 
-# open gui applications
+# gui applications
 alias chrome='open -a Google\ Chrome'
 alias finder='open -a Finder'

@@ -1,9 +1,8 @@
 # SSH ZSH PROMPT
 
 
-# --------- local settings ---------
-PROMPT='%F{green}dschreck@INSERT%f %B%F{69}%1~ ❯%f%b '
-# ----------------------------------
+# left prompt
+PROMPT='%F{green}%n@%m%f %B%F{69}%1~ ❯%f%b '
 
 # git right-prompt
 autoload -Uz vcs_info

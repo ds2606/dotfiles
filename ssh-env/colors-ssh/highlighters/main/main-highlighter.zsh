@@ -27,7 +27,7 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
-source ~/ssh-env/colors-ssh/pn-syntax.zsh
+source ~/ssh-env/colors-ssh/palenight/pn-syntax.zsh
 
 # Whether the highlighter should be called or not.
 _zsh_highlight_highlighter_main_predicate()

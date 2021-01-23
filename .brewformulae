@@ -40,4 +40,6 @@ brew install eth-p/software/bat-extras
 brew install gh
 brew install st
 brew install coreutils
-#
+brew install hyperfine
+brew install jqbrew install ccls
+brew install handbrake

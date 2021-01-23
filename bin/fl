@@ -1,0 +1,37 @@
+#! /usr/bin/env python
+""" prints info for a manpage flag """
+
+import re
+import subprocess
+import sys
+
+# parse command-line arguments
+if len(sys.argv) != 3:
+    print("usage: fl <command> <flag>")
+    sys.exit(2)
+command = sys.argv[1]
+flag = sys.argv[2]
+
+# get and clean man page info
+p1 = subprocess.Popen(["man", command], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+p2 = subprocess.Popen(["col", "-b"], stdin=p1.stdout, stdout=subprocess.PIPE)
+OUTPUT = p2.communicate()[0].decode("utf-8")
+if p1.communicate()[1]:
+    # quit if no man page entry for `command`
+    print(f"No manual entry for '{command}'")
+    sys.exit(1)
+
+# extract matches for flag
+p = re.compile(rf"\n[\s\t]*{flag}[^\w].*?\n\n", re.DOTALL)
+matches = re.findall(p, OUTPUT)
+
+# failure if no matches
+if not matches:
+    print(f"No matches for '{command} {flag}'.")
+    sys.exit(1)
+
+# pretty-print matches
+for match in matches:
+    match = match.strip("\n ")[len(flag):].strip()
+    print(f"     \033[94m{command} \033[92m{flag}\033[0m", match)
+sys.exit(0)

@@ -35,6 +35,11 @@ mcd() {
 	fi
 }
 
+# jump straight to a man page flag
+mfl () {
+    LESS=+/^[[:blank:]]+"$2" man "$1"
+}
+
 # switch workspace
 spc() {
 	if [[ "$#" -ne 1 ]]; then
@@ -42,18 +47,18 @@ spc() {
 		return 1
 	fi
 
-	local bg="/Users/Daniel/Pictures/backgrounds/"
+	local bg="/Users/dschreck/Pictures/backgrounds/"
 	case $1 in
-		"221")
+		"41")
 			bg+="lights.jpg"
 			;;
 		"231n")
 			bg+="garden.jpg"
 			;;
-		"230")
+		"124")
 			bg+="stars.jpg"
 			;;
-		"107")
+		"110")
 			bg+="swirl.jpg"
 			;;
 		*)

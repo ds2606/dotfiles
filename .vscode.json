@@ -18,7 +18,6 @@
     "workbench.activityBar.visible": false,
     "editor.scrollbar.verticalScrollbarSize": 7,
     "editor.scrollbar.horizontalScrollbarSize": 5,
-    "workbench.statusBar.visible": true,
     "editor.minimap.enabled": false,
     "window.zoomLevel": 1,
     "editor.cursorBlinking": "solid",
@@ -45,6 +44,7 @@
     },
     "terminal.integrated.shell.osx": "/bin/bash",
     "python.pythonPath": "/usr/local/bin/python3",
+    "python.jediEnabled": false,
     "editor.matchBrackets": false,
     
     // vim emulation
@@ -98,6 +98,10 @@
         "after": ["<C-u>"]
       },  
       {
+        "before": ["<leader>", "="],
+        "after": ["="]
+      }, 
+      {
         "before": ["<C-n>"],
         "commands": [":nohl"]
       },  
@@ -143,5 +147,17 @@
       "<C-f>": false
     },
     "latex-workshop.view.pdf.viewer": "tab",
-    "python.defaultInterpreterPath": "/Library/Developer/CommandLineTools/usr/bin/python3"
+    "python.defaultInterpreterPath": "/Library/Developer/CommandLineTools/usr/bin/python3",
+    "C_Cpp.updateChannel": "Insiders",
+    "editor.columnSelection": false,
+    "workbench.editorAssociations": [
+      {
+        "viewType": "jupyter.notebook.ipynb",
+        "filenamePattern": "*.ipynb"
+      }
+    ],
+    "editor.lightbulb.enabled": false,
+    "python.languageServer": "Microsoft",
+    "remote.SSH.lockfilesInTmp": true,
+    "C_Cpp.errorSquiggles": "Enabled"
   }

@@ -1,7 +1,13 @@
 {
     "python.jediEnabled": false,
     "suggest.autoTrigger": "none",
-    "diagnostic.displayByAle": true,
+    "suggest.floatEnable": true,
+    "coc.preferences.hoverTarget": "float",
+    "signature.target": "echo",
+    "diagnostic.messageTarget": "echo",
+    "python.analysis.diagnosticEnabled": false,
+    "rust-analyzer.enable": true,
+    "diagnostic.enable": false,
     "languageserver": {
         "ccls": {
             "disableDiagnostics": true,
