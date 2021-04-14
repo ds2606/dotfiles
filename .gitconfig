@@ -25,7 +25,7 @@
     h    = help
     l    = log --all --oneline --graph -10
     ld   = log --all --oneline --graph -10 -p
-	last = log -1 head
+	last = log -1 HEAD
     m    = merge
     ; rs   = reset
     ; rt   = restore

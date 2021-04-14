@@ -1,37 +1,52 @@
 #! /usr/bin/env python
-""" prints info for a manpage flag """
+""" prints manpage info for flags """
 
 import re
-import subprocess
+import subprocess as sp
 import sys
 
+# some ANSI color codes
+RED = "\033[31m"
+CYAN = "\033[94m"
+NONE = "\033[0m"
+GREEN = "\033[92m"
+MAGENTA = "\033[95m"
+
 # parse command-line arguments
-if len(sys.argv) != 3:
-    print("usage: fl <command> <flag>")
+if len(sys.argv) < 3:
+    print("usage: fl <command> <flag(s)>")
     sys.exit(2)
 command = sys.argv[1]
-flag = sys.argv[2]
+flags = sys.argv[2:]
 
 # get and clean man page info
-p1 = subprocess.Popen(["man", command], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-p2 = subprocess.Popen(["col", "-b"], stdin=p1.stdout, stdout=subprocess.PIPE)
-OUTPUT = p2.communicate()[0].decode("utf-8")
-if p1.communicate()[1]:
+p1 = sp.Popen(["man", command], stdout=sp.PIPE, stderr=sp.PIPE)
+p2 = sp.Popen(["col", "-b"], stdin=p1.stdout, stdout=sp.PIPE)
+if p1.stderr.peek():
     # quit if no man page entry for `command`
-    print(f"No manual entry for '{command}'")
+    print("%sNo man entry for '%s%s%s'" % (RED, MAGENTA, command, RED))
     sys.exit(1)
+manpage = p2.communicate()[0].decode("utf-8")
 
-# extract matches for flag
-p = re.compile(rf"\n[\s\t]*{flag}[^\w].*?\n\n", re.DOTALL)
-matches = re.findall(p, OUTPUT)
+# print matches for each command-line flag
+for i, flag in enumerate(flags):
+    # format user input
+    if flag[0] != '-':
+        flag = '-' + flag
 
-# failure if no matches
-if not matches:
-    print(f"No matches for '{command} {flag}'.")
-    sys.exit(1)
+    # extract matches for flag
+    p = re.compile(rf"\n[\s\t]*{flag}[^\w].*?\n\n", re.DOTALL)
+    matches = re.findall(p, manpage)
 
-# pretty-print matches
-for match in matches:
-    match = match.strip("\n ")[len(flag):].strip()
-    print(f"     \033[94m{command} \033[92m{flag}\033[0m", match)
-sys.exit(0)
+    # failure if no matches
+    if not matches:
+        print("   %sNo matches for '%s%s %s%s'" % (RED, MAGENTA, command, flag, RED))
+
+    # pretty-print matches
+    for match in matches:
+        match = match.strip("\n ")[len(flag):].strip()
+        print("   %s%s %s%s%s" % (CYAN, command, GREEN, flag, NONE), match)
+
+    # separate flags with newline
+    if i != len(flags) - 1:
+        print()

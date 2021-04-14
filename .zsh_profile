@@ -29,10 +29,10 @@ export CLICOLOR=1                         # pretty colorful terminal
 export BASH_SILENCE_DEPRECATION_WARNING=1 # yes yes we know zsh is default
 export PYTHONDONTWRITEBYTECODE=1          # don't spew python bytecode everywhere
 export PYTHONBREAKPOINT=ipdb.set_trace    # ipdb debugging
-export PYTHONSTARTUP="$HOME/.dotfiles/.pyrc"  # python REPL init
 stty -ixon  # enable forward cycling in bck-i-search by ^S
 bindkey -e  # emacs keybindings for command line
 setopt EXTENDED_GLOB
+bindkey "^H" delete-char  # enable easy forward-char deletion
 
 # history management
 HISTFILE=~/.zsh_history

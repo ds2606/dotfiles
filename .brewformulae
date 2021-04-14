@@ -1,45 +1,40 @@
 # homebrew formulae
 
-brew install bat
-brew install cowsay
-brew install eth-p/software/bat-extras
-brew install exa
-brew install fasd
-brew install fd
-brew install ffmpeg
-brew install fish
-brew install fortune
-brew install fzf
-brew install gdb
-brew install gh
-brew install git
-brew install grep
-brew install htop
-brew install ipython
-brew install lolcat
-brew install pacvim
-brew install rename
-brew install ripgrep
-brew install shellcheck
-brew install tldr
-brew install tmux
-brew install trash
-brew install tree
-brew install vim
-brew install wget
-brew install youtube-dl
-brew install zsh-history-substring-search
-brew install zsh-syntax-highlighting
-brew install exa
-brew install youtube-dl
-brew install ffmpeg
-brew install cowsay
-brew install fortune
-brew install lolcat
-brew install eth-p/software/bat-extras
-brew install gh
-brew install st
-brew install coreutils
-brew install hyperfine
-brew install jqbrew install ccls
-brew install handbrake
+bat
+ccls
+coreutils
+cowsay
+eth-p/software/bat-extras
+exa
+fasd
+fd
+ffmpeg
+fish
+fortune
+fzf
+gdb
+gh
+git
+grep
+handbrake
+htop
+hyperfine
+ipython
+jq
+lolcat
+node
+pacvim
+rename
+ripgrep
+shellcheck
+st
+tldr
+tmux
+trash
+tree
+vim
+watch
+wget
+youtube-dl
+zsh-history-substring-search
+zsh-syntax-highlighting

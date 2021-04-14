@@ -40,7 +40,7 @@ alias bd='batdiff'
 alias fd='fd -i'
 alias grep='ggrep --color=auto' # GNU grep as default
 alias htop='htop-vim'
-alias ipy='ipython'
+alias ipy='ipython --profile=dschreck'
 alias la='exa -a --color=always'
 alias ll='exa -lah --color=always'
 alias ls='exa --color=always'

@@ -128,8 +128,6 @@ let s:black = s:colors.black
 let s:blue = s:colors.blue
 let s:cyan = s:colors.cyan
 let s:green = s:colors.green
-let s:gutter_fg_grey = s:colors.z_gutter_fg_grey
-let s:highlight = s:colors.highlight
 let s:ice = s:colors.ice
 let s:orange = s:colors.orange
 let s:pink = s:colors.pink_soft
@@ -145,6 +143,8 @@ let s:yellow = s:colors.yellow_orange
 let s:yellow_soft = s:colors.yellow_soft
 let s:z_comment_grey = s:colors.highlight
 let s:z_cursor_grey = s:colors.z_cursor_grey
+let s:z_gutter_fg_grey = s:colors.z_gutter_fg_grey
+let s:z_linenr_grey = s:colors.z_linenr_grey
 let s:z_menu_grey = s:colors.z_menu_grey
 let s:z_special_grey = s:colors.z_special_grey
 let s:z_term_grey = s:colors.z_term_grey
@@ -228,7 +228,7 @@ call s:h("Folded", { "fg": s:z_comment_grey })                                  
 call s:h("FoldColumn", {})                                                           " 'foldcolumn'
 call s:h("SignColumn", {})                                                           " column where signs are displayed
 call s:h("IncSearch", { "fg": s:red, "cterm": "bold", "bg": s:z_test }) " 'incsearch' highlighting; also used for the text replaced with ":s///c"
-call s:h("LineNr", { "fg": s:gutter_fg_grey }) " Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
+call s:h("LineNr", { "fg": s:z_linenr_grey }) " Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
 call s:h("cursorlinenr", {})                                                         " like linenr when 'cursorline' or 'relativenumber' is set for the cursor line.
 call s:h("matchparen", { "fg": s:cyan, "gui": "underline", "cterm": "underline" })   " the character under the cursor or just before it, if it is a paired bracket, and its match.
 call s:h("ModeMsg", {}) " 'showmode' message (e.g., "-- INSERT --")

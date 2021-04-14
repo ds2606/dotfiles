@@ -57,8 +57,6 @@ set      showmatch         " show matching brachets
 set      ruler
 set      laststatus=2         " show status bar by default
 set      noshowmode           " hide --MODE-- (redundant with lightline)
-hi       Normal ctermbg=NONE
-hi       LineNr ctermfg=60
 hi       ExtraWhitespace ctermbg=18 guibg=#87005f
 match    ExtraWhitespace /\s\+$/
 autocmd  BufWinEnter * match ExtraWhitespace /\s\+$/
@@ -166,8 +164,11 @@ noremap ]p          <C-w>w
 noremap [p          <C-w>W
 noremap ]t          :tabn<cr>
 noremap [t          :tabp<cr>
-noremap <leader>\   :vsp<cr>
 noremap <leader>-   :sp<cr>
+noremap <leader>_   :sp<cr>:enew<cr>
+noremap <leader>\   :vsp<cr>
+noremap <leader>\|  :vsp<cr>:enew<cr>
+noremap <leader>wn  :enew<cr>
 noremap <leader>wt  :tabnew<cr>
 noremap <leader>wo  :tabedit <C-r>=expand("%:p:h")<cr>/
 noremap <leader>wO  :tabedit
@@ -198,6 +199,10 @@ noremap <leader>2 2gt
 noremap <leader>3 3gt
 noremap <leader>4 4gt
 noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
 
 " normal mode newline
 nnoremap <leader>o o<esc>
@@ -288,6 +293,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
+Plug 'uiiaoo/java-syntax.vim'
 Plug 'w0rp/ale'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 call plug#end()
@@ -404,7 +410,7 @@ let g:ale_enabled               = 0
 let g:ale_linters               = {'python': ['flake8', 'pylint'],
                                  \ 'rust': ['rls', 'rustc', 'analyzer', 'cargo']}
 
-let g:ale_linters_ignore        = {'rust': []}
+let g:ale_linters_ignore        = {'rust': [], 'cpp': ['ccls']}
 let g:ale_python_flake8_options = "--ignore f403"  " allow 'import *'
 let g:ale_python_pylint_options =
     \ "-d C0115,C0116,WO401 --variable-rgx '..?' --argument-rgx '..?'"  " allow 1-2 char variable names in pylint
@@ -437,8 +443,8 @@ function! s:show_documentation()
 endfunction
 inoremap <silent><nowait><expr> - coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "-"
 inoremap <silent><nowait><expr> = coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "="
-inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+inoremap <nowait><expr> <C-d> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+inoremap <nowait><expr> <C-u> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
 nnoremap <nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
 nnoremap <nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
 "" Some servers have issues with backup files, see #649.

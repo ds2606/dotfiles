@@ -22,6 +22,7 @@ let s:colors = {
     \ "yellow_orange": get(s:overrides, "pnyellow", { "gui": "#FAC056", "cterm": "214", "cterm16": "1" }),
     \ "yellow_soft": get(s:overrides, "softyellow", { "gui": "#E5C07B", "cterm": "223", "cterm16": "3" }),
     \ "z_comment_grey": get(s:overrides, "comment_grey", { "gui": "#5C6370", "cterm": "102", "cterm16": "15" }),
+    \ "z_linenr_grey": get(s:overrides, "comment_grey", { "gui": "#5C6370", "cterm": "60", "cterm16": "15" }),
     \ "z_text_grey": get(s:overrides, "comment_grey", { "gui": "#5C6370", "cterm": "60", "cterm16": "15" }),
     \ "z_cursor_grey": get(s:overrides, "cursor_grey", { "gui": "#2C323C", "cterm": "236", "cterm16": "8" }),
     \ "z_gutter_fg_grey": get(s:overrides, "gutter_fg_grey", { "gui": "#4B5263", "cterm": "238", "cterm16": "15" }),

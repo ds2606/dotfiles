@@ -2,6 +2,7 @@ bat
 exa
 fasd
 fd
+htop
 rg
 tldr
-node
+node  // for vim coc
