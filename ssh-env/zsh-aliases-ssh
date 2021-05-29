@@ -19,7 +19,6 @@ alias rsync='rsync -havz --stats'
 alias srz='source ~/.zshrc'
 alias t='tmux'
 alias ta='tmux attach'
-alias tn='tmux new-session'
 alias vi='vim'
 
 # 3rd-party aliases

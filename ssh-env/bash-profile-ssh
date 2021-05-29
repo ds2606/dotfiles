@@ -11,6 +11,10 @@ export HISTSIZE=5000  # give ^R some data to work with
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
 ulimit -c 0
 set -o noclobber
 alias cp='cp -i'    # prompt before overwriting file

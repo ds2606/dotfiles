@@ -38,3 +38,5 @@ wget
 youtube-dl
 zsh-history-substring-search
 zsh-syntax-highlighting
+iproute2mac
+telnet

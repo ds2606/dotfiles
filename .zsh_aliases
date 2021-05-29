@@ -3,10 +3,10 @@
 
 # safe environment
 set -o noclobber
-alias rm='rm -i'         # Prompt before removing files via 'rm'
-alias cp='cp -i'         # Prompt before overwriting files via 'cp'
-alias mv='mv -i'         # Prompt before overwriting files via 'mv'
-alias ln='ln -i'         # Prompt before overwriting files via 'ln'
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias ln='ln -i'
 
 # navigation
 alias ,="cd -"
@@ -17,14 +17,20 @@ export zrc=~/.dotfiles/.zsh_profile
 export vrc=~/.dotfiles/.vimrc
 cs=~/desktop/home/cs
 dots=~/.dotfiles
-alias myth='ssh myth'
+
+# suffix defaults
+alias -s py='python3'
+alias -s html='open -a Google\ Chrome'
+alias -s pdf='open'
 
 # built-ins
 alias cl='clear'
 alias du1='du -sh'
 alias g='git'
 alias hist='history'
-alias mirror='wget -r -p -E -l inf -k -np'
+alias man.linux='man -M /usr/local/share/man-linux'
+alias man.myth='man -M /usr/local/share/man-myth'
+alias mirror='wget -m -p -E -k -np'
 alias pe='printenv'
 alias rmf='rm -f'
 alias rsync='rsync -havz --stats'
@@ -38,7 +44,7 @@ alias vi='vim'
 # 3rd-party
 alias bd='batdiff'
 alias fd='fd -i'
-alias grep='ggrep --color=auto' # GNU grep as default
+alias grep='ggrep --color=auto'  # GNU grep as default
 alias htop='htop-vim'
 alias ipy='ipython --profile=dschreck'
 alias la='exa -a --color=always'
@@ -49,8 +55,10 @@ alias pydoc='pydoc3'
 # alias python='/usr/local/bin/python3'  # homebrew managed python
 alias rg='rg --smart-case'
 alias trash='trash -F'
-alias v='f -e vim'  # fasd quick file open with vim
-alias vv='sf -e vim'  # 'v' but interactive
+alias v='fasd -fe vim'  # fasd quick file open with vim
+alias vv='fasd -ife vim'  # 'v' but interactive
+alias myip4='curl -4 ifconfig.co'
+alias myip6='curl -6 ifconfig.co'
 
 # gui applications
 alias chrome='open -a Google\ Chrome'

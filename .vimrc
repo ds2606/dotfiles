@@ -26,8 +26,7 @@ let &showbreak='  '      " little extra break for wrapped lines
 set autoread             " auto-refresh unmodified buffers edited elsewhere
 au  FocusGained,BufEnter * checktime  " check if buffer updated elsewhere
 set magic                " enable special chars in regex ('*', '.', etc)
-"set mouse=;             " allow mouse interface
-"set scrolloff=3         " keep 3 lines of context while scrolling
+"set mouse=a              " allow mouse interface
 
 " backups, swap files, and persistent undo
 set backup
@@ -89,7 +88,7 @@ noremap <leader>c :close<cr>
 " new file
 noremap <leader>n :new<cr>
 
-" Y behaves like other capitals
+" Y behaves like other capitals (act to end of line)
 noremap Y y$
 
 " easier redo
@@ -143,35 +142,31 @@ inoremap <C-e> <esc>A
 inoremap <C-^> <C-o><C-^>
 inoremap <C-d> <C-k>
 
-" quick select all
+" quick select-all
 noremap <leader>va ggVG
 
 " pane switching
+noremap ]p          <C-w>w
+noremap [p          <C-w>W
 noremap <C-h> <C-w>h
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
 
 " buffer management
-set hidden    " hide a buffer instead of closing it
+set nohidden  " really close a buffer when closing it (prevents buflist blow-up)
 noremap ]b          :bnext<cr>
 noremap [b          :bprev<cr>
 noremap <leader>bc  :BD<cr>
 noremap <leader>bl  :buffers<cr>
 
-" tab/window management
-noremap ]p          <C-w>w
-noremap [p          <C-w>W
+" window (tab) management
 noremap ]t          :tabn<cr>
 noremap [t          :tabp<cr>
 noremap <leader>-   :sp<cr>
 noremap <leader>_   :sp<cr>:enew<cr>
 noremap <leader>\   :vsp<cr>
 noremap <leader>\|  :vsp<cr>:enew<cr>
-noremap <leader>wn  :enew<cr>
-noremap <leader>wt  :tabnew<cr>
-noremap <leader>wo  :tabedit <C-r>=expand("%:p:h")<cr>/
-noremap <leader>wO  :tabedit
 noremap <leader>wj  :tabmove -1<cr>
 noremap <leader>wk  :tabmove +1<cr>
 noremap <leader>wr  <C-w><C-r>
@@ -237,29 +232,30 @@ map <leader>sr :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
 " delete trailing whitespace
 noremap <silent> <leader>dw mt:let _s=@/ <bar>
       \ :%s/\s\+$//e<bar>:let @/=_s<cr>`t
-      \ <bar> :echom "deleted trailing whitespace"<cr>
+      \ <bar> :echom "deleted trailing whitespace"<cr>:noh<cr>
 " noremap <leader>lw  :match ExtraWhitespace /\s\+$/<cr>  "show trailing whitespace
 
 " file shortcuts for quick editing (last is for sourcing .vimrc)
-noremap <leader>ev  :tabedit ~/.vimrc<cr>
-noremap <leader>es  :source  ~/.vimrc
+noremap <leader>en  :enew<cr>
+noremap <leader>et  :tabnew<cr>
+noremap <leader>eo  :tabedit <C-r>=expand("%:p:h")<cr>/
+noremap <leader>eO  :tabedit
 noremap <leader>ez  :tabedit ~/.dotfiles/.zsh_profile<cr>
+noremap <leader>ev  :tabedit ~/.vimrc<cr>
+noremap <leader>es  :source  ~/.vimrc<cr> <bar> :echom "vim config reloaded"<cr>
 noremap <leader>ec  :CocConfig<cr>
 
-" terminal access
-noremap <leader>tn   :ter<cr>
-      \<c-w>:exe          "resize" . (winheight(0) * 3/5) <cr>
-noremap <leader>to   :sb zsh<cr>
-      \<c-w>:exe          "resize " . (winheight(0) * 3/5) <cr>
-tnoremap `n  <C-w>c:ter<cr>
-      \<c-w>:exe          "resize " . (winheight(0) * 3/5) <cr>
-tnoremap `c    <C-w>c
-tnoremap `d    <C-d>
-tnoremap <C-k> <C-w>k
-tnoremap `p    <C-w>w
-tnoremap `e    <C-w>N
-tnoremap `-    <C-w>k <bar> :res +3 <cr> <bar> <c-w>j
-tnoremap `=    <C-w>k <bar> :res -3 <cr> <bar> <c-w>j
+" vim built-in terminal access
+noremap <leader>tn  :ter<cr><C-w>:exe "resize" . (winheight(0) * 3/5) <cr>
+noremap <leader>to  :sb zsh<cr><C-w>:exe "resize " . (winheight(0) * 3/5) <cr>
+tnoremap ~n    <C-w>c:ter<cr><C-w>:exe "resize " . (winheight(0) * 3/5) <cr>
+tnoremap ~c    <C-w>c
+tnoremap ~d    <C-d>
+" tnoremap <C-k> <C-w>k
+tnoremap ~p    <C-w>w
+tnoremap ~e    <C-w>N
+tnoremap ~-    <C-w>k <bar> :res +3 <cr> <bar> <c-w>j
+tnoremap ~=    <C-w>k <bar> :res -3 <cr> <bar> <c-w>j
 
 " quick insertion of \(\) in search-replace
 cmap ;\ \(\)<left><left>
@@ -277,6 +273,7 @@ Plug 'gillyb/stable-windows', { 'on': [] }
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'junegunn/gv.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'maximbaz/lightline-ale'
 Plug 'mbbill/undotree'
@@ -289,6 +286,7 @@ Plug 'qpkorr/vim-bufkill'
 Plug 'rust-lang/rust.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'simeji/winresizer'
+Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
@@ -311,7 +309,7 @@ let g:BufKillCreateMappings = 0
 " winresizer
 let g:winresizer_horiz_resize  = 1
 let g:winresizer_vert_resize   = 3
-noremap <leader>wr :WinResizerStartResize<cr>
+noremap <leader>r ,WinResizerStartResize<cr>
 
 " NERDTree
 noremap <leader>n :NERDTreeToggle<cr>
@@ -356,8 +354,8 @@ let g:fzf_colors = {
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment']
   \ }
-noremap <leader>/ :Rg<cr>,
-noremap <leader>bs :Buffers<cr>,
+noremap <leader>/ :Rg<cr>
+noremap <leader>bs :Buffers<cr>
 
 " lightline integration with ale and fugitive
 let g:lightline = {
@@ -408,9 +406,8 @@ let g:ale_enabled               = 0
 let g:ale_enabled               = 0
 " let g:ale_disable_lsp           = 1
 let g:ale_linters               = {'python': ['flake8', 'pylint'],
-                                 \ 'rust': ['rls', 'rustc', 'analyzer', 'cargo']}
-
-let g:ale_linters_ignore        = {'rust': [], 'cpp': ['ccls']}
+                                 \ 'rust': ['rls', 'rustc', 'analyzer', 'cargo'],
+                                 \ 'zsh': ['bashate', 'shell', 'shellcheck']}
 let g:ale_python_flake8_options = "--ignore f403"  " allow 'import *'
 let g:ale_python_pylint_options =
     \ "-d C0115,C0116,WO401 --variable-rgx '..?' --argument-rgx '..?'"  " allow 1-2 char variable names in pylint

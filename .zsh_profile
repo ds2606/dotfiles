@@ -7,7 +7,7 @@ if [[ -z "$TMUX" ]]; then
 fi
 
 # set environment
-source $HOME/.dotfiles/.shfunctions
+source $HOME/.dotfiles/.shfunctions.zsh
 source $HOME/.dotfiles/.zsh_aliases
 source $HOME/.dotfiles/.zsh_prompt
 
@@ -108,3 +108,6 @@ export ITERM2_SQUELCH_MARK=0
 
 # initialize pyenv
 eval "$(pyenv init -)"
+
+# discourage hosts editing
+alias -g /etc/hosts='-c'

@@ -1,7 +1,7 @@
 # BASH PROFILE
 
 # source functions
-source $HOME/.dotfiles/.shfunctions
+source $HOME/.dotfiles/.shfunctions.zsh
 
 # set prompt
 PS1='\[\033[01;34m\](bash) \w> \[\033[00m\]'

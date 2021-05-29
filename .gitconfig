@@ -21,6 +21,7 @@
     c    = commit
     cam  = commit -am
     cat  = cat-file -p
+    co   = checkout
     d    = diff
     h    = help
     l    = log --all --oneline --graph -10
