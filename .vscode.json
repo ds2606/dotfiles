@@ -10,7 +10,7 @@
     //"editor.quickSuggestions": false,
 
     // aesthetic
-    "workbench.colorTheme": "Palenight Theme",
+    "workbench.colorTheme": "Material Theme Palenight",
     "workbench.iconTheme": null,
     "editor.fontSize": 12,
     "editor.wordWrap": "on",
@@ -42,7 +42,6 @@
             ]
         }
     },
-    "terminal.integrated.shell.osx": "/bin/bash",
     "python.pythonPath": "/usr/local/bin/python3",
     "python.jediEnabled": false,
     "editor.matchBrackets": false,
@@ -147,17 +146,23 @@
       "<C-f>": false
     },
     "latex-workshop.view.pdf.viewer": "tab",
-    "python.defaultInterpreterPath": "/Library/Developer/CommandLineTools/usr/bin/python3",
+    "python.defaultInterpreterPath": "/Users/dschreck/.pyenv/versions/3.9.1/bin/python",
     "C_Cpp.updateChannel": "Insiders",
     "editor.columnSelection": false,
-    "workbench.editorAssociations": [
-      {
-        "viewType": "jupyter.notebook.ipynb",
-        "filenamePattern": "*.ipynb"
-      }
-    ],
+    "workbench.editorAssociations": {
+      "*.ipynb": "jupyter.notebook.ipynb"
+    },
     "editor.lightbulb.enabled": false,
     "python.languageServer": "Microsoft",
     "remote.SSH.lockfilesInTmp": true,
-    "C_Cpp.errorSquiggles": "Enabled"
+    "C_Cpp.errorSquiggles": "Enabled",
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "terminal.integrated.profiles.osx": {
+      "/bin/bash (migrated)": {
+        "path": "/bin/bash",
+        "args": [
+          "-l"
+        ]
+      }
+    }
   }

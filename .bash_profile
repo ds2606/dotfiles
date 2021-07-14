@@ -13,11 +13,6 @@ export PATH="$PATH:/usr/local/smlnj/bin"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$PATH:$HOME/.opt/bin"
 
-# set paths
-export BASH_SILENCE_DEPRECATION_WARNING=1
-export PYTHONDONTWRITEBYTECODE=1
-export PATH="$HOME/.cargo/bin:$PATH"
-
 # set environment variables
 export PYTHONDONTWRITEBYTECODE=1
 export BASH_SILENCE_DEPRECATION_WARNING=1

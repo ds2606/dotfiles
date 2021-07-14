@@ -312,6 +312,9 @@ call s:h("rustTypedef", { "fg": s:purple })
 call s:h("rustType", { "fg": s:yellow })
 call s:h("rustAssert", { "fg": s:orange })
 
+" Java
+call s:h("javaAccessKeyword", { "fg": s:blue })
+
 
 " PLUGIN-SPECIFIC HIGHLIGHTING
 

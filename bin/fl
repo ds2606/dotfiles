@@ -22,11 +22,15 @@ flags = sys.argv[2:]
 # get and clean man page info
 p1 = sp.Popen(["man", command], stdout=sp.PIPE, stderr=sp.PIPE)
 p2 = sp.Popen(["col", "-b"], stdin=p1.stdout, stdout=sp.PIPE)
+manpage = p2.communicate()[0].decode("utf-8")
 if p1.stderr.peek():
     # quit if no man page entry for `command`
+    # NOTE: can only check first subprocess standard error *after* waiting for
+    # second child (done with `communicate`) to avoid deadlock (caused by
+    # filled pipes in the case of long manpages)
     print("%sNo man entry for '%s%s%s'" % (RED, MAGENTA, command, RED))
     sys.exit(1)
-manpage = p2.communicate()[0].decode("utf-8")
+print(len(manpage))
 
 # print matches for each command-line flag
 for i, flag in enumerate(flags):

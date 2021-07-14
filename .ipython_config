@@ -4,15 +4,16 @@ c.BaseIPythonApplication.profile = 'dschreck'
 c.TerminalIPythonApp.display_banner = False
 c.InteractiveShellApp.exec_PYTHONSTARTUP = True
 c.InteractiveShellApp.exec_lines = [
-    'import numpy as np',
     'from importlib import reload',
-    'import sys',
     'import os',
+    'import sys',
+    'import numpy as np',
     'print(f"Python {sys.version.split()[0]} ", end=\'\')',
     'print("| help(), ?, %quickref", end=\'\')'
     ]
 c.AliasManager.user_aliases = [
     ('ls', 'exa'),
+    ('vim', 'vim'),
     ('la', 'exa -a'),
     ('ll', 'exa -al'),
 ]

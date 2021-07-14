@@ -55,8 +55,22 @@ mcd() {
 }
 
 # jump straight to a man page flag
-mfl () {
+mfl() {
     LESS=+/^[[:blank:]]+"$2" man "$1"
+}
+
+# make a phone call
+call() {
+    open -a facetime tel://$1
+}
+
+# nest tmux nessions
+tmux_nested() {
+    [ -z $N_TMUX_NESTED ] && N_TMUX_NESTED=0
+    env TMUX='' tmux new-session -d -As nested${N_TMUX_NESTED}
+    tmux send-keys -t nested${N_TMUX_NESTED} "tmux set prefix C-b" ENTER "clear" ENTER
+    env TMUX='' tmux attach -t nested${N_TMUX_NESTED}
+    N_TMUX_NESTED=$((N_TMUX_NESTED + 1))
 }
 
 # switch workspace

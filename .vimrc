@@ -1,4 +1,4 @@
-" VIMRC
+"  VIMRC
 
 
 " ENVIRONMENT
@@ -73,10 +73,11 @@ autocmd  BufWinLeave * call clearmatches()
 noremap ; :
 noremap \; ;
 
-" jk for insertion escape
+" `jk` for insertion/visual escape
 inoremap jk <esc>`^
+vnoremap <space> <esc>
 
-" remap normal mode comma to backtick (accomodates tmux prefix, also ergonomic)
+" map comma -> backtick (for marks: accomodates tmux prefix and ergonomic)
 noremap ' `
 
 " quick quit, write, and write-quit
@@ -84,9 +85,6 @@ noremap <leader>q :q<cr>
 noremap <leader>Q :qa<cr>
 noremap <leader>x :x<cr>
 noremap <leader>c :close<cr>
-
-" new file
-noremap <leader>n :new<cr>
 
 " Y behaves like other capitals (act to end of line)
 noremap Y y$
@@ -131,6 +129,8 @@ noremap J L
 noremap K H
 noremap & J
 noremap <C-k> K
+noremap gH g^
+noremap gL g$
 
 " insert mode navigation (remap digraph insertion)
 inoremap <C-h> <C-o>h
@@ -154,19 +154,19 @@ noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
 
 " buffer management
-set nohidden  " really close a buffer when closing it (prevents buflist blow-up)
+set nohidden  " really close a buffer when closing it (prevents buflist blow-up) NOT SURE IF WORKING AS EXPECTED
 noremap ]b          :bnext<cr>
 noremap [b          :bprev<cr>
 noremap <leader>bc  :BD<cr>
 noremap <leader>bl  :buffers<cr>
 
-" window (tab) management
+" window/tab management
 noremap ]t          :tabn<cr>
 noremap [t          :tabp<cr>
 noremap <leader>-   :sp<cr>
-noremap <leader>_   :sp<cr>:enew<cr>
+noremap <leader>_   :new<cr>
 noremap <leader>\   :vsp<cr>
-noremap <leader>\|  :vsp<cr>:enew<cr>
+noremap <leader>\|  :vne<cr>
 noremap <leader>wj  :tabmove -1<cr>
 noremap <leader>wk  :tabmove +1<cr>
 noremap <leader>wr  <C-w><C-r>
@@ -199,21 +199,20 @@ noremap <leader>7 7gt
 noremap <leader>8 8gt
 noremap <leader>9 9gt
 
-" normal mode newline
+" normal mode insert newline, insert char, and delete line
 nnoremap <leader>o o<esc>
 nnoremap <leader>O O<esc>
-
-" insert a char in normal mode
 nnoremap <leader>i i_<Esc>r
-
-" insert mode delete line
 inoremap ;d   <esc>ddkA
 
-" insert mode write/quit
+" insert mode write, quit, perform normal-mode command, paste, and insert semicolon
 inoremap ;ww  <esc>:w<cr>li
 inoremap ;wq  <esc>:wq
 inoremap ;x   <esc>:x
 inoremap ;q   <esc>:q
+inoremap ;n   <C-o>
+inoremap ;p   <C-o>p
+inoremap ;; ;
 
 " easier macro repitition
 noremap Q @@
@@ -239,11 +238,11 @@ noremap <silent> <leader>dw mt:let _s=@/ <bar>
 noremap <leader>en  :enew<cr>
 noremap <leader>et  :tabnew<cr>
 noremap <leader>eo  :tabedit <C-r>=expand("%:p:h")<cr>/
-noremap <leader>eO  :tabedit
+noremap <leader>eO  :tabedit <C-r><cr>
+noremap <leader>ec  :CocConfig<cr>
 noremap <leader>ez  :tabedit ~/.dotfiles/.zsh_profile<cr>
 noremap <leader>ev  :tabedit ~/.vimrc<cr>
 noremap <leader>es  :source  ~/.vimrc<cr> <bar> :echom "vim config reloaded"<cr>
-noremap <leader>ec  :CocConfig<cr>
 
 " vim built-in terminal access
 noremap <leader>tn  :ter<cr><C-w>:exe "resize" . (winheight(0) * 3/5) <cr>
@@ -266,6 +265,7 @@ cmap ;\ \(\)<left><left>
 " vim-plug (to disable, append `{ 'on': [] }`
 call plug#begin('~/.vim/plugged')
 Plug 'airblade/vim-gitgutter'
+Plug 'alvan/vim-closetag'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'easymotion/vim-easymotion'
 Plug 'editorconfig/editorconfig-vim'
@@ -275,6 +275,7 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/gv.vim'
 Plug 'junegunn/vim-easy-align'
+Plug 'mattn/emmet-vim'
 Plug 'maximbaz/lightline-ale'
 Plug 'mbbill/undotree'
 Plug 'mhinz/vim-startify'
@@ -407,7 +408,8 @@ let g:ale_enabled               = 0
 " let g:ale_disable_lsp           = 1
 let g:ale_linters               = {'python': ['flake8', 'pylint'],
                                  \ 'rust': ['rls', 'rustc', 'analyzer', 'cargo'],
-                                 \ 'zsh': ['bashate', 'shell', 'shellcheck']}
+                                 \ 'zsh': ['bashate', 'shell', 'shellcheck'],
+                                 \ 'cpp': ['ccls']}
 let g:ale_python_flake8_options = "--ignore f403"  " allow 'import *'
 let g:ale_python_pylint_options =
     \ "-d C0115,C0116,WO401 --variable-rgx '..?' --argument-rgx '..?'"  " allow 1-2 char variable names in pylint
