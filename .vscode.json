@@ -24,7 +24,9 @@
     "workbench.colorCustomizations": {
         "statusBar.background" : "#303030",
         "editorError.foreground": "#ff000030",
-        "editorWarning.foreground": "#ffd9006f",
+        "editorWarning.foreground": "#ffd9006f", 
+        "editorCursor.foreground": "#6947b6",
+        "terminalCursor.foreground": "#6947b6"
     },
     "subtleBrackets.style": {
         "borderColor": "#6d65f8c5",

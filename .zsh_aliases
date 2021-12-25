@@ -15,8 +15,8 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 export zrc=~/.dotfiles/.zsh_profile
 export vrc=~/.dotfiles/.vimrc
-cs=~/desktop/home/cs
-dots=~/.dotfiles
+export cs=~/desktop/home/cs
+export dots=~/.dotfiles
 
 # suffix defaults
 alias -s py='python3'
@@ -28,6 +28,7 @@ alias cl='clear'
 alias du1='du -sh'
 alias g='git'
 alias hist='history'
+alias grep='ggrep --color=auto'  # GNU grep as default
 alias man.linux='man -M /usr/local/share/man-linux'
 alias man.m='man -M /usr/local/share/man-myth'
 alias mirror='wget -m -p -E -k -np'
@@ -45,7 +46,6 @@ alias vi='vim'
 # 3rd-party
 alias bd='batdiff'
 alias fd='fd -i'
-alias grep='ggrep --color=auto'  # GNU grep as default
 alias htop='htop-vim'
 alias ipy='ipython --profile=dschreck'
 alias la='exa -a --color=always'

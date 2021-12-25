@@ -33,7 +33,7 @@ launch() {
             if [[ $(rg -c . <<< "$app") > 1 ]]; then
                 echo "$_RED\0Multiple matches for $_MAGENTA\"$var\"$_RED found:$_NONE\n$app" # if multiple matches found, list and return
             elif [ -z "$app" ]; then
-                echo "$_MAGENTA\"$var\" not found$_NONE" # if no matches found, inform caller
+                echo "$_MAGENTA\"$var\"$_RED not found$_NONE" # if no matches found, inform caller
             else [[ $_list == 0 ]] && open "$app" || echo "$_CYAN\0Found app at path: $_GREEN\0$app$_NONE"  # if one match, launch (or list if '-l' given)
             fi
         done
@@ -44,13 +44,29 @@ launch() {
 mcd() {
     if [ $# -eq 1 ]; then
         if [ -d "$1" ]; then
-            echo dir exists
+            echo 'dir exists'
         else
             mkdir -p "$1"
         fi
         cd "$1"
     else
         echo 'usage: mcd [dir path]'
+    fi
+}
+
+# change extension
+chex() {
+    file=$(fd $1 -t f)
+    if [[ $(rg -c . <<< "$file") > 1 ]]; then
+        echo "$_RED\0Multiple matches for $_MAGENTA\"$1\"$_RED found:$_NONE\n$file" # if multiple matches found, list and return
+    elif [ -z "$file" ]; then
+        echo "$_RED\"$1\"$_MAGENTA not found$_NONE" # if no matches found, inform caller
+    else
+        old_extension="${file##*.}"
+        new_extension=$2
+        newpath=$(echo $file | sed "s/$old_extension/$new_extension/")
+        mv $file $newpath
+        echo "$_CYAN\0Moved $file to $_GREEN\0$newpath$_NONE"  # if one match, launch (or list if '-l' given)
     fi
 }
 
@@ -71,22 +87,23 @@ tmux_nested() {
     tmux send-keys -t nested${N_TMUX_NESTED} "tmux set prefix C-b" ENTER "clear" ENTER
     env TMUX='' tmux attach -t nested${N_TMUX_NESTED}
     N_TMUX_NESTED=$((N_TMUX_NESTED + 1))
+    echo $N_TMUX_NESTED
 }
 
-# switch workspace
-spc() {
+# switch wallpaper
+wp() {
     if [[ "$#" -ne 1 ]]; then
-        echo "usage: space [ARG]"
+        echo "usage: wp [ARG]"
         return 1
     fi
 
     local bg="/Users/dschreck/Pictures/backgrounds/"
     case $1 in
-        "41") bg+="lights.jpg" ;;
-        "231n") bg+="garden.jpg" ;;
-        "124") bg+="stars.jpg" ;;
-        "110") bg+="swirl.jpg" ;;
-        *) echo "space not recognized" && return 1 ;;
+        "lights") bg+="lights.jpg" ;;
+        "garden") bg+="garden.jpg" ;;
+        "stars") bg+="stars.jpg" ;;
+        "swirl") bg+="swirl.jpg" ;;
+        *) echo "wallpaper not recognized" && return 1 ;;
     esac
     osascript -e "tell application \"Finder\" to set desktop picture to POSIX file \"$bg\""
 }

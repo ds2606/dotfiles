@@ -13,20 +13,21 @@ set showcmd              " show most recent command
 set splitbelow
 set splitright
 set nu                   " normal line numbering
-set formatoptions-=cro   " don't autoinsert newline comments from comments (BROKEN)
 set clipboard^=unnamed   " copy-paste across terminals
 set foldlevel=99         " file unfolded by default
 set matchtime=0
 set encoding=utf8
 set wrap
 set textwidth=90         " inserted text automatically linebroken after 120 chars
+set formatoptions-=tcro   " don't autoinsert newline comments from comments
+set fo-=t                " idk y this needs to be repeated separately to work
 set linebreak            " wrap lines at whitespace and punctuation, not mid-word
 set breakindent          " wrap lines to same indent level
 let &showbreak='  '      " little extra break for wrapped lines
 set autoread             " auto-refresh unmodified buffers edited elsewhere
 au  FocusGained,BufEnter * checktime  " check if buffer updated elsewhere
 set magic                " enable special chars in regex ('*', '.', etc)
-"set mouse=a              " allow mouse interface
+" set mouse=a              " allow mouse interface
 
 " backups, swap files, and persistent undo
 set backup
@@ -73,7 +74,7 @@ autocmd  BufWinLeave * call clearmatches()
 noremap ; :
 noremap \; ;
 
-" `jk` for insertion/visual escape
+" `jk` for insertion escape, space for visual escape
 inoremap jk <esc>`^
 vnoremap <space> <esc>
 
@@ -109,8 +110,10 @@ noremap <leader>p %
 noremap <leader># :set nu!<cr>
 
 " move vertically by visual line (don't skip wrapped lines)
-nmap j gj
-nmap k gk
+noremap j gj
+noremap k gk
+noremap gj j
+noremap gk k
 
 " 'go to line' without reaching for shift
 noremap gl G
@@ -154,7 +157,7 @@ noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
 
 " buffer management
-set nohidden  " really close a buffer when closing it (prevents buflist blow-up) NOT SURE IF WORKING AS EXPECTED
+set hidden
 noremap ]b          :bnext<cr>
 noremap [b          :bprev<cr>
 noremap <leader>bc  :BD<cr>
@@ -173,6 +176,7 @@ noremap <leader>wr  <C-w><C-r>
 noremap <leader>wv  <C-w>H
 noremap <leader>wh  <C-w>J
 noremap <leader>wb  <C-w>T
+noremap <leader>wr  <C-w><C-r>
 noremap <leader>z   :call MaximizeToggle()<CR>
 function! MaximizeToggle()
   if exists("s:maximize_session")
@@ -235,26 +239,27 @@ noremap <silent> <leader>dw mt:let _s=@/ <bar>
 " noremap <leader>lw  :match ExtraWhitespace /\s\+$/<cr>  "show trailing whitespace
 
 " file shortcuts for quick editing (last is for sourcing .vimrc)
-noremap <leader>en  :enew<cr>
-noremap <leader>et  :tabnew<cr>
-noremap <leader>eo  :tabedit <C-r>=expand("%:p:h")<cr>/
-noremap <leader>eO  :tabedit <C-r><cr>
-noremap <leader>ec  :CocConfig<cr>
+noremap <leader>bn  :enew<cr>
+noremap <leader>t   :tabedit<cr>
+noremap <leader>T   :tabedit <C-r>=expand("%:p:h")<cr>/
+" noremap <leader>eo  :tabedit <C-r>=expand("%:p:h")<cr>/
+" noremap <leader>eO  :tabedit <C-r><cr>
+" noremap <leader>ec  :CocConfig<cr>
 noremap <leader>ez  :tabedit ~/.dotfiles/.zsh_profile<cr>
 noremap <leader>ev  :tabedit ~/.vimrc<cr>
 noremap <leader>es  :source  ~/.vimrc<cr> <bar> :echom "vim config reloaded"<cr>
 
 " vim built-in terminal access
-noremap <leader>tn  :ter<cr><C-w>:exe "resize" . (winheight(0) * 3/5) <cr>
-noremap <leader>to  :sb zsh<cr><C-w>:exe "resize " . (winheight(0) * 3/5) <cr>
-tnoremap ~n    <C-w>c:ter<cr><C-w>:exe "resize " . (winheight(0) * 3/5) <cr>
-tnoremap ~c    <C-w>c
-tnoremap ~d    <C-d>
-" tnoremap <C-k> <C-w>k
-tnoremap ~p    <C-w>w
-tnoremap ~e    <C-w>N
-tnoremap ~-    <C-w>k <bar> :res +3 <cr> <bar> <c-w>j
-tnoremap ~=    <C-w>k <bar> :res -3 <cr> <bar> <c-w>j
+" noremap <leader>tn  :ter<cr><C-w>:exe "resize" . (winheight(0) * 3/5) <cr>
+" noremap <leader>to  :sb zsh<cr><C-w>:exe "resize " . (winheight(0) * 3/5) <cr>
+" tnoremap ~n    <C-w>c:ter<cr><C-w>:exe "resize " . (winheight(0) * 3/5) <cr>
+" tnoremap ~c    <C-w>c
+" tnoremap ~d    <C-d>
+" " tnoremap <C-k> <C-w>k
+" tnoremap ~p    <C-w>w
+" tnoremap ~e    <C-w>N
+" tnoremap ~-    <C-w>k <bar> :res +3 <cr> <bar> <c-w>j
+" tnoremap ~=    <C-w>k <bar> :res -3 <cr> <bar> <c-w>j
 
 " quick insertion of \(\) in search-replace
 cmap ;\ \(\)<left><left>
@@ -264,8 +269,9 @@ cmap ;\ \(\)<left><left>
 
 " vim-plug (to disable, append `{ 'on': [] }`
 call plug#begin('~/.vim/plugged')
+Plug 'ap/vim-css-color'
 Plug 'airblade/vim-gitgutter'
-Plug 'alvan/vim-closetag'
+" Plug 'alvan/vim-closetag'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'easymotion/vim-easymotion'
 Plug 'editorconfig/editorconfig-vim'
@@ -279,7 +285,7 @@ Plug 'mattn/emmet-vim'
 Plug 'maximbaz/lightline-ale'
 Plug 'mbbill/undotree'
 Plug 'mhinz/vim-startify'
-Plug 'neoclide/coc.nvim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'preservim/nerdtree'
 Plug 'psliwka/vim-smoothie'
 Plug 'preservim/tagbar'
@@ -310,7 +316,7 @@ let g:BufKillCreateMappings = 0
 " winresizer
 let g:winresizer_horiz_resize  = 1
 let g:winresizer_vert_resize   = 3
-noremap <leader>r ,WinResizerStartResize<cr>
+noremap <leader>r :WinResizerStartResize<cr>
 
 " NERDTree
 noremap <leader>n :NERDTreeToggle<cr>
@@ -380,6 +386,8 @@ let g:lightline.component_expand = {
       \  'linter_ok': 'lightline#ale#ok',
       \ }
 let g:lightline.component_type = {
+      \ 'linter_warnings': 'warning',
+      \ 'linter_errors': 'error',
       \ 'linter_ok': 'ok',
       \ }
 
@@ -396,6 +404,10 @@ noremap [g         :GitGutterPrevHunk<cr>
 " vim-smoothie
 let g:smoothie_update_interval = 15
 let g:smoothie_base_speed      = 7
+
+" emmet
+imap ;e <Plug>(emmet-expand-abbr)
+" let g:user_emmet_leader_key = ';e'
 
 " ALE (linting)
 noremap <leader>lt  :ALEToggle<cr>
@@ -427,25 +439,25 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-nmap <silent> <leader>ld <Plug>(coc-definition)
-nmap <silent> <leader>lk :call <SID>show_documentation()<CR>
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
-inoremap <silent><nowait><expr> - coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "-"
-inoremap <silent><nowait><expr> = coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "="
-inoremap <nowait><expr> <C-d> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-inoremap <nowait><expr> <C-u> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-nnoremap <nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
-nnoremap <nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
+" nmap <silent> <leader>ld <Plug>(coc-definition)
+" nmap <silent> <leader>lk :call <SID>show_documentation()<CR>
+" function! s:show_documentation()
+"   if (index(['vim','help'], &filetype) >= 0)
+"     execute 'h '.expand('<cword>')
+"   elseif (coc#rpc#ready())
+"     call CocActionAsync('doHover')
+"   else
+"     execute '!' . &keywordprg . " " . expand('<cword>')
+"   endif
+" endfunction
+" inoremap <silent><nowait><expr> - coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "-"
+" inoremap <silent><nowait><expr> = coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "="
+" inoremap <nowait><expr> <C-d> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+" inoremap <nowait><expr> <C-u> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+" nnoremap <nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
+" nnoremap <nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
 "" Some servers have issues with backup files, see #649.
 " set nobackup
 " set nowritebackup

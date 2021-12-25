@@ -6,6 +6,7 @@ if [[ -z "$TMUX" ]]; then
   tmux attach || tmux new -s mbp
 fi
 
+
 # set environment
 source $HOME/.dotfiles/.shfunctions.zsh
 source $HOME/.dotfiles/.zsh_aliases
@@ -19,7 +20,7 @@ export PATH="$PATH:/usr/local/lib/ruby/gems/3.0.0/bin"
 export PATH="$PATH:/Library/TeX/texbin"
 export PATH="$PATH:/usr/local/smlnj/bin"
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-14.0.2.jdk/Contents/Home
-source "$HOME/.cargo/env"  # is this necessary? double check script
+# source "$HOME/.cargo/env"  # is this necessary? double check script
 
 # set environment
 export EDITOR=vim
@@ -70,12 +71,15 @@ if [[ $(which run-help) == "run-help: aliased to man" ]]; then
     alias help=run-help
 fi
 
+# initialize homebrew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 # initialize fasd
 eval "$(fasd --init auto)"
 
-# initialize fzf (commands rely on github.com/softmoth/zsh-vim-mode)
+# initialize fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_COMMAND='fd . ~ --hidden --exclude .git'# find hidden files
+export FZF_DEFAULT_COMMAND='fd . ~ --hidden --exclude .git' # find hidden files
 export FZF_CTRL_T_COMMAND='fd . ~ --hidden --type f --exclude .git'
 export FZF_ALT_C_COMMAND='fd . ~ --hidden --type d --exclude .git'
 export FZF_DEFAULT_OPTS='
@@ -89,20 +93,20 @@ bindkey '^O' fzf-cd-widget
 bindkey '^F' fzf-file-widget
 
 # syntax highlighting
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 export zle_highlight=('paste:none') # don't highlight pasted items
 export BAT_THEME="OneHalfDark"
 export EXA_COLORS="ln=38;5;171:lp=38;5;171:uu=38;5;214"
 
 # history substring search
-source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='underline'
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=204'
 
 # iterm2 shell integration
-source ~/.iterm2_shell_integration.zsh
+# source ~/.iterm2_shell_integration.zsh
 export ITERM2_SQUELCH_MARK=0
 
 # initialize pyenv

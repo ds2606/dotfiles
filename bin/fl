@@ -30,7 +30,6 @@ if p1.stderr.peek():
     # filled pipes in the case of long manpages)
     print("%sNo man entry for '%s%s%s'" % (RED, MAGENTA, command, RED))
     sys.exit(1)
-print(len(manpage))
 
 # print matches for each command-line flag
 for i, flag in enumerate(flags):
