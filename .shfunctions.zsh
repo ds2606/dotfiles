@@ -55,25 +55,21 @@ mcd() {
 }
 
 # change extension
+## maybe update this to handle hidden files by stripping a leading dot
 chex() {
     [[ $1 == "-q" ]] && local _quiet=1 && shift
     if [[ $# -ne 2 ]]; then
         echo 'usage: chex [-q] [file] [new-extension]'
         return 1
     fi
-    file=$(fd -H -t f "$1")
-    if [[ $(rg -c . <<< "$file") -gt 1 ]]; then
-        echo "$_RED\0Multiple matches for $_MAGENTA\0$1\0$_RED found:$_NONE\n$file" # if multiple matches found, list and return
-    elif [ -z "$file" ]; then
-        echo "$_RED\"$1\"$_MAGENTA not found$_NONE" # if no matches found, inform caller
-    else
-        local old_ext new_ext newpath
-        old_ext=${file##*.}
-        new_ext=$2
-        newpath=$(echo $file | sed "s/\(.*\)$old_ext/\1$new_ext/")
-        mv "$file" "$newpath"
-        [[ $_quiet -ne 1 ]] && echo "moved $_CYAN$file$_NONE to $_GREEN\0$newpath$_NONE"
-    fi
+
+    local file old_ext new_ext newpath
+    file=$1
+    old_ext=${file##*.}
+    new_ext=$2
+    newpath=$(echo $file | sed "s/\(.*\)$old_ext/\1$new_ext/")
+    mv "$file" "$newpath" || return 1
+    [[ $_quiet -ne 1 ]] && echo "moved $_CYAN$file$_NONE to $_GREEN\0$newpath$_NONE"
 }
 
 # jump straight to a man page flag
