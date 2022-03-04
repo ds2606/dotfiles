@@ -1,19 +1,8 @@
 [user]
-	name = Daniel Schreck
-	email = daniel.s.schreck@gmail.com
-[filter "lfs"]
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
+    name = Daniel Schreck
+    email = daniel.s.schreck@gmail.com
 [init]
-	defaultBranch = main
-
-# from jonhoo
-[ui "color"]
-	ui = auto
-[color]
-    ui = true
+    defaultBranch = main
 [alias]
     a    = add
     aa   = add .
@@ -24,50 +13,50 @@
     co   = checkout
     d    = diff
     h    = help
-    l    = log --all --oneline --graph -10
-    ld   = log --all --oneline --graph -10 -p
-	last = log -1 HEAD
-    m    = merge
-    ; rs   = reset
-    ; rt   = restore
-    ; rv   = revert
+    l    = !git -c core.pager=cat log --oneline --graph -10
+    la   = log --oneline --graph --all
+    ld   = log --oneline --graph -p
+    last = log -1 HEAD
+    mg   = merge
     s    = status
     ss   = status -s
     sh   = show
     st   = stash
     sw   = switch
     swc  = switch -c
-	cl   = log -p -- ':(exclude)cargo.lock'
-    ; # from jonhoo, not exactly sure what they do yet
-	; f    = push --force-with-lease
-	; ## https://stackoverflow.com/a/11688523/472927
-	; ss   = "!f() { git stash show stash^{/$*} -p; }; f"
-	; sa   = "!f() { git stash apply stash^{/$*}; }; f"
-	; sl   = stash list
-[pull]
-	ff = only
-[push]
-	default = simple
-
-# from anishathalye
 [core]
-	excludesfile = ~/.dotfiles/.gitignore_global
-# Allow local customizations in the .gitconfig_local file
-[include]
-    path = ~/.gitconfig_local
+    excludesfile = ~/.dotfiles/.gitignore_global
+    editor = vim
+    pager = less
 [pretty]
-	line = "%C(auto)%h %<|(60,trunc)%s %C(green)%ad%C(auto)%d"
-	detail = "%C(auto)%h %s%n  %C(yellow)by %C(blue)%an %C(magenta)<%ae> [%G?] %C(green)%ad%n %C(auto)%d%n"
-[color "grep"]
-	match = cyan bold
-	selected = blue
-	context = normal
-	filename = magenta
-	linenumber = green
-	separator = yellow
-    function = blue
-[diff]
-	mnemonicPrefix = true
-	wordRegex = "[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+"
-	compactionHeuristic = true
+    line = "%C(auto)%h %<|(60,trunc)%s %C(green)%ad%C(auto)%d"
+    detail = "%C(auto)%h %s%n  %C(yellow)by %C(blue)%an %C(magenta)<%ae> [%G?] %C(green)%ad%n %C(auto)%d%n"
+[merge]
+    tool = vimdiff
 
+# not sure what these do
+; [diff]
+;     mnemonicPrefix = true
+;     wordRegex = "[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+"
+;     compactionHeuristic = true
+; [pull]
+;     ff = only
+; [push]
+;     default = simple
+; [alias]
+;     # from jonhoo, not exactly sure what they do yet
+;     cl   = log -p -- ':(exclude)cargo.lock'
+;     f    = push --force-with-lease
+;     ## https://stackoverflow.com/a/11688523/472927
+;     ss   = "!f() { git stash show stash^{/$*} -p; }; f"
+;     sa   = "!f() { git stash apply stash^{/$*}; }; f"
+;     sl   = stash list
+; [filter "lfs"]
+;     smudge = git-lfs smudge -- %f
+;     process = git-lfs filter-process
+;     required = true
+;     clean = git-lfs clean -- %f
+; [ui "color"]
+;     ui = auto
+; [color]
+;     ui = true

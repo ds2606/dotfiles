@@ -19,8 +19,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$PATH:/usr/local/lib/ruby/gems/3.0.0/bin"
 export PATH="$PATH:/Library/TeX/texbin"
 export PATH="$PATH:/usr/local/smlnj/bin"
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-14.0.2.jdk/Contents/Home
-# source "$HOME/.cargo/env"  # is this necessary? double check script
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-17.0.2.jdk/Contents/Home # is this necessary? seems like a hardcoded value might not be so great but idk exactly what this does
 
 # set environment
 export EDITOR=vim
@@ -33,6 +32,7 @@ stty -ixon  # enable forward cycling in bck-i-search by ^S
 bindkey -e  # emacs keybindings for command line
 setopt EXTENDED_GLOB
 bindkey "^H" delete-char  # enable easy forward-char deletion
+unset -f colors  # stop zsh from overriding colors script
 
 # history management
 HISTFILE=~/.zsh_history
@@ -79,7 +79,7 @@ eval "$(fasd --init auto)"
 
 # initialize fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_COMMAND='fd . ~ --hidden --exclude .git' # find hidden files
+export FZF_DEFAULT_COMMAND='fd . ~ --hidden --exclude .git'
 export FZF_CTRL_T_COMMAND='fd . ~ --hidden --type f --exclude .git'
 export FZF_ALT_C_COMMAND='fd . ~ --hidden --type d --exclude .git'
 export FZF_DEFAULT_OPTS='

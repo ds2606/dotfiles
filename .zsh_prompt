@@ -2,7 +2,7 @@
 
 
 source ~/.zsh/git-prompt.zsh/git-prompt.zsh
-source ~/.dotfiles/colors/palenight/pn-palette.zsh && pn_colors 256
+source ~/.dotfiles/colors/palenight/pn-palette.zsh && pn_colors 256 && unset -f pn_colors
 
 # set left prompt
 PROMPT='%B%F{69}%1~ ❯%f%b '
@@ -28,6 +28,3 @@ ZSH_THEME_GIT_PROMPT_UNSTAGED='%B%F{204}●'  # 209 for orange-ish
 ZSH_THEME_GIT_PROMPT_UNTRACKED='%B%F{245}●'
 ZSH_THEME_GIT_PROMPT_STASHED="%{$fg[blue]%}⚑"
 ZSH_THEME_GIT_PROMPT_CLEAN='%B%F{118}●'
-
-#remove 'colors' function from working environment
-unset -f colors

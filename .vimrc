@@ -104,7 +104,8 @@ inoremap <up>    <C-o>:echoe "use ^k"<cr>i
 inoremap <down>  <C-o>:echoe "use ^l"<cr>i
 
 " bracket/paren matching
-noremap <leader>p %
+map <leader>p %
+packadd! matchit
 
 " toggle line numbering
 noremap <leader># :set nu!<cr>
@@ -137,7 +138,7 @@ noremap gL g$
 
 " insert mode navigation (remap digraph insertion)
 inoremap <C-h> <C-o>h
-inoremap <C-l> <C-o>a
+inoremap <C-l> <C-o>l
 inoremap <C-j> <C-o>j
 inoremap <C-k> <C-o>k
 inoremap <C-a> <esc>I
@@ -176,7 +177,6 @@ noremap <leader>wr  <C-w><C-r>
 noremap <leader>wv  <C-w>H
 noremap <leader>wh  <C-w>J
 noremap <leader>wb  <C-w>T
-noremap <leader>wr  <C-w><C-r>
 noremap <leader>z   :call MaximizeToggle()<CR>
 function! MaximizeToggle()
   if exists("s:maximize_session")
@@ -210,7 +210,7 @@ nnoremap <leader>i i_<Esc>r
 inoremap ;d   <esc>ddkA
 
 " insert mode write, quit, perform normal-mode command, paste, and insert semicolon
-inoremap ;ww  <esc>:w<cr>li
+inoremap ;ww  <esc>:w<cr>i<C-o>l
 inoremap ;wq  <esc>:wq
 inoremap ;x   <esc>:x
 inoremap ;q   <esc>:q
@@ -236,43 +236,41 @@ map <leader>sr :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
 noremap <silent> <leader>dw mt:let _s=@/ <bar>
       \ :%s/\s\+$//e<bar>:let @/=_s<cr>`t
       \ <bar> :echom "deleted trailing whitespace"<cr>:noh<cr>
-" noremap <leader>lw  :match ExtraWhitespace /\s\+$/<cr>  "show trailing whitespace
 
 " file shortcuts for quick editing (last is for sourcing .vimrc)
-noremap <leader>bn  :enew<cr>
-noremap <leader>t   :tabedit<cr>
-noremap <leader>T   :tabedit <C-r>=expand("%:p:h")<cr>/
-" noremap <leader>eo  :tabedit <C-r>=expand("%:p:h")<cr>/
-" noremap <leader>eO  :tabedit <C-r><cr>
-" noremap <leader>ec  :CocConfig<cr>
-noremap <leader>ez  :tabedit ~/.dotfiles/.zsh_profile<cr>
-noremap <leader>ev  :tabedit ~/.vimrc<cr>
-noremap <leader>es  :source  ~/.vimrc<cr> <bar> :echom "vim config reloaded"<cr>
-
-" vim built-in terminal access
-" noremap <leader>tn  :ter<cr><C-w>:exe "resize" . (winheight(0) * 3/5) <cr>
-" noremap <leader>to  :sb zsh<cr><C-w>:exe "resize " . (winheight(0) * 3/5) <cr>
-" tnoremap ~n    <C-w>c:ter<cr><C-w>:exe "resize " . (winheight(0) * 3/5) <cr>
-" tnoremap ~c    <C-w>c
-" tnoremap ~d    <C-d>
-" " tnoremap <C-k> <C-w>k
-" tnoremap ~p    <C-w>w
-" tnoremap ~e    <C-w>N
-" tnoremap ~-    <C-w>k <bar> :res +3 <cr> <bar> <c-w>j
-" tnoremap ~=    <C-w>k <bar> :res -3 <cr> <bar> <c-w>j
+noremap <leader>bn :enew<cr>
+noremap <leader>t  :tabedit<cr>
+noremap <leader>T  :tabedit <C-r>=expand("%:p:h")<cr>/
+noremap <leader>eo :FZF ~ <cr>
+noremap <leader>ez :tabedit ~/.dotfiles/.zsh_profile<cr>
+noremap <leader>ev :tabedit ~/.vimrc<cr>
+noremap <leader>es :source  ~/.vimrc<cr> <bar> :echom "vim config reloaded"<cr>
 
 " quick insertion of \(\) in search-replace
 cmap ;\ \(\)<left><left>
 
+" Toggle vimdiff for two (vertical) splits)
+command! Diff :call ToggleDiff()
+function ToggleDiff ()
+    if (&diff)
+        set nodiff noscrollbind
+    else
+        " enable diff options in both windows; balance the sizes, too
+        wincmd =
+        set diff scrollbind nowrap number
+        wincmd w
+        set diff scrollbind nowrap number
+        wincmd w
+    endif
+endfunction
 
-" PLUG-INS
+
+" PLUGINS
 
 " vim-plug (to disable, append `{ 'on': [] }`
 call plug#begin('~/.vim/plugged')
 Plug 'ap/vim-css-color'
 Plug 'airblade/vim-gitgutter'
-" Plug 'alvan/vim-closetag'
-Plug 'christoomey/vim-tmux-navigator'
 Plug 'easymotion/vim-easymotion'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'gillyb/stable-windows', { 'on': [] }
@@ -285,7 +283,7 @@ Plug 'mattn/emmet-vim'
 Plug 'maximbaz/lightline-ale'
 Plug 'mbbill/undotree'
 Plug 'mhinz/vim-startify'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', { 'branch': 'release'}
 Plug 'preservim/nerdtree'
 Plug 'psliwka/vim-smoothie'
 Plug 'preservim/tagbar'
@@ -342,7 +340,6 @@ map <leader>j <Plug>(easymotion-bd-jk)
 map <leader>f <Plug>(easymotion-s2)
 
 " fzf
-noremap <leader><space> :FZF ~ <cr>
 let g:fzf_layout = {
   \ 'down': '~40%'
   \ }
@@ -373,7 +370,7 @@ let g:lightline = {
       \   'right': [['lineinfo'],
       \             ['percent'], ['filetype', 'fileencoding','fileformat'],
       \             ['linter_checking', 'linter_ok',
-      \              'linter_errors', 'linter_warnings']]
+      \              'linter_errors', 'linter_warnings', 'linter_infos' ]]
       \ },
       \ 'component_function': {
       \   'gitbranch': 'FugitiveHead'
@@ -383,12 +380,14 @@ let g:lightline.component_expand = {
       \  'linter_checking': 'lightline#ale#checking',
       \  'linter_warnings': 'lightline#ale#warnings',
       \  'linter_errors': 'lightline#ale#errors',
+      \  'linter_infos': 'lightline#ale#infos',
       \  'linter_ok': 'lightline#ale#ok',
       \ }
 let g:lightline.component_type = {
-      \ 'linter_warnings': 'warning',
       \ 'linter_errors': 'error',
+      \ 'linter_infos': 'info',
       \ 'linter_ok': 'ok',
+      \ 'linter_warnings': 'warning',
       \ }
 
 " fugitive/gitgutter
@@ -398,6 +397,8 @@ noremap <leader>gc :Git commit
 noremap <leader>gd :Git diff<cr>
 noremap <leader>gl :Git log<cr>
 noremap <leader>gt :GitGutterToggle<cr>
+noremap <leader>gp :GitGutterPreviewHunk<cr>
+noremap <leader>gq :pclose<cr>
 noremap ]g         :GitGutterNextHunk<cr>
 noremap [g         :GitGutterPrevHunk<cr>
 
@@ -413,51 +414,54 @@ imap ;e <Plug>(emmet-expand-abbr)
 noremap <leader>lt  :ALEToggle<cr>
 noremap <leader>lo  :lop<cr>
 noremap <leader>lb  obreakpoint()<esc>k
-noremap <silent>[l  :ALEPrevious<cr>
-noremap <silent>]l  :ALENext<cr>
+noremap <silent>[l  :lpre<cr>
+noremap <silent>]l  :lbel<cr>
 let g:ale_enabled               = 0
 let g:ale_enabled               = 0
 " let g:ale_disable_lsp           = 1
 let g:ale_linters               = {'python': ['flake8', 'pylint'],
                                  \ 'rust': ['rls', 'rustc', 'analyzer', 'cargo'],
-                                 \ 'zsh': ['bashate', 'shell', 'shellcheck'],
+                                 \ 'zsh': ['shell', 'shellcheck'],
                                  \ 'cpp': ['ccls']}
 let g:ale_python_flake8_options = "--ignore f403"  " allow 'import *'
 let g:ale_python_pylint_options =
     \ "-d C0115,C0116,WO401 --variable-rgx '..?' --argument-rgx '..?'"  " allow 1-2 char variable names in pylint
 
 " COC (completion/lsp)
+noremap <leader>ll :CocList<cr>
 set updatetime=300  " (for some reason, LSP/completion broken without this)
-set shortmess+=c " Don't pass messages to \|ins-completion-menu\|.
-inoremap ;~ ~
-inoremap <silent><expr> ~
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-" nmap <silent> <leader>ld <Plug>(coc-definition)
-" nmap <silent> <leader>lk :call <SID>show_documentation()<CR>
-" function! s:show_documentation()
-"   if (index(['vim','help'], &filetype) >= 0)
-"     execute 'h '.expand('<cword>')
-"   elseif (coc#rpc#ready())
-"     call CocActionAsync('doHover')
-"   else
-"     execute '!' . &keywordprg . " " . expand('<cword>')
-"   endif
-" endfunction
-" inoremap <silent><nowait><expr> - coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "-"
-" inoremap <silent><nowait><expr> = coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "="
-" inoremap <nowait><expr> <C-d> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-" inoremap <nowait><expr> <C-u> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-" nnoremap <nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
-" nnoremap <nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
+set shortmess+=c " Don't update statusline with completion information
+""autocomplete
+    inoremap ;~ ~
+    inoremap <silent><expr> ~
+          \ pumvisible() ? "\<C-n>" :
+          \ <SID>check_back_space() ? "\<TAB>" :
+          \ coc#refresh()
+    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+    function! s:check_back_space() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~# '\s'
+    endfunction
+    nmap <silent> <leader>ld <Plug>(coc-definition)
+""show-documentation
+    nnoremap <silent> <leader>lk :call <SID>show_documentation()<CR>
+    function! s:show_documentation()
+      if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+      elseif (coc#rpc#ready())
+        call CocActionAsync('doHover')
+      else
+        execute '!' . &keywordprg . " " . expand('<cword>')
+      endif
+    endfunction
+    nmap <leader>ln <Plug>(coc-rename)
+""float-window scrolling
+    nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+    nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+    inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+    inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+    vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+    vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 "" Some servers have issues with backup files, see #649.
 " set nobackup
 " set nowritebackup
