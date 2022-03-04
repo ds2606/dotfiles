@@ -36,7 +36,7 @@ let s:t = [ '#708020', 103 ]
 let s:white = [ s:colors.white.gui, s:term_white ]
 let s:yellow = [ s:colors.yellow.gui, s:term_yellow ]
 let s:darkyellow = [ '#d7875f', 173 ]
-let s:okgreen = [ '#005f00', 65 ]
+let s:okgreen = [ '#005f00', 70 ]
 
 let s:p = {'normal': {}, 'inactive': {}, 'insert': {}, 'replace': {}, 'visual': {}, 'tabline': {}}
 let s:p.normal.left = [ [ s:black, s:green ], [ s:pn_bgtext, s:black ] ]
@@ -58,6 +58,7 @@ let s:p.tabline.right = [ [ s:pn_bgtext, s:grey ] ]
 let s:p.normal.error = [ [ s:red, s:grey ] ]
 let s:p.normal.warning = [ [ s:darkyellow, s:grey ] ]
 let s:p.normal.ok = [ [ s:okgreen, s:grey ] ]
+let s:p.normal.info = [ [ s:purple, s:grey ] ]
 
 let g:lightline#colorscheme#palenight#palette = lightline#colorscheme#flatten(s:p)
 

@@ -1,6 +1,8 @@
 # color palette for onedark-palenight custom highlighting
 pn_colors () {
-    if [[ $1 == '256' ]]; then
+    if [[ $1 == '16' ]]; then
+        echo '16 colors not yet implemented'
+    elif [[ $1 == '256' ]]; then
         declare -xA c=(
             [blue]=81
             [cyan]=14
@@ -30,7 +32,7 @@ pn_colors () {
             [ice]='#afd7ff'
             [orange]='#ff875f'
             [pink]='#ff87ff'
-            [pnhighlight]='#8787d7'  # 04 is good too
+            [pnhighlight]='#8787d7'
             [pnpurpblue]='#87afff'
             [pnpurple]='#afafff'
             [pnyellow]='#ffaf00'
@@ -42,9 +44,7 @@ pn_colors () {
             [testval]='#ff0000'
             [yellow]='#ffd75f'
         )
-    elif [[ $1 == '16' ]]; then
-        echo '16 colors not yet implemented'
     else
-        echo 'usage: pn_colors [256 | gui | 16]'
+        echo 'usage: pn_colors [16 | 256 | rgb]'
     fi
 }
