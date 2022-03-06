@@ -120,8 +120,8 @@ noremap gk k
 noremap gl G
 
 " easier scrolling (remap = to accomodate)
-noremap -           :call smoothie#downwards()<cr>
-noremap =           :call smoothie#upwards()<cr>
+noremap <silent> - :call smoothie#downwards()<cr>
+noremap <silent> = :call smoothie#upwards()<cr>
 noremap _           <C-e>
 noremap +           <C-y>
 noremap <leader>=   =
@@ -292,6 +292,7 @@ Plug 'psliwka/vim-smoothie'
 Plug 'preservim/tagbar'
 Plug 'qpkorr/vim-bufkill'
 Plug 'rust-lang/rust.vim'
+Plug 'samoshkin/vim-mergetool'
 Plug 'sheerun/vim-polyglot'
 Plug 'simeji/winresizer'
 Plug 'tpope/vim-abolish'
@@ -417,8 +418,8 @@ imap ;e <Plug>(emmet-expand-abbr)
 noremap <leader>lt  :ALEToggle<cr>
 noremap <leader>lo  :lop<cr>
 noremap <leader>lb  obreakpoint()<esc>k
-noremap <silent>[l  :lpre<cr>
-noremap <silent>]l  :lbel<cr>
+noremap <silent>[l  :lp<cr>
+noremap <silent>]l  :lne<cr>
 let g:ale_enabled               = 0
 let g:ale_enabled               = 0
 " let g:ale_disable_lsp           = 1
@@ -426,9 +427,9 @@ let g:ale_linters               = {'python': ['pylint'],
                                  \ 'rust': ['rls', 'rustc', 'analyzer', 'cargo'],
                                  \ 'zsh': ['shell', 'shellcheck'],
                                  \ 'cpp': ['ccls']}
-let g:ale_python_flake8_options = "--ignore f403"  " allow 'import *'
 let g:ale_python_pylint_options =
     \ "-d C0115,C0116,WO401 --variable-rgx '..?' --argument-rgx '..?'"  " allow 1-2 char variable names in pylint
+let g:ale_sh_shellcheck_dialect = 'bash'
 
 " COC (completion/lsp)
 noremap <leader>ll :CocList<cr>

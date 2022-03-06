@@ -3,14 +3,12 @@
     "suggest.autoTrigger": "none",
     "suggest.floatEnable": true,
     "coc.preferences.hoverTarget": "float",
-    "signature.target": "echo",
-    "diagnostic.messageTarget": "echo",
+    "signature.enable": false,
     "python.analysis.diagnosticEnabled": false,
     "rust-analyzer.enable": true,
     "diagnostic.enable": false,
     "languageserver": {
         "ccls": {
-            "disableDiagnostics": true,
             "command": "ccls",
             "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"],
             "rootPatterns": [".ccls", "compile_commands.json", ".git/", ".hg/"],
@@ -19,6 +17,11 @@
                   "directory": "/tmp/ccls"
                 }
             }
+        },
+        "bash": {
+            "command": "bash-language-server",
+            "args": ["start"],
+            "filetypes": ["bash", "zsh", "sh"]
         }
     }
 }

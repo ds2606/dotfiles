@@ -23,7 +23,8 @@
     sh   = show
     st   = stash
     sw   = switch
-    swc  = switch -c
+	unstage = restore --staged --
+	mgt = mergetool
 [core]
     excludesfile = ~/.dotfiles/.gitignore_global
     editor = vim
@@ -33,6 +34,8 @@
     detail = "%C(auto)%h %s%n  %C(yellow)by %C(blue)%an %C(magenta)<%ae> [%G?] %C(green)%ad%n %C(auto)%d%n"
 [merge]
     tool = vimdiff
+[mergetool]
+	keepBackup = false
 
 # not sure what these do
 ; [diff]
