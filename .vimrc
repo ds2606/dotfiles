@@ -156,6 +156,10 @@ noremap <C-h> <C-w>h
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
+noremap \a <C-w>h
+noremap \s <C-w>j
+noremap \d <C-w>l
+noremap \w <C-w>k
 
 " buffer management
 set hidden
@@ -171,9 +175,10 @@ noremap <leader>-   :sp<cr>
 noremap <leader>_   :new<cr>
 noremap <leader>\   :vsp<cr>
 noremap <leader>\|  :vne<cr>
-noremap <leader>wj  :tabmove -1<cr>
-noremap <leader>wk  :tabmove +1<cr>
+noremap <leader>w<  :tabmove -1<cr>
+noremap <leader>w>  :tabmove +1<cr>
 noremap <leader>wr  <C-w><C-r>
+noremap <leader>wo  <C-w><C-o>
 noremap <leader>wv  <C-w>H
 noremap <leader>wh  <C-w>J
 noremap <leader>wb  <C-w>T
@@ -400,9 +405,12 @@ noremap <leader>gg :Git<cr>
 noremap <leader>gc :Git commit
 noremap <leader>gd :Git diff<cr>
 noremap <leader>gl :Git log<cr>
+noremap <leader>gs :Git status<cr>
 noremap <leader>gt :GitGutterToggle<cr>
 noremap <leader>gp :GitGutterPreviewHunk<cr>
 noremap <leader>gq :pclose<cr>
+noremap <leader>g1 :diffge //2<cr>
+noremap <leader>g2 :diffge //3<cr>
 noremap ]g         :GitGutterNextHunk<cr>
 noremap [g         :GitGutterPrevHunk<cr>
 
@@ -478,9 +486,3 @@ set shiftwidth=4         " shift indentation levels ('>>', '<<', etc) by 4 space
 set smarttab             " intelligently add whitespace with tabs
 set autoindent
 set smartindent
-
-" (template for local customizations for potentially at some point)
-let $LOCALFILE=expand("~/.vimrc_local")
-if filereadable($LOCALFILE)
-    source $LOCALFILE
-endif

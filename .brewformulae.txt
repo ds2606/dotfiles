@@ -42,3 +42,5 @@ brew install telnet
 brew install imagemagick
 brew install rbenv
 brew install certbot
+brew install git-lfs
+brew install less

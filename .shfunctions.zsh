@@ -87,7 +87,11 @@ call() {
 ## could make invocation code paths for different flag/arg combinations much cleaner in
 ## general (e.g. 'tmux_nested a b c d e f g' code path should be cleanly handled)
 tmux_nested() {
-    if [[ $# -eq 0 ]]; then
+    if [[ -z $TMUX ]]; then
+        # ensure invoked within active session
+        echo "'tmux_nested' should be invoked inside an active tmux session"
+        return 1
+    elif [[ $# -eq 0 ]]; then
         # if invoked without flags, print usage string and exit
         echo 'usage: tmux-nested <[-n] | [-a nested-session-number] | [-l]>'
         return 1
@@ -95,7 +99,7 @@ tmux_nested() {
 
     # read flags and check for number of existing nested sessions
     local nested_sessions session_name
-    nested_sessions=$(tmux list-sessions -F '#{session_name}' | grep -P '^nested' --color=never | sort -V)
+    nested_sessions=$(tmux list-sessions -F '#{session_name}' | ggrep -P '^nested' --color=never | sort -V)
     [[ $1 == "-n" ]] && local _new=1 && shift
     [[ $1 == "-a" ]] && local _attach=1 && shift
     [[ $1 == "-l" ]] && echo "$nested_sessions" && return 0
@@ -113,7 +117,10 @@ tmux_nested() {
     # attach to specified session if requested
     elif [[ $_attach -eq 1 ]]; then
         session_name="nested$1"
-        env TMUX='' tmux attach -t "$session_name" || return
+        if ! env TMUX='' tmux attach -t "$session_name"; then
+            echo "list existing nested sessions with 'tmux_nested -l'"
+            return
+        fi
     fi
 }
 

@@ -22,8 +22,9 @@ export PATH="$PATH:/usr/local/smlnj/bin"
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-17.0.2.jdk/Contents/Home # is this necessary? seems like a hardcoded value might not be so great but idk exactly what this does
 
 # set environment
-export EDITOR=vim
-export VISUAL=vim
+export EDITOR="vim"
+export VISUAL="vim"
+export LESS="-RF"
 export CLICOLOR=1                         # pretty colorful terminal
 export BASH_SILENCE_DEPRECATION_WARNING=1 # yes yes we know zsh is default
 export PYTHONDONTWRITEBYTECODE=1          # don't spew python bytecode everywhere
