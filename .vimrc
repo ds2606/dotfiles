@@ -79,19 +79,19 @@ inoremap jk <esc>`^
 vnoremap <space> <esc>
 
 " map comma -> backtick (for marks: accomodates tmux prefix and ergonomic)
-noremap ' `
+nnoremap ' `
 
 " quick quit, write, and write-quit
-noremap <leader>q :q<cr>
-noremap <leader>Q :qa<cr>
-noremap <leader>x :x<cr>
-noremap <leader>c :close<cr>
+nnoremap <leader>q :q<cr>
+nnoremap <leader>Q :qa<cr>
+nnoremap <leader>x :x<cr>
+nnoremap <leader>c :close<cr>
 
 " Y behaves like other capitals (act to end of line)
-noremap Y y$
+nnoremap Y y$
 
 " easier redo
-noremap U <C-r>
+nnoremap U <C-r>
 
 " unmap arrow keys in normal/visual mode (use hjkl)
 noremap  <left>  :echoe "use h"<cr>
@@ -108,7 +108,7 @@ map <leader>p %
 packadd! matchit
 
 " toggle line numbering
-noremap <leader># :set nu!<cr>
+nnoremap <leader># :set nu!<cr>
 
 " move vertically by visual line (don't skip wrapped lines)
 noremap j gj
@@ -149,7 +149,7 @@ inoremap <C-d> <C-k>
 " quick select-all
 noremap <leader>va ggVG
 
-" pane switching
+" pane management
 noremap ]p          <C-w>w
 noremap [p          <C-w>W
 noremap <C-h> <C-w>h
@@ -160,29 +160,18 @@ noremap \a <C-w>h
 noremap \s <C-w>j
 noremap \d <C-w>l
 noremap \w <C-w>k
-
-" buffer management
-set hidden
-noremap ]b          :bnext<cr>
-noremap [b          :bprev<cr>
-noremap <leader>bc  :BD<cr>
-noremap <leader>bl  :buffers<cr>
-
-" window/tab management
-noremap ]t          :tabn<cr>
-noremap [t          :tabp<cr>
-noremap <leader>-   :sp<cr>
-noremap <leader>_   :new<cr>
-noremap <leader>\   :vsp<cr>
-noremap <leader>\|  :vne<cr>
-noremap <leader>w<  :tabmove -1<cr>
-noremap <leader>w>  :tabmove +1<cr>
+nnoremap <leader>-   :sp<cr>
+nnoremap <leader>_   :new<cr>
+nnoremap <leader>\   :vsp<cr>
+nnoremap <leader>\|  :vne<cr>
+nnoremap <leader>w<  :tabmove -1<cr>
+nnoremap <leader>w>  :tabmove +1<cr>
 noremap <leader>wr  <C-w><C-r>
 noremap <leader>wo  <C-w><C-o>
 noremap <leader>wv  <C-w>H
 noremap <leader>wh  <C-w>J
 noremap <leader>wb  <C-w>T
-noremap <leader>z   :call MaximizeToggle()<CR>
+nnoremap <leader>z   :call MaximizeToggle()<CR>
 function! MaximizeToggle()
   if exists("s:maximize_session")
     exec "source " . s:maximize_session
@@ -198,6 +187,17 @@ function! MaximizeToggle()
     only
   endif
 endfunction
+
+" buffer management
+set hidden
+nnoremap ]b          :bnext<cr>
+nnoremap [b          :bprev<cr>
+nnoremap <leader>bc  :BD<cr>
+nnoremap <leader>bl  :buffers<cr>
+
+" tab management
+noremap [t          <C-PageUp>
+noremap ]t          <C-PageDown>
 noremap <leader>1 1gt
 noremap <leader>2 2gt
 noremap <leader>3 3gt
@@ -224,32 +224,32 @@ inoremap ;p   <C-o>p
 inoremap ;; ;
 
 " easier macro repitition
-noremap Q @@
+nnoremap Q @@
 
 " quick show registers
-noremap <C-r> :registers<cr>
+nnoremap <C-r> :registers<cr>
 
 " quick syntax set
-noremap <leader>sf :set ft=
+nnoremap <leader>sf :set ft=
 
 " quick syntax reveal
-map <leader>sr :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+nmap <leader>sr :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 " delete trailing whitespace
-noremap <silent> <leader>dw mt:let _s=@/ <bar>
+nnoremap <silent> <leader>dw mt:let _s=@/ <bar>
       \ :%s/\s\+$//e<bar>:let @/=_s<cr>`t
       \ <bar> :echom "deleted trailing whitespace"<cr>:noh<cr>
 
 " file shortcuts for quick editing (last is for sourcing .vimrc)
-noremap <leader>bn :enew<cr>
-noremap <leader>t  :tabedit<cr>
-noremap <leader>T  :tabedit <C-r>=expand("%:p:h")<cr>/
-noremap <leader>eo :FZF ~ <cr>
-noremap <leader>ez :tabedit ~/.dotfiles/.zsh_profile<cr>
-noremap <leader>ev :tabedit ~/.vimrc<cr>
-noremap <leader>es :source  ~/.vimrc<cr> <bar> :echom "vim config reloaded"<cr>
+nnoremap <leader>bn :enew<cr>
+nnoremap <leader>t  :tabedit<cr>
+nnoremap <leader>T  :tabedit <C-r>=expand("%:p:h")<cr>/
+nnoremap <leader>eo :FZF ~ <cr>
+nnoremap <leader>ez :tabedit ~/.dotfiles/.zsh_profile<cr>
+nnoremap <leader>ev :tabedit ~/.vimrc<cr>
+nnoremap <leader>es :source  ~/.vimrc<cr> <bar> :echom "vim config reloaded"<cr>
 
 " quick insertion of \(\) in search-replace
 cmap ;\ \(\)<left><left>
@@ -311,7 +311,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 call plug#end()
 
 " undotree toggle
-noremap <leader>u :UndotreeToggle<cr>
+nnoremap <leader>u :UndotreeToggle<cr>
 
 " easy-align
 nmap ga <Plug>(EasyAlign)
@@ -323,11 +323,11 @@ let g:BufKillCreateMappings = 0
 " winresizer
 let g:winresizer_horiz_resize  = 1
 let g:winresizer_vert_resize   = 3
-noremap <leader>r :WinResizerStartResize<cr>
+nnoremap <leader>r :WinResizerStartResize<cr>
 
 " NERDTree
-noremap <leader>n :NERDTreeToggle<cr>
-noremap <leader>N :NERDTreeFind<cr>
+nnoremap <leader>n :NERDTreeToggle<cr>
+nnoremap <leader>N :NERDTreeFind<cr>
 " let NERDTreeShowHidden=1
 let NERDTreeShowBookmarks = 1
 let NERDTreeMouseMode     = 2
@@ -337,7 +337,7 @@ autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTr
     \ quit | endif
 
 " Tagbar
-noremap <leader>. :TagbarOpenAutoClose<cr>
+nnoremap <leader>. :TagbarOpenAutoClose<cr>
 let g:tagbar_wrap  = 1
 let g:tagbar_width = max([25, winwidth(0) / 3])
 
@@ -367,8 +367,8 @@ let g:fzf_colors = {
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment']
   \ }
-noremap <leader>/ :Rg<cr>
-noremap <leader>bs :Buffers<cr>
+nnoremap <leader>/ :Rg<cr>
+nnoremap <leader>bs :Buffers<cr>
 
 " lightline integration with ale and fugitive
 let g:lightline = {
@@ -401,18 +401,18 @@ let g:lightline.component_type = {
 
 " fugitive/gitgutter
 set tags^=.git/tags;~
-noremap <leader>gg :Git<cr>
-noremap <leader>gc :Git commit
-noremap <leader>gd :Git diff<cr>
-noremap <leader>gl :Git log<cr>
-noremap <leader>gs :Git status<cr>
-noremap <leader>gt :GitGutterToggle<cr>
-noremap <leader>gp :GitGutterPreviewHunk<cr>
-noremap <leader>gq :pclose<cr>
-noremap <leader>g1 :diffge //2<cr>
-noremap <leader>g2 :diffge //3<cr>
-noremap ]g         :GitGutterNextHunk<cr>
-noremap [g         :GitGutterPrevHunk<cr>
+nnoremap <leader>gg :Git<cr>
+nnoremap <leader>gc :Git commit
+nnoremap <leader>gd :Git diff<cr>
+nnoremap <leader>gl :Git log<cr>
+nnoremap <leader>gs :Git status<cr>
+nnoremap <leader>gt :GitGutterToggle<cr>
+nnoremap <leader>gp :GitGutterPreviewHunk<cr>
+nnoremap <leader>gq :pclose<cr>
+nnoremap <leader>g1 :diffge //2<cr>
+nnoremap <leader>g2 :diffge //3<cr>
+nnoremap ]g         :GitGutterNextHunk<cr>
+nnoremap [g         :GitGutterPrevHunk<cr>
 
 " vim-smoothie
 let g:smoothie_update_interval = 15
@@ -423,11 +423,11 @@ imap ;e <Plug>(emmet-expand-abbr)
 " let g:user_emmet_leader_key = ';e'
 
 " ALE (linting)
-noremap <leader>lt  :ALEToggle<cr>
-noremap <leader>lo  :lop<cr>
-noremap <leader>lb  obreakpoint()<esc>k
-noremap <silent>[l  :lp<cr>
-noremap <silent>]l  :lne<cr>
+nnoremap <leader>lt  :ALEToggle<cr>
+nnoremap <leader>lo  :lop<cr>
+nnoremap <leader>lb  obreakpoint()<esc>k
+nnoremap <silent>[l  :lp<cr>
+nnoremap <silent>]l  :lne<cr>
 let g:ale_enabled               = 0
 let g:ale_enabled               = 0
 " let g:ale_disable_lsp           = 1
@@ -440,7 +440,7 @@ let g:ale_python_pylint_options =
 let g:ale_sh_shellcheck_dialect = 'bash'
 
 " COC (completion/lsp)
-noremap <leader>ll :CocList<cr>
+nnoremap <leader>ll :CocList<cr>
 set updatetime=300  " (for some reason, LSP/completion broken without this)
 set shortmess+=c " Don't update statusline with completion information
 ""autocomplete
