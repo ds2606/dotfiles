@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 """ prints manpage info for flags """
 
 import re
@@ -28,7 +28,7 @@ if p1.stderr.peek():
     # NOTE: can only check first subprocess standard error *after* waiting for
     # second child (done with `communicate`) to avoid deadlock (caused by
     # filled pipes in the case of long manpages)
-    print("%sNo man entry for '%s%s%s'" % (RED, MAGENTA, command, RED))
+    print(f"{RED}No man entry for '{MAGENTA}{command}{RED}'")
     sys.exit(1)
 
 # print matches for each command-line flag
@@ -38,17 +38,22 @@ for i, flag in enumerate(flags):
         flag = '-' + flag
 
     # extract matches for flag
-    p = re.compile(rf"\n[\s\t]*{flag}[^\w].*?\n\n", re.DOTALL)
+    p = re.compile(rf"""
+            (?=\n\n                      # lookahead (0-width): accomadate match overlaps
+                ([A-Z ]*\n)?             # match a section header (if flag is first listed)
+                [\s\t]*({flag}[^\w].*?)  # match the flag itself
+                \n\n([\s\t]*-|[A-Z])     # terminate match on next flag or next section
+            )""", re.DOTALL | re.VERBOSE)
     matches = re.findall(p, manpage)
 
     # failure if no matches
     if not matches:
-        print("   %sNo matches for '%s%s %s%s'" % (RED, MAGENTA, command, flag, RED))
+        print(f"    {RED}No matches for '{MAGENTA}{command} {flag}{RED}'")
 
     # pretty-print matches
     for match in matches:
-        match = match.strip("\n ")[len(flag):].strip()
-        print("   %s%s %s%s%s" % (CYAN, command, GREEN, flag, NONE), match)
+        match = match[1].strip()[len(flag):]
+        print(f"    {CYAN}{command} {GREEN}{flag}{NONE}{match}")
 
     # separate flags with newline
     if i != len(flags) - 1:
