@@ -5,7 +5,7 @@ source ~/.zsh/git-prompt.zsh/git-prompt.zsh
 source ~/.dotfiles/colors/palenight/pn-palette.zsh && pn_colors 256 && unset -f pn_colors
 
 # set left prompt
-PROMPT='%B%F{69}%1~ ❯%f%b '
+PROMPT='%(?..%B%F{204}!%f%b)%B%F{69}%1~ ❯ %f%b'
 
 # set right prompt
 RPROMPT='$(gitprompt)'
