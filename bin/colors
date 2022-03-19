@@ -18,7 +18,7 @@ __license__   = 'WTFPL http://sam.zoy.org/wtfpl/'
 
 #---------------------------------------------------------------------
 
-import sys, re
+import sys, re, subprocess as sp
 
 CLUT = [  # color look-up table
 #    8-bit, RGB hex
@@ -310,13 +310,15 @@ def short2rgb(short):
 def print_all():
     """ Print all 256 xterm color codes.
     """
+    outstring = ''
     for short, rgb in CLUT:
-        sys.stdout.write('\033[48;5;%sm%s:%s' % (short, short, rgb))
-        sys.stdout.write("\033[0m  ")
-        sys.stdout.write('\033[38;5;%sm%s:%s' % (short, short, rgb))
-        sys.stdout.write("\033[0m\n")
-    print("Printed all codes.")
-    print("You can translate a hex or 0-255 code by providing an argument.")
+        outstring += ('\033[48;5;%sm%s:%s' % (short, short, rgb))
+        outstring += ("\033[0m  ")
+        outstring += ('\033[38;5;%sm%s:%s' % (short, short, rgb))
+        outstring += ("\033[0m\n")
+    outstring += "Printed all codes.\n"
+    outstring += "You can translate a hex or 0-255 code by providing an argument.\n"
+    sp.run(["less"], input=outstring.encode())
 
 def rgb2short(rgb):
     """ Find the closest xterm-256 approximation to the given RGB value.
