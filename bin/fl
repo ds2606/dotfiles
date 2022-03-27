@@ -38,7 +38,7 @@ for i, flag in enumerate(flags):
         flag = '-' + flag
 
     # extract matches for flag
-    p = re.compile(rf"\n[\s\t]*{flag}[^\w].*?\n\n[\s\t]*-", re.DOTALL)
+    p = re.compile(rf"(\n[\s\t]*{flag}[^\w].*?)\n\n([\s\t]*-|[A-Z])", re.DOTALL)
     matches = re.findall(p, manpage)
 
     # failure if no matches
@@ -47,7 +47,7 @@ for i, flag in enumerate(flags):
 
     # pretty-print matches
     for match in matches:
-        match = match[:-1].strip("\n ")[len(flag):].strip()
+        match = match[0][:-1].strip("\n ")[len(flag):].strip()
         print("   %s%s %s%s%s" % (CYAN, command, GREEN, flag, NONE), match)
 
     # separate flags with newline
