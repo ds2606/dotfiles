@@ -141,3 +141,41 @@ wp() {
     esac
     osascript -e "tell application \"Finder\" to set desktop picture to POSIX file \"$bg\""
 }
+
+# shell information catch-all (similar to iPython '?' directive)
+alias h='help'
+help () {
+    local _cmd=$1 _linux_cmd _cmd_type
+    [[ $_cmd == "-l" ]] && _linux_cmd=1 && shift
+    if [[ $# -ne 1 ]]; then
+        echo "usage: help [-l] command" && return 1
+    fi
+    _cmd_type=$(whence -w "$_cmd" | cut -d ' ' -f 2)
+    case $_cmd_type in
+        "alias")
+            which "$_cmd"
+            ;;
+        "builtin")
+            LESS="+/^[[:blank:]]+""$1" man "zshbuiltins"
+            ;;
+        "command")
+            if [[ "$_linux_cmd" ]]; then
+                man -M "/usr/local/share/man-linux" "$_cmd"
+            else
+                man "$_cmd"
+            fi
+            ;;
+        "function")
+            which "$_cmd" | bat -p -l sh
+            ;;
+        "hashed")
+            echo "$_cmd: support for hashed commands not yet implemented"
+            ;;
+        "reserved")
+            whence -v "$_cmd"
+            ;;
+        "none")
+            man "$_cmd" 2> /dev/null || echo "$_cmd is not a recognized command." && return 1
+            ;;
+    esac
+}
