@@ -146,11 +146,14 @@ tmux_nested() {
 # shell information catch-all (similar to iPython '?' directive)
 alias h='help'
 help() {
-    local _cmd=$1 _linux_cmd _cmd_type
-    [[ $_cmd == "-l" ]] && _linux_cmd=1 && shift
-    if [[ $# -ne 1 ]]; then
+    local _cmd=$1  _cmd_type
+    if [[ $_cmd == "-l" ]]; then
+        man -M "/usr/local/man-linux" "${@:2}"
+        return
+    elif [[ $# -ne 1 ]]; then
         echo "usage: help [-l] command" && return 1
     fi
+
     _cmd_type=$(whence -w "$_cmd" | cut -d ' ' -f 2)
     case $_cmd_type in
         "alias")
@@ -160,11 +163,7 @@ help() {
             LESS="+/^[[:blank:]]+""$1" man "zshbuiltins"
             ;;
         "command")
-            if [[ "$_linux_cmd" ]]; then
-                man -M "/usr/local/share/man-linux" "$_cmd"
-            else
-                man "$_cmd"
-            fi
+            man "$_cmd"
             ;;
         "function")
             which "$_cmd" | bat -p -l sh
