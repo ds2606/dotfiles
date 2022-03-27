@@ -91,8 +91,9 @@ chex() {
     [[ $_quiet -ne 1 ]] && echo "moved $_CYAN$file$_NONE to $_GREEN\0$newpath$_NONE"
 }
 
-# jump straight to a man page flag
-mfl() {
+# jump straight to a man page section
+alias mj='manjump'
+manjump() {
     LESS="+/^[[:blank:]]+""$2" man "$1"
 }
 

@@ -26,6 +26,7 @@ alias -s pdf='open'
 # built-ins
 alias cl='clear'
 alias du1='du -sh'
+alias e='echo'
 alias g='git'
 alias grep='ggrep --color=auto'  # GNU grep as default
 alias hist='history'
