@@ -7,6 +7,20 @@ _NONE="\033[0m"
 _GREEN="\033[92m"
 _MAGENTA="\033[95m"
 
+# mkdir and cd into it
+mcd() {
+    if [ $# -eq 1 ]; then
+        if [ -d "$1" ]; then
+            echo "dir exists, changing pwd to ./$1"
+        else
+            mkdir -p "$1"
+        fi
+        cd "$1" || return 1
+    else
+        echo 'usage: mcd [dir path]'
+    fi
+}
+
 # toggle desktop icons
 tdi() {
     val=$(defaults read com.apple.finder CreateDesktop)
@@ -18,6 +32,24 @@ tdi() {
         echo ds icons off
     fi
     killall Finder
+}
+
+# switch wallpaper
+wp() {
+    if [[ "$#" -ne 1 ]]; then
+        echo "usage: wp [ARG]"
+        return 1
+    fi
+
+    local bg="/Users/dschreck/Pictures/backgrounds/"
+    case $1 in
+        "lights") bg+="lights.jpg" ;;
+        "garden") bg+="garden.jpg" ;;
+        "stars") bg+="stars.jpg" ;;
+        "swirl") bg+="swirl.jpg" ;;
+        *) echo "wallpaper not recognized" && return 1 ;;
+    esac
+    osascript -e "tell application \"Finder\" to set desktop picture to POSIX file \"$bg\""
 }
 
 # launch a GUI application (optionally list matches if '-l' given)
@@ -40,19 +72,6 @@ launch() {
     done
 }
 
-# mkdir and cd into it
-mcd() {
-    if [ $# -eq 1 ]; then
-        if [ -d "$1" ]; then
-            echo 'dir exists'
-        else
-            mkdir -p "$1"
-        fi
-        cd "$1" || return 1
-    else
-        echo 'usage: mcd [dir path]'
-    fi
-}
 
 # change extension
 ## maybe update this to handle hidden files by stripping a leading dot
@@ -93,16 +112,16 @@ tmux_nested() {
         return 1
     elif [[ $# -eq 0 ]]; then
         # if invoked without flags, print usage string and exit
-        echo 'usage: tmux-nested <[-n] | [-a nested-session-number] | [-l]>'
+        echo 'usage: tmux-nested [-n | -a nested-session-number | -l]'
         return 1
     fi
 
     # read flags and check for number of existing nested sessions
     local nested_sessions session_name
     nested_sessions=$(tmux list-sessions -F '#{session_name}' | ggrep -P '^nested' --color=never | sort -V)
+    [[ $1 == "-l" ]] && echo "$nested_sessions" && return 0
     [[ $1 == "-n" ]] && local _new=1 && shift
     [[ $1 == "-a" ]] && local _attach=1 && shift
-    [[ $1 == "-l" ]] && echo "$nested_sessions" && return 0
 
     if [[ $_new -eq 1 ]]; then
         # if new session requested: create, set <C-b> tmux prefix, and attach
@@ -124,27 +143,9 @@ tmux_nested() {
     fi
 }
 
-# switch wallpaper
-wp() {
-    if [[ "$#" -ne 1 ]]; then
-        echo "usage: wp [ARG]"
-        return 1
-    fi
-
-    local bg="/Users/dschreck/Pictures/backgrounds/"
-    case $1 in
-        "lights") bg+="lights.jpg" ;;
-        "garden") bg+="garden.jpg" ;;
-        "stars") bg+="stars.jpg" ;;
-        "swirl") bg+="swirl.jpg" ;;
-        *) echo "wallpaper not recognized" && return 1 ;;
-    esac
-    osascript -e "tell application \"Finder\" to set desktop picture to POSIX file \"$bg\""
-}
-
 # shell information catch-all (similar to iPython '?' directive)
 alias h='help'
-help () {
+help() {
     local _cmd=$1 _linux_cmd _cmd_type
     [[ $_cmd == "-l" ]] && _linux_cmd=1 && shift
     if [[ $# -ne 1 ]]; then
