@@ -50,14 +50,6 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_FIND_NO_DUPS
 setopt HIST_SAVE_NO_DUPS
 
-# The following lines were added by compinstall
-zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|[._-]=** r:|=**'
-zstyle :compinstall filename '/Users/dschreck/.zshrc'
-
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
-
 # Add colors to man pages
 export LESS_TERMCAP_mb=$'\E[01;31m'     # enter blinking mode
 export LESS_TERMCAP_md=$'\E[01;31m'     # enter double-bright mode
@@ -69,6 +61,7 @@ export LESS_TERMCAP_us=$'\E[01;32m'     # enter underline mode
 
 # initialize homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
+type brew &>/dev/null && FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 
 # initialize fasd
 eval "$(fasd --init auto)"
@@ -107,3 +100,10 @@ export ITERM2_SQUELCH_MARK=0
 
 # initialize pyenv
 eval "$(pyenv init --path)"
+
+# The following lines were added by compinstall
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|[._-]=** r:|=**'
+zstyle :compinstall filename '/Users/dschreck/.zshrc'
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
