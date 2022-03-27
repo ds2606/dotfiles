@@ -6,6 +6,7 @@
 [alias]
     a     = add
     aa    = add .
+    ai    = add -i
     amend = commit --amend
     b     = branch
     c     = commit
@@ -16,6 +17,7 @@
     cp    = cherry-pick
     d     = diff
     da    = diff HEAD
+    dl    = diff HEAD~ HEAD
     ds    = diff --staged
     f     = fetch
     h     = help
@@ -23,6 +25,7 @@
     la    = log --oneline --graph --all -10
     ll    = log --oneline --graph --all
     ld    = log --oneline --graph -p
+    lb    = log --oneline --graph
     last  = log -1 HEAD
     mg    = merge
     mgt   = mergetool
@@ -37,7 +40,11 @@
     ss    = status -s
     st    = stash
     sw    = switch
-    unstage = restore --staged --
+    unstage  = restore --staged --
+    # submodule aliases, from pro-git 7.11 (Submodules)
+	smpush   = push --recurse-submodules=on-demand
+	smupdate = submodule update --remote --merge
+	smdiff   = !git diff && git submodule foreach 'git diff'
 [core]
     excludesfile = ~/.dotfiles/.gitignore_global
     editor = vim
@@ -52,7 +59,7 @@
 [pull]
 	ff = only
 [push]
-	default = nothing
+	default = simple
 # installed by git-lfs
 [filter "lfs"]
 	smudge = git-lfs smudge -- %f
@@ -68,3 +75,5 @@
 ; [alias]
 ;     cl   = log -p -- ':(exclude)cargo.lock'
 ;     f    = push --force-with-lease
+[advice]
+	detachedHead = false
