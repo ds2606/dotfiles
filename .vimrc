@@ -29,6 +29,7 @@ au  FocusGained,BufEnter * checktime  " check if buffer updated elsewhere
 set magic                " enable special chars in regex ('*', '.', etc)
 " set mouse=a              " allow mouse interface
 
+huhu
 " backups, swap files, and persistent undo
 set backup
 set backupdir=~/.vim/backups/  " backup files
