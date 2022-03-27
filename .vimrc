@@ -168,6 +168,7 @@ nnoremap <leader>w<  :tabmove -1<cr>
 nnoremap <leader>w>  :tabmove +1<cr>
 noremap <leader>wr  <C-w><C-r>
 noremap <leader>wo  <C-w><C-o>
+noremap <leader>w=  <C-w>=
 noremap <leader>wv  <C-w>H
 noremap <leader>wh  <C-w>J
 noremap <leader>wb  <C-w>T
@@ -345,7 +346,7 @@ let g:tagbar_width = max([25, winwidth(0) / 3])
 let g:EasyMotion_startofline = 0   " keep cursor column with line jump
 let g:EasyMotion_smartcase   = 1   " turn on case-insensitive feature
 map <leader>F <plug>(easymotion-prefix)
-map <leader>j <Plug>(easymotion-bd-jk)
+map <leader>j H<Plug>(easymotion-bd-jk)
 map <leader>f <Plug>(easymotion-s2)
 
 " fzf

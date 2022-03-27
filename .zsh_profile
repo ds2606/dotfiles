@@ -8,9 +8,9 @@ fi
 
 
 # set environment
-source $HOME/.dotfiles/.shfunctions.zsh
-source $HOME/.dotfiles/.zsh_aliases
-source $HOME/.dotfiles/.zsh_prompt
+source "$HOME/.dotfiles/.shfunctions.zsh"
+source "$HOME/.dotfiles/.zsh_aliases"
+source "$HOME/.dotfiles/.zsh_prompt"
 
 # set paths
 PATH='/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
@@ -32,8 +32,10 @@ export PYTHONBREAKPOINT=ipdb.set_trace    # ipdb debugging
 stty -ixon  # enable forward cycling in bck-i-search by ^S
 bindkey -e  # emacs keybindings for command line
 setopt EXTENDED_GLOB
+setopt NO_NOMATCH  # see https://stackoverflow.com/a/16864766/14894384
 bindkey "^H" delete-char  # enable easy forward-char deletion
 unset -f colors  # stop zsh from overriding colors script
+setopt AUTO_PUSHD  # to enable `dirs` functionality
 
 # history management
 HISTFILE=~/.zsh_history
@@ -72,7 +74,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(fasd --init auto)"
 
 # initialize fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f ~/.fzf.zsh ] && source "$HOME/.fzf.zsh"
 export FZF_DEFAULT_COMMAND='fd . ~ --hidden --exclude .git'
 export FZF_CTRL_T_COMMAND='fd . ~ --hidden --type f --exclude .git'
 export FZF_ALT_C_COMMAND='fd . ~ --hidden --type d --exclude .git'
