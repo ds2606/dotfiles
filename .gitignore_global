@@ -1,4 +1,4 @@
-# from anishathalye
+# modified from anishathalye
 
 # Compiled source #
 ###################
@@ -11,10 +11,10 @@
 
 # Editing tools and IDEs #
 ##########################
-[._]*.sw[a-p]
-[._]*.s[a-v][a-z]
+*.sw[a-z]
 *~
 ~*
+%*
 \#*\#
 \.#*
 .ipynb_checkpoints/

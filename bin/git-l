@@ -1,0 +1,46 @@
+#!/bin/bash
+# usage: git l [-h] <-ampsy> [args...]
+
+# if '--debug' given, print computed git-log command without running it
+[[ $1 == '--debug' ]] && _debug=echo && shift
+
+# default command if invoked with no other args
+[[ $# -eq 0 ]] && ${_debug} git log --oneline --graph -10 && exit
+
+_cmd=$1 && shift
+_usagestring="usage: git l [-h] <-ampsy> [args...]"
+
+if [[ $_cmd == '-h' ]]; then
+    echo "\
+Quick configuration of a git-log command.
+usage: git l [-h] <opstring> [args...]
+
+git-l passes a default command to git-log that is modified by
+options given in the <optstring> and additional arguments. The default
+command is:
+
+    > git log --oneline --graph
+
+<opstring> can include any combination of the following options:
+    -: no-op (skips optstring)
+    a: display all refs                + --all)
+    m: display full log messages       - --oneline)
+    p: display diff output             + --patch)
+    s: generate diffstat               + --stat)
+    y: linear (non-graphical) display  - --graph)
+
+Any arguments given as [args...] are then appended to the modified default
+command, which is then passed to git-log. If <-h> is given, git-l will display
+this message and exit."
+    exit 0
+fi
+
+[[ $_cmd =~ .*[^-ampsy].* ]] && echo "usage: git l [-h] <-ampsy> [args...]" && exit
+[[ $_cmd =~ .*-.* ]]                        # -: no-op for skipping optstring
+[[ $_cmd =~ .*a.* ]] && _a="--all"          # a: display all refs
+[[ $_cmd =~ .*m.* ]] || _m='--oneline'      # m: display full log messages
+[[ $_cmd =~ .*p.* ]] && _p='-p'             # p: display diff output
+[[ $_cmd =~ .*s.* ]] && _s='--stat'         # s: generate diffstat
+[[ $_cmd =~ .*y.* ]] || _y="--graph"        # y: linear (non-graph) display
+
+${_debug} git log $_a $_l $_m $_p $_s $_y $@
