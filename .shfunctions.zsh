@@ -1,13 +1,27 @@
 # ZSH FUNCTIONS
-#
-# some ANSI color codes
+
+# Some ANSI color codes
 _RED="\033[31m"
 _CYAN="\033[94m"
 _NONE="\033[0m"
 _GREEN="\033[92m"
 _MAGENTA="\033[95m"
 
-# toggle desktop icons
+# Mkdir and cd into it
+mcd() {
+    if [ $# -eq 1 ]; then
+        if [ -d "$1" ]; then
+            echo "dir exists, changing pwd to ./$1"
+        else
+            mkdir -p "$1"
+        fi
+        cd "$1" || return 1
+    else
+        echo 'usage: mcd [dir path]'
+    fi
+}
+
+# Toggle desktop icons
 tdi() {
     val=$(defaults read com.apple.finder CreateDesktop)
     if [ "$val" = "0" ]; then
@@ -20,137 +34,174 @@ tdi() {
     killall Finder
 }
 
-# launch a GUI application (optionally list matches if '-l' given)
+# Launch a GUI application (optionally list matches if '-l' given)
 alias l='launch'
 launch() {
     [[ $# == 0 ]] && echo "Usage: launch [-l] application[s]" && return 1
-    local SEARCH_PATHS=( "/Applications" "/System/Applications" )
     [[ $1 == "-l" ]] && local _list=1 && shift
+    local SEARCH_PATHS=( "/Applications" "/System/Applications" )
     for var in "$@"; do
         app=$(fd "$var" "${SEARCH_PATHS[@]}" -d 1)
-        if [[ $(rg -c . <<< "$app") -gt 1 ]]; then
-            echo "$_RED\0Multiple matches for $_MAGENTA\"$var\"$_RED found:$_NONE\n$app" # if multiple matches found, list and return
-        elif [ -z "$app" ]; then
-            echo "$_MAGENTA\"$var\"$_RED not found$_NONE" # if no matches found, inform caller
+        if [ -z "$app" ]; then
+            # no matches: exit
+            echo "$_MAGENTA\"$var\"$_RED not found$_NONE"
+            return 1
+        elif [[ $(rg -c . <<< "$app") -gt 1 ]]; then
+            # multiple matches: list and exit
+            echo "$_RED\0Multiple matches for $_MAGENTA\"$var\"$_RED found:$_NONE\n$app"
+            return 1
         elif [[ $_list == 1 ]]; then
-            echo "\0Found app $_CYAN\0$(basename "$app" | cut -d . -f 1)\0$_NONE at path: $_GREEN\0$app$_NONE" # list match if '-l' given
+            # exact match and '-l' given: list path
+            echo "\0Found app $_CYAN\0$(basename "$app" | cut -d . -f 1)\0$_NONE at path: $_GREEN\0$app$_NONE"
         else
             open "$app"
         fi
     done
 }
 
-# mkdir and cd into it
-mcd() {
-    if [ $# -eq 1 ]; then
-        if [ -d "$1" ]; then
-            echo 'dir exists'
-        else
-            mkdir -p "$1"
-        fi
-        cd "$1" || exit
-    else
-        echo 'usage: mcd [dir path]'
-    fi
-}
-
-# change extension
-## maybe update this to handle hidden files by stripping a leading dot
+# Change an extension
 chex() {
-    [[ $1 == "-q" ]] && local _quiet=1 && shift
-    if [[ $# -ne 2 ]]; then
-        echo 'usage: chex [-q] [file] [new-extension]'
-        return 1
+    local usagestring='usage: chex [-h | flags] <file> <new-extension>'
+    local _append _delete _dryrun _force _quiet
+    while getopts ":adfhnq" opt; do
+        case $opt in
+            a) _append=1;;
+            d) _delete=1;;
+            f) _force=1;;
+            n) _dryrun=1;;
+            q) _quiet=1;;
+            h) printf "%s\n" "Change a file extension." ""\
+                      "usage: chex [-d|-f|-h|-n|-q] <file> <new extension>"\
+                      "  - a: append extension to filename"\
+                      "  - d: delete existing extension (<new-extension> is omitted)"\
+                      "  - f: force renaming (even if target path already exists)"\
+                      "  - h: display this help message and exit"\
+                      "  - n: dry-run"\
+                      "  - q: quiet" ""\
+                      "Note: -a and -d flags are mutually exclusive. Behavior"\
+                      "is undefined if both are simultaneously given."
+               return;;
+            ?) echo "$usagestring" && return 1;;
+
+        esac
+    done
+    shift $((OPTIND - 1))
+    [[ $_delete ]] && set "$1" "null"
+    [[ $# -ne 2 ]] && echo "$usagestring" && return 1
+    [[ $_append && $_delete ]] && echo "chex: -a and -d flags are mutually exclusive" && return 1
+
+    local _file _old_ext _new_ext _newpath
+    _file=$1
+    ! [[ -e "$_file" ]] && echo "$_CYAN$_file$_NONE does not exist." && return 1
+    _old_ext=${_file##*.}
+    _new_ext=$2
+
+    # construct target pathname
+    if [[ $_append ]]; then
+        _newpath="${_file}.${_new_ext}"
+    elif [[ $_delete ]]; then
+        _newpath=$(echo "$_file" | sed "s/\.[[:alnum:]]*$//")
+    else
+        _newpath=$(echo "$_file" | sed "s/\(.*\)$_old_ext/\1$_new_ext/")
     fi
 
-    local file old_ext new_ext newpath
-    file=$1
-    old_ext=${file##*.}
-    new_ext=$2
-    newpath=$(echo $file | sed "s/\(.*\)$old_ext/\1$new_ext/")
-    mv "$file" "$newpath" || return 1
-    [[ $_quiet -ne 1 ]] && echo "moved $_CYAN$file$_NONE to $_GREEN\0$newpath$_NONE"
+    # move file to target path
+    if [[ -e "$_newpath" && -z $_force ]]; then
+        echo "$_CYAN$_newpath$_NONE already exists." && return 1
+    elif [[ $_dryrun ]]; then
+        echo "would move $_CYAN$_file$_NONE to $_GREEN$_newpath$_NONE"
+    else
+        /bin/mv "$_file" "$_newpath" || { echo 'failure' && return 1; }
+        [[ $_quiet ]] || echo "moved $_CYAN$_file$_NONE to $_GREEN$_newpath$_NONE"
+    fi
 }
 
-# jump straight to a man page flag
-mfl() {
-    LESS="+/^[[:blank:]]+""$2" man "$1"
+# Jump straight to a manpage line
+alias mj='manjump'
+manjump() {
+    LESS="+/^[[:blank:]]*""$2" man "$1"
 }
 
-# make a phone call
+# Make a phone call
 call() {
     open -a facetime tel://"$1"
 }
 
-# nest tmux nessions
-# UPDATE WITH GETOPTS instead of this janky flag catching
-## could make invocation code paths for different flag/arg combinations much cleaner in
-## general (e.g. 'tmux_nested a b c d e f g' code path should be cleanly handled)
+# Nest tmux sessions
 tmux_nested() {
+    local usagestring='usage: tmux-nested [-n | -a nested-session-# | -l]'
     if [[ -z $TMUX ]]; then
         # ensure invoked within active session
         echo "'tmux_nested' should be invoked inside an active tmux session"
         return 1
-    elif [[ $# -eq 0 ]]; then
-        # if invoked without flags, print usage string and exit
-        echo 'usage: tmux-nested <[-n] | [-a nested-session-number] | [-l]>'
-        return 1
     fi
 
     # read flags and check for number of existing nested sessions
-    local nested_sessions session_name
-    nested_sessions=$(tmux list-sessions -F '#{session_name}' | ggrep -P '^nested' --color=never | sort -V)
-    [[ $1 == "-n" ]] && local _new=1 && shift
-    [[ $1 == "-a" ]] && local _attach=1 && shift
-    [[ $1 == "-l" ]] && echo "$nested_sessions" && return 0
+    local nested session_name
+    nested=$(tmux list-sessions -F '#{session_name}' | \
+             ggrep -P '^nested[\d]+' --color=never | sort -V)
+    while getopts ':lna:' opt; do
+        case $opt in
+            l)
+                [[ -z $nested ]] && nested="No nested sessions running"
+                echo "$nested" && return 0;;
+            n)
+                # if new session requested: create, set <C-b> tmux prefix, and attach
+                for (( i = 1;; i++ )); do
+                    # get lowest available numeric value for new session name
+                    if ! tmux has-session -t "nested$i" 2> /dev/null; then
+                        session_name="nested$i" && break
+                    fi
+                done
+                tmux new-session -ds "$session_name"
+                tmux send-keys -t "$session_name" \
+                                  "tmux set prefix C-b" ENTER "clear" ENTER
+                env TMUX='' tmux attach -t "$session_name"
+                return $?;;
+            a)
+                # attach to specified session if requested
+                session_name="nested${OPTARG}"
+                if ! env TMUX='' tmux attach -t "$session_name"; then
+                    echo "Try 'tmux_nested -l'?" && return 1
+                fi;;
+            *) echo "$usagestring" && return 1;;
+        esac
+    done
 
-    if [[ $_new -eq 1 ]]; then
-        # if new session requested: create, set <C-b> tmux prefix, and attach
-        for (( i = 1;; i++ )); do
-            # get lowest available numeric value for new session name
-            grep -Pq "\w$i$" <<< "$nested_sessions"  # debug? sometimes the '$' anchor seems to be failing for the herestring '\n' newline literals
-            [[ $? -eq 1 ]] && session_name="nested$i" && break
-        done
-        env TMUX='' tmux new-session -ds "$session_name"
-        tmux send-keys -t "$session_name" "tmux set prefix C-b" ENTER "clear" ENTER
-        env TMUX='' tmux attach -t "$session_name" || return
-    # attach to specified session if requested
-    elif [[ $_attach -eq 1 ]]; then
-        session_name="nested$1"
-        if ! env TMUX='' tmux attach -t "$session_name"; then
-            echo "list existing nested sessions with 'tmux_nested -l'"
+    # incorrect invocation, report incorrect invocation and exit
+    echo "$usagestring" && return 1
+}
+
+# Shell help-information catch-all
+alias h='help'
+help() {
+    local usagestring="usage: help [-a | -l | -m | -t] command"
+    local _cmd _cmd_type _follow_alias _linux_cmd _type
+    while getopts ":almt" opt; do
+        case $opt in
+            a) _follow_alias=1;;
+            l) man -M "/usr/local/man-linux" "${@:2}"; return;;
+            m) man "$2"; return;;
+            t) whence -w "$2"; return;;
+            ?) echo "$usagestring"; return 1;;
+        esac
+    done
+    shift $((OPTIND - 1))
+    [[ $# -ne 1 ]] && echo "$usagestring" && return 1
+
+    get_cmd_type() { whence -w "$1" | cut -d ' ' -f 2; }
+    _cmd=$1
+    _cmd_type=$(get_cmd_type "$_cmd")
+    if [[ $_follow_alias && $_cmd_type == "alias" ]]; then
+        _cmd="$(whence "$_cmd" | cut -d ' ' -f1)"
+        _cmd_type=$(get_cmd_type "$_cmd")
+        if [[ "$_cmd_type" == "alias" ]]; then
+            # for self-referential aliases
+            man "$_cmd"
             return
         fi
     fi
-}
 
-# switch wallpaper
-wp() {
-    if [[ "$#" -ne 1 ]]; then
-        echo "usage: wp [ARG]"
-        return 1
-    fi
-
-    local bg="/Users/dschreck/Pictures/backgrounds/"
-    case $1 in
-        "lights") bg+="lights.jpg" ;;
-        "garden") bg+="garden.jpg" ;;
-        "stars") bg+="stars.jpg" ;;
-        "swirl") bg+="swirl.jpg" ;;
-        *) echo "wallpaper not recognized" && return 1 ;;
-    esac
-    osascript -e "tell application \"Finder\" to set desktop picture to POSIX file \"$bg\""
-}
-
-# shell information catch-all (similar to iPython '?' directive)
-alias h='help'
-help () {
-    local _cmd=$1 _linux_cmd _cmd_type
-    [[ $_cmd == "-l" ]] && _linux_cmd=1 && shift
-    if [[ $# -ne 1 ]]; then
-        echo "usage: help [-l] command" && return 1
-    fi
-    _cmd_type=$(whence -w "$_cmd" | cut -d ' ' -f 2)
     case $_cmd_type in
         "alias")
             which "$_cmd"
@@ -159,11 +210,7 @@ help () {
             LESS="+/^[[:blank:]]+""$1" man "zshbuiltins"
             ;;
         "command")
-            if [[ "$_linux_cmd" ]]; then
-                man -M "/usr/local/share/man-linux" "$_cmd"
-            else
-                man "$_cmd"
-            fi
+            man "$_cmd"
             ;;
         "function")
             which "$_cmd" | bat -p -l sh
@@ -175,7 +222,66 @@ help () {
             whence -v "$_cmd"
             ;;
         "none")
-            man "$_cmd" 2> /dev/null || echo "$_cmd is not a recognized command." && return 1
+            if ! man "$_cmd" 2> /dev/null; then
+                echo "$_cmd is not a recognized command." && return 1
+            fi
             ;;
     esac
+}
+
+# Go up [n] directories (from anishathalye)
+up()
+{
+    local cdir
+    cdir="$(pwd)"
+    if [[ "${1}" == "" ]]; then
+        cdir="$(dirname "${cdir}")"
+    elif ! [[ "${1}" =~ ^[0-9]+$ ]]; then
+        echo "Error: argument must be a number"
+    else
+        for ((i=0; i<${1}; i++)); do
+            local ncdir
+            ncdir="$(dirname "${cdir}")"
+            if [[ "${cdir}" == "${ncdir}" ]]; then
+                break
+            else
+                cdir="${ncdir}"
+            fi
+        done
+    fi
+    cd "${cdir}" || return
+}
+
+# Shadows /usr/local/share/zsh/site-functions/edit-command-line but
+# edits the command line in-place (i.e. does not invoke `send-break`, thereby not
+# exiting with error-status and redrawing the prompt)
+edit-command-line() {
+    emulate -L zsh
+
+    () {
+        exec </dev/tty
+
+        # Compute the cursor's position in bytes, not characters.
+        setopt localoptions nomultibyte noksharrays
+        (( $+zle_bracketed_paste )) && print -r -n - $zle_bracketed_paste[2]
+
+        # Open the editor, placing the cursor at the right place if we know how.
+        local editor=( "${(@Q)${(z)${VISUAL:-${EDITOR:-vi}}}}" )
+        case $editor in
+            (*vim*)
+                integer byteoffset=$(( $#PREBUFFER + $#LBUFFER + 1 ))
+                "${(@)editor}" -c "normal! ${byteoffset}go" -- $1;;
+            (*emacs*)
+                local lines=( "${(@f):-"$PREBUFFER$LBUFFER"}" )
+                "${(@)editor}" +${#lines}:$((${#lines[-1]} + 1)) $1;;
+            (*)
+                "${(@)editor}" $1;;
+        esac
+
+        (( $+zle_bracketed_paste )) && print -r -n - $zle_bracketed_paste[1]
+
+        # # Replace the buffer with the editor output.
+        BUFFER="$(<$1)"
+
+    } =(<<<"$PREBUFFER$BUFFER")
 }
