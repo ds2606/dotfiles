@@ -1,60 +1,73 @@
 # ZSH PROFILE
 
-
-# open tmux session (reattach if one exists, create new otherwise)
+# ----------
+# Open tmux session (reattach if one exists, create new otherwise)
 if [[ -z "$TMUX" ]]; then
-  tmux attach || tmux new -s mbp
+  tmux attach 2> /dev/null || tmux new -s mbp
 fi
+# ----------
 
+# Set-up environment
+source "$HOME/.dotfiles/.shfunctions.zsh"
+source "$HOME/.dotfiles/.zsh_aliases"
+source "$HOME/.dotfiles/.zsh_prompt"
 
-# set environment
-source $HOME/.dotfiles/.shfunctions.zsh
-source $HOME/.dotfiles/.zsh_aliases
-source $HOME/.dotfiles/.zsh_prompt
-
-# set paths
+# Configure 'PATH'
 PATH='/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
 export PATH="$PATH:$HOME/.dotfiles/bin"
 export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$PATH:/usr/local/lib/ruby/gems/3.0.0/bin"
-export PATH="$PATH:/Library/TeX/texbin"
-export PATH="$PATH:/usr/local/smlnj/bin"
+# export PATH="$HOME/.cargo/bin:$PATH" # commented out until actively-using rust
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-17.0.2.jdk/Contents/Home # is this necessary? seems like a hardcoded value might not be so great but idk exactly what this does
 
-# set environment
+# Environment variables and options
 export EDITOR="vim"
 export VISUAL="vim"
 export LESS="-RF"
-export CLICOLOR=1                         # pretty colorful terminal
-export BASH_SILENCE_DEPRECATION_WARNING=1 # yes yes we know zsh is default
-export PYTHONDONTWRITEBYTECODE=1          # don't spew python bytecode everywhere
-export PYTHONBREAKPOINT=ipdb.set_trace    # ipdb debugging
-stty -ixon  # enable forward cycling in bck-i-search by ^S
-bindkey -e  # emacs keybindings for command line
+export CLICOLOR=1
+export BASH_SILENCE_DEPRECATION_WARNING=1
+export ITERM2_SQUELCH_MARK=0
+export PYTHONDONTWRITEBYTECODE=1
+export PYTHONBREAKPOINT=ipdb.set_trace
 setopt EXTENDED_GLOB
-bindkey "^H" delete-char  # enable easy forward-char deletion
-unset -f colors  # stop zsh from overriding colors script
+setopt NO_NOMATCH  # see https://stackoverflow.com/a/16864766/14894384
+setopt AUTO_PUSHD  # to enable `dirs` functionality
+unset -f colors    # stop zsh from overriding colors script
 
-# history management
-HISTFILE=~/.zsh_history
+# Bindings
+bindkey -e         # emacs keybindings for command line
+## navigation
+bindkey "^[h" backward-char
+bindkey "^[l" forward-char
+bindkey "^[H" beginning-of-line
+bindkey "^[L" end-of-line
+bindkey "^[b" backward-word
+bindkey "^[w" forward-word
+bindkey "^[J" down-line-or-history
+bindkey "^[K" up-line-or-history
+## command-line editing
+zle -N edit-command-line
+bindkey "^[E" edit-command-line
+bindkey "^[x" delete-char
+bindkey "^[X" backward-delete-char
+bindkey "^[d" backward-kill-word
+bindkey "^[D" kill-word
+bindkey "^[u" backward-kill-line
+bindkey "^[U" kill-line
+bindkey "^[c" kill-whole-line
+## misc
+bindkey "^[C" clear-screen  # remap for "^l"
+
+# History
+HISTFILE=$HOME/.zsh_history
 HISTSIZE=5000
-SAVEHIST=5000
-setopt APPEND_HISTORY
+SAVEHIST=$HISTSIZE
+setopt EXTENDED_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_FIND_NO_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_SAVE_NO_DUPS
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
-setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_FIND_NO_DUPS
-setopt HIST_SAVE_NO_DUPS
-
-# The following lines were added by compinstall
-zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|[._-]=** r:|=**'
-zstyle :compinstall filename '/Users/dschreck/.zshrc'
-
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
 
 # Add colors to man pages
 export LESS_TERMCAP_mb=$'\E[01;31m'     # enter blinking mode
@@ -65,50 +78,63 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'  # enter standout mode – yellow
 export LESS_TERMCAP_ue=$'\E[0m'         # leave underline mode
 export LESS_TERMCAP_us=$'\E[01;32m'     # enter underline mode
 
-# help function for builtin manpages
-if [[ $(which run-help) == "run-help: aliased to man" ]]; then
-    autoload -Uz run-help
-    unalias run-help
-    alias help=run-help
-fi
-
 # initialize homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
+type brew &>/dev/null && FPATH="${FPATH}:$(brew --prefix)/share/zsh/site-functions"
 
 # initialize fasd
 eval "$(fasd --init auto)"
 
 # initialize fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_COMMAND='fd . ~ --hidden --exclude .git'
-export FZF_CTRL_T_COMMAND='fd . ~ --hidden --type f --exclude .git'
-export FZF_ALT_C_COMMAND='fd . ~ --hidden --type d --exclude .git'
-export FZF_DEFAULT_OPTS='
-  --color info:114,prompt:26,spinner:135,pointer:81
-  --color header:221,hl+:204,hl:81,preview-fg:81
-'
-export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || bat {} || tree -C {}) 2> /dev/null | head -200'"
-export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
-bindkey '^X^R' fzf-history-widget
+source "$HOME/.fzf.zsh"
+_fzf_path='~/desktop/dropbox'
+_fd_flags="-H -E .git -E '.dropbox*' --ignore-file ~/.dotfiles/.gitignore_global"
+export FZF_DEFAULT_COMMAND="fd $_fd_flags . $_fzf_path"
+export FZF_CTRL_T_COMMAND="fd -t f $_fd_flags . $_fzf_path"
+export FZF_ALT_C_COMMAND="fd -t d $_fd_flags . $_fzf_path"
+export FZF_DEFAULT_OPTS="
+    --color info:114,prompt:26,spinner:135,pointer:81
+    --color header:221,hl+:204,hl:81,preview-fg:81
+    --height=33%
+    --reverse
+    --info=inline
+    --multi
+    --prompt='∼ ' --pointer='▶' --marker='✓'
+    --preview-window=:hidden
+    --preview '([[ -f {} ]] && (bat --style=plain --color=always {} || cat {})) ||
+               ([[ -d {} ]] && (tree -C {} | less)) || echo {} 2> /dev/null | head -200'
+    --bind 'ctrl-y:execute-silent(echo {+} | pbcopy)'
+    --bind 'ctrl-e:execute(echo {+} | xargs -o vim -p)'
+    --bind 'ctrl-d:half-page-down'
+    --bind 'ctrl-u:half-page-up'"
+export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null ||
+                                    bat {} || tree -C {}) 2> /dev/null | head -200'"
+export FZF_ALT_C_OPTS=""
+bindkey '^R' fzf-history-widget
 bindkey '^O' fzf-cd-widget
 bindkey '^F' fzf-file-widget
+unset _fd_cmd
 
-# syntax highlighting
+# Syntax highlighting
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-export zle_highlight=('paste:none') # don't highlight pasted items
+export zle_highlight=('paste:none')  # don't highlight pasted items
 export BAT_THEME="OneHalfDark"
 export EXA_COLORS="ln=38;5;171:lp=38;5;171:uu=38;5;214"
 
-# history substring search
+# zsh-history-substring-search
 source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+bindkey '^[j' history-substring-search-down
+bindkey '^[k' history-substring-search-up
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='underline'
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=204'
 
-# iterm2 shell integration
-# source ~/.iterm2_shell_integration.zsh
-export ITERM2_SQUELCH_MARK=0
-
-# initialize pyenv
+# Initialize language environment managers
+eval "$(rbenv init - zsh)"
 eval "$(pyenv init --path)"
+
+# The following lines were added by compinstall
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|[._-]=** r:|=**'
+zstyle :compinstall filename '/Users/dschreck/.zshrc'
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall

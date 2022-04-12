@@ -1,49 +1,35 @@
 # ZSH ALIASES
 
 
-# safe environment
+# Safe environment
 set -o noclobber
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 alias ln='ln -i'
 
-# navigation
+# Navigation
 alias ,="cd -"
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
-export zrc=~/.dotfiles/.zsh_profile
-export vrc=~/.dotfiles/.vimrc
-export cs=~/desktop/home/cs
-export dots=~/.dotfiles
 
-# suffix defaults
+# Suffix defaults
 alias -s py='python3'
 alias -s html='open -a Google\ Chrome'
 alias -s pdf='open'
 
-# built-ins
+# Built-ins
 alias cl='clear'
 alias du1='du -sh'
-alias g='git'
+alias e='echo'
 alias grep='ggrep --color=auto'  # GNU grep as default
-alias h='man'
-alias h.l='man.linux'
 alias hist='history'
-alias man.linux='man -M /usr/local/share/man-linux'
-alias man.m='man -M /usr/local/share/man-myth'
 alias mirror='wget -m -p -E -k -np'
 alias pe='printenv'
 alias rmf='rm -f'
-alias rsync='rsync -havz --stats'
-alias srz='source ~/.zshrc'
+alias se='source ~/.zshrc'  # source environment
 alias stat='gstat'
-alias t='tmux'
-alias ta='tmux attach -t mbp'
-alias ti='tmux_nested'
-alias tn='tmux new-session -As mbp'
-alias vi='vim'
 alias w='which'
 
 # 3rd-party
@@ -51,17 +37,25 @@ alias bd='batdiff'
 alias fd='fd -i'
 alias htop='htop-vim'
 alias ipy='ipython --profile=dschreck'
-alias la='exa -a --color=always'
-alias ll='exa -la --color=always'
-alias ls='exa --color=always'
+alias la='exa -a'
+alias ll='exa -la'
+alias ls='exa'
+alias g='git'
 alias moo='fortune | cowsay | lolcat'
+alias myth='ssh myth'
 alias rg='rg --smart-case'
+alias rsync='rsync -havz --stats'
 alias trash='trash -F'
 alias v='fasd -fe vim'  # fasd quick file open with vim
 alias vv='fasd -ife vim'  # 'v' but interactive
+alias t='tmux'
+alias ta='tmux attach -t mbp'
+alias ti='tmux_nested'
+alias tn='tmux new-session -As mbp'
 alias myip4='curl -4 ifconfig.co'
 alias myip6='curl -6 ifconfig.co'
+tree() { /usr/bin/env tree -C $@ | less }
 
-# gui applications
+# GUI applications
 alias chrome='open -a Google\ Chrome'
 alias finder='open -a Finder'
