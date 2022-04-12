@@ -3,7 +3,9 @@ exa
 fasd
 fd
 fl
+fzf  // also associated key-bindings.zsh file (for widget bindings)
 htop
 rg
 tldr
+tree
 node  // for vim coc

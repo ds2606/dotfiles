@@ -1,10 +1,12 @@
 # SSH ZSH PROFILE
 
-# open tmux session (reattach if one exists, create new otherwise)
-if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_CONNECTION" ]]; then
-  tmux attach || tmux new -s ssh
+# ----------
+# Open tmux session (reattach if one exists, create new otherwise)
+if [[ -z "$TMUX" ]] && [[ -n "$SSH_CONNECTION" ]]; then
+  tmux attach 2> /dev/null || tmux new -s ssh
 fi
 alias dex='tmux detach -P'  # `d`etach tmux session and `ex`it ssh
+# ----------
 
 
 # ------------- local settings -------------
@@ -12,66 +14,118 @@ alias dex='tmux detach -P'  # `d`etach tmux session and `ex`it ssh
 # ------------------------------------------
 
 
-# environment setup
-source $HOME/ssh-env/functions-ssh
-source $HOME/ssh-env/zsh-aliases-ssh
-source $HOME/ssh-env/zsh-prompt-ssh
+# Set-up environment
+source "$HOME/ssh-env/functions-ssh"
+source "$HOME/ssh-env/zsh-aliases-ssh"
+source "$HOME/ssh-env/zsh-prompt-ssh"
 
-# set paths
+# Configure 'PATH'
 export PATH="$HOME/ssh-env/bin:$PATH"  # add local bins to path
 
-# set environment variables
-export EDITOR=vim
-export VISUAL=vim
-export CLICOLOR=1                         # pretty colorful terminal
-export PYTHONDONTWRITEBYTECODE=1          # don't spew python bytecode everywhere
-stty -ixon  # enable forward cycling in bck-i-search by ^S
-bindkey -e  # emacs keybindings for command line
+# Environment variables and options
+export EDITOR="vim"
+export VISUAL="vim"
+export LESS="-RF"
+export CLICOLOR=1
+export PYTHONDONTWRITEBYTECODE=1
+export PYTHONBREAKPOINT=ipdb.set_trace
 setopt EXTENDED_GLOB
+setopt NO_NOMATCH  # see https://stackoverflow.com/a/16864766/14894384
+setopt AUTO_PUSHD  # to enable `dirs` functionality
 
-# safe environment
-unsetopt CLOBBER    # don't overwrite existing file w/ redirect
-alias cp='cp -i'    # prompt before overwriting file
-alias mv='mv -i'    # prompt before overwriting file
-alias rm='rm -i'    # prompt before removing file
-alias ln='ln -i'    # prompt before overwriting files via 'ln'
+# Bindings
+bindkey -e         # emacs keybindings for command line
+## navigation
+bindkey "^[h" backward-char
+bindkey "^[l" forward-char
+bindkey "^[H" backward-word
+bindkey "^[L" forward-word
+bindkey "^[J" down-line-or-history
+bindkey "^[K" up-line-or-history
+bindkey "^[a" beginning-of-line
+bindkey "^[e" end-of-line
+## command-line editing
+zle -N edit-command-line
+bindkey "^[E" edit-command-line
+bindkey "^[w" backward-kill-word
+bindkey "^[W" kill-word
+bindkey "^[u" backward-kill-line
+bindkey "^[U" kill-line
+bindkey "^[d" kill-whole-line
+## misc
+bindkey "^[c" clear-screen  # remap for "^l"
 
-# history management
-HISTFILE=$HOME/.zsh_history     # set history file
-HISTSIZE=5000                # number of history commands to save
+# History
+HISTFILE=$HOME/.zsh_history
+HISTSIZE=5000
 SAVEHIST=$HISTSIZE
-setopt INC_APPEND_HISTORY    # set history options
-setopt SHARE_HISTORY
+setopt EXTENDED_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_FIND_NO_DUPS
+setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_SAVE_NO_DUPS
-
-# The following lines were added by compinstall
-zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|[._-]=** r:|=**'
-zstyle :compinstall filename '/Users/dschreck/.zshrc'
-
-autoload -Uz compinit
-compinit
-autoload -Uz promptinit    # use prompt themes
-promptinit
-# End of lines added by compinstall
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
 
 # Add colors to man pages
 export LESS_TERMCAP_mb=$'\E[01;31m'     # enter blinking mode
 export LESS_TERMCAP_md=$'\E[01;31m'     # enter double-bright mode
-export LESS_TERMCAP_me=$'\E[0m'         # turn off all appearance modes         (mb, md, so, us)
+export LESS_TERMCAP_me=$'\E[0m'         # turn off all appearance modes (mb, md, so, us)
 export LESS_TERMCAP_se=$'\E[0m'         # leave standout mode
 export LESS_TERMCAP_so=$'\E[01;44;33m'  # enter standout mode – yellow
 export LESS_TERMCAP_ue=$'\E[0m'         # leave underline mode
 export LESS_TERMCAP_us=$'\E[01;32m'     # enter underline mode
 
-# fasd
-eval "$(fasd --init auto)"  # initialization
+# initialize fasd
+eval "$(fasd --init auto)"
 
-# syntax highlighting
-source ~/ssh-env/colors-ssh/zsh-syntax-highlighting.zsh
+# initialize fzf
+_fd_cmd="-H -E .git . ~"
+export FZF_DEFAULT_COMMAND="fd $_fd_cmd"
+export FZF_CTRL_T_COMMAND="fd -t f $_fd_cmd"
+export FZF_ALT_C_COMMAND="fd -t d $_fd_cmd"
+export FZF_DEFAULT_OPTS="
+    --color info:114,prompt:26,spinner:135,pointer:81
+    --color header:221,hl+:204,hl:81,preview-fg:81
+    --height=33%
+    --reverse
+    --info=inline
+    --multi
+    --prompt='∼ ' --pointer='▶' --marker='✓'
+    --preview-window=:hidden
+    --preview '([[ -f {} ]] && (bat --style=plain --color=always {} || cat {})) ||
+               ([[ -d {} ]] && (tree -C {} | less)) || echo {} 2> /dev/null | head -200'
+    --bind 'ctrl-y:execute-silent(echo {+} | pbcopy)'
+    --bind 'ctrl-e:execute(echo {+} | xargs -o vim -p)'
+    --bind 'ctrl-d:half-page-down'
+    --bind 'ctrl-u:half-page-up'"
+export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null ||
+                                    bat {} || tree -C {}) 2> /dev/null | head -200'"
+export FZF_ALT_C_OPTS=""
+source ~/ssh-env/fzf-widgets.zsh
+bindkey '^R' fzf-history-widget
+bindkey '^O' fzf-cd-widget
+bindkey '^F' fzf-file-widget
+unset _fd_cmd
+
+# Syntax highlighting
+source "$HOME/ssh-env/colors-ssh/zsh-syntax-highlighting.zsh"
 export zle_highlight=('paste:none')  # don't highlight pasted items
-export EXA_COLORS="ln=38;5;171:lp=38;5;171:uu=38;5;214"
 export BAT_THEME="OneHalfDark"
+export EXA_COLORS="ln=38;5;171:lp=38;5;171:uu=38;5;214"
+
+# zsh-history-substring-search
+source ~/ssh-env/zsh-history-substring-search.zsh
+bindkey '^[j' history-substring-search-down
+bindkey '^[k' history-substring-search-up
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='underline'
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=204'
+
+# The following lines were added by compinstall
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|[._-]=** r:|=**'
+zstyle :compinstall filename '/Users/dschreck/.zshrc'
+autoload -Uz compinit
+compinit
+autoload -Uz promptinit    # use prompt themes
+promptinit
+# End of lines added by compinstall

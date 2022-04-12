@@ -1,32 +1,44 @@
 # SSH ZSH ALIASES
 
 
-# navigation shortcuts
+# Safe environment
+set -o noclobber
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias ln='ln -i'
+
+# Navigation
 alias ,="cd -"
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
-export zrc=~/ssh-env/zsh-profile-ssh
-export vrc=~/ssh-env/vimrc-ssh
 
-# built-ins aliases
+# Built-ins
+alias cl='clear'
 alias du1='du -sh'
-alias g='git'
+alias e='echo'
 alias hist='history'
 alias pe='printenv'
 alias rmf='rm -f'
-alias rsync='rsync -havz --stats'
-alias srz='source ~/.zshrc'
+alias se='source ~/.zshrc'  # source environment
+alias vi='vim'
+alias w='which'
+
+# 3rd-party
+alias fd='fd -i'
+alias htop='htop-vim'
+alias ipy='ipython --profile=dschreck'
+alias la='exa -a'
+alias ll='exa -la'
+alias ls='exa'
+alias g='git'
+alias rg='rg --smart-case'
+alias v='fasd -fe vim'  # fasd quick file open with vim
+alias vv='fasd -ife vim'  # 'v' but interactive
 alias t='tmux'
 alias ta='tmux attach'
-alias vi='vim'
-
-# 3rd-party aliases
-alias fd='fd -i'
-alias ipy='ipython'
-alias la='exa -a --color=always'
-alias ll='exa -lah --color=always'
-alias ls='exa --color=always'
-alias rg='rg --smart-case'
-alias v='f -e vim'    # fasd quick file open with vim
-alias vv='sf -e vim'  # 'v' but interactive
+alias tn='tmux new-session -As ssh'
+alias myip4='curl -4 ifconfig.co'
+alias myip6='curl -6 ifconfig.co'
+tree() { /usr/bin/env tree -C $@ | less }
