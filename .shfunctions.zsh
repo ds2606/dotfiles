@@ -122,9 +122,63 @@ manjump() {
     LESS="+/^[[:blank:]]*""$2" man "$1"
 }
 
-# Make a phone call
+# Make a call by phone, facetime, or skype
 call() {
-    open -a facetime tel://"$1"
+    local usagestring="usage: call [-a | -s | -v] <name | number>"
+    while getopts ":an:sv" opt; do
+        case $opt in
+            a) local ft_audio=1 ;;
+            n) local index=$OPTARG ;;
+            s) local skype=1 ;;
+            v) local facetime=1 ;;
+            \?) echo "$usagestring" && return 1 ;;
+            :) echo "option -$OPTARG requires an argument." && return 1 1>&2 ;;
+        esac
+    done
+    shift $(( OPTIND - 1))
+    [[ $# -eq 0 ]] && echo "$usagestring" && return 1
+    local num=$*
+
+    # Handle alphabetic queries (for, e.g., specific names)
+    if ggrep -q '.*[[:alpha:]].*' <<< "$*"; then
+        # extract number if name is given
+        matches=$(~/.bin/contacts "$*" 2> /dev/null)
+        if [[ -z $matches ]]; then
+            echo "$_RED\0no matches found for $_MAGENTA$*$_RED, aborting$_NONE"
+            return 1
+        fi
+        num=$(sed -E 's/.*ue=(.*),.*/\1/' <<< $matches | tr -d ' ')
+        local n_matches=$(wc -l <<< "$matches")
+
+        if [[ -n $index ]]; then
+            # Handle (optional) user-specified index
+            if [[ $index -gt 0 ]] && [[ $index -le $n_matches ]]; then
+                num=$(sed -n "$index"p <<< $num)
+            else
+                echo "Invalid index given: $index"
+            fi
+        elif [[ $n_matches -gt 1 ]]; then
+            # Pretty-print multiple matches if user-specified index given
+            printf '%s\n' 'Multiple matches (try `call -n <index> <query>)' \
+                          '-----------------------------------------------'
+            local names indices
+            names=$(echo "$matches" | sed -E 's/(.*) <.*/\1/')
+            indices=$(seq $n_matches | sed 's/$/)/')
+            paste <(echo "$indices") <(echo "$names") <(echo "$num") | column -s $'\t' -t
+            return 1
+        fi
+    fi
+
+    # Make the call
+    if [[ -n $ft_audio ]]; then
+        open "facetime-audio://$num"
+    elif [[ -n $facetime ]]; then
+        open "facetime://$num"
+    elif [[ -n $skype ]]; then
+        open -a skype "tel://$num"
+    else
+        open -a facetime "tel://$num"
+    fi
 }
 
 # Nest tmux sessions
