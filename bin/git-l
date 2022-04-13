@@ -8,11 +8,11 @@
 [[ $# -eq 0 ]] && ${_debug} git log --oneline --graph -10 && exit
 
 opts=$1 && shift
-usagestring="usage: git l [-h] <-ampsy> [args...]"
+usagestring="usage: git l [-h] <-acfpsy> [args...]"
 
 if [[ $opts == '-h' ]]; then
     echo \
-"usage: git l [-h] <opstring> [args...]
+"usage: git l [-h] <optstring> [args...]
 ---------------------------------------
 Quick configuration of a git-log command.
 
@@ -22,30 +22,31 @@ command is:
 
     > git log --oneline --graph
 
-<opstring> can include any combination of the following options:
+<optstring> can include any combination of the following options in any order:
     -: no-op (skips optstring)
     a: display all refs                (+ --all)
-    m: display full log messages       (- --oneline)
+    c: cut output to 10 commits        (+ --max-count=10)
+    f: display full log messages       (- --oneline)
     p: display diff output             (+ --patch)
     s: generate diffstat               (+ --stat)
     y: linear (non-graphical) display  (- --graph)
 
 Any arguments given as [args...] are then appended to the modified default
 command, which is then passed to git-log. If <-h> is given, git-l will display
-this message and exit. If invoked without an optstring, the resulting output is limited to
-10 commits (i.e. '-10' is appended to the default command).
+this message and exit. If invoked without an optstring, the resulting output
+is limited to 10 commits (i.e. '-10' is appended to the default command).
 
-For scripting and debugging: if '--debug' is given as the first parameter, git-l will
-print to stdout the generated git-log command without executing it"
+For scripting and debugging: if '--debug' is given as the first parameter,
+git-l will print the generated git-log command to stdout without executing it"
     exit 0
 fi
 
-[[ $opts =~ .*[^-ampsy].* ]] && echo "$usagestring" && exit
-[[ $opts =~ .*-.* ]]                        # -: no-op for skipping optstring
-[[ $opts =~ .*a.* ]] && _a="--all"          # a: display all refs
-[[ $opts =~ .*m.* ]] || _m='--oneline'      # m: display full log messages
-[[ $opts =~ .*p.* ]] && _p='-p'             # p: display diff output
-[[ $opts =~ .*s.* ]] && _s='--stat'         # s: generate diffstat
-[[ $opts =~ .*y.* ]] || _y="--graph"        # y: linear (non-graph) display
+[[ $opts =~ .*[^-acfpsy0-9].* ]] && echo "$usagestring" && exit
+[[ $opts =~ .*a.* ]] && _a="--all"
+[[ $opts =~ .*c.* ]] && _c="-n 10"
+[[ $opts =~ .*f.* ]] || _f="--oneline"
+[[ $opts =~ .*p.* ]] && _p="-p"
+[[ $opts =~ .*s.* ]] && _s="--stat"
+[[ $opts =~ .*y.* ]] || _y="--graph"
 
-${_debug} git log $_a $_l $_m $_p $_s $_y "$@"
+${_debug} git log $_a $_c $_f $_p $_s $_y "$@"

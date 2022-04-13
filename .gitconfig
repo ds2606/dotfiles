@@ -25,19 +25,19 @@
     ds       = diff --staged
     f        = fetch
     h        = help
-    last     = log -1 HEAD
+    last     = log -1 -p HEAD
     mg       = merge
     mgt      = mergetool
     pfwl     = push --force-with-lease
     r        = remote
     rb       = rebase
     rl       = reflog -10
+    t        = tag
     s        = status
     sh       = show
     ss       = status -s
     st       = stash
     sw       = switch
-    t        = tag
     unstage  = reset HEAD --
     wt       = worktree
 [core]
@@ -60,16 +60,16 @@
 [push]
 	default = simple
 [color "diff-highlight"]
-	oldNormal = 161 bold
-	oldHighlight = 211 bold 52
-	newNormal = 114 bold
-	newHighlight = 114 bold 22
+	oldNormal = 204
+	oldHighlight = 211 52
+	newNormal = 114
+	newHighlight = 114 22
 [color "diff"]
 	meta = 153
 	frag = 209 bold
-	func = 219 bold
+	func = 104
 	commit = 141  ; 220 nice as well
-	old = 161
+	old = 204
 	new = 114
 	whitespace = 204 reverse
 [color]

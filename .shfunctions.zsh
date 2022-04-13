@@ -37,24 +37,27 @@ tdi() {
 # Launch a GUI application (optionally list matches if '-l' given)
 alias l='launch'
 launch() {
-    [[ $# == 0 ]] && echo "Usage: launch [-l] application[s]" && return 1
+    [[ $# == 0 ]] && echo "Usage: launch [-l | -o] application[s]" && return 1
     [[ $1 == "-l" ]] && local _list=1 && shift
-    local SEARCH_PATHS=( "/Applications" "/System/Applications" )
-    for var in "$@"; do
-        app=$(fd "$var" "${SEARCH_PATHS[@]}" -d 1)
-        if [ -z "$app" ]; then
+    [[ $1 == "-o" ]] && local _open=1 _file=$2 && shift 2
+    local app SEARCH_PATHS=( "/Applications" "/System/Applications" ) var
+    for _var in "$@"; do
+        _app=$(fd "$_var" "${SEARCH_PATHS[@]}" -d 1)
+        if [ -z "$_app" ]; then
             # no matches: exit
-            echo "$_MAGENTA\"$var\"$_RED not found$_NONE"
+            echo "$_MAGENTA\"$_var\"$_RED not found$_NONE"
             return 1
-        elif [[ $(rg -c . <<< "$app") -gt 1 ]]; then
+        elif [[ $(rg -c . <<< "$_app") -gt 1 ]]; then
             # multiple matches: list and exit
-            echo "$_RED\0Multiple matches for $_MAGENTA\"$var\"$_RED found:$_NONE\n$app"
+            echo "$_RED\0Multiple matches for $_MAGENTA\"$_var\"$_RED found:$_NONE\n$_app"
             return 1
         elif [[ $_list == 1 ]]; then
             # exact match and '-l' given: list path
-            echo "\0Found app $_CYAN\0$(basename "$app" | cut -d . -f 1)\0$_NONE at path: $_GREEN\0$app$_NONE"
+            echo "\0Found app $_CYAN\0$(basename "$_app" | cut -d . -f 1)\0$_NONE at path: $_GREEN\0$_app$_NONE"
+        elif [[ $_open == 1 ]]; then
+            open -a "$_app" "$_file"
         else
-            open "$app"
+            open "$_app"
         fi
     done
 }
@@ -142,9 +145,9 @@ call() {
     # Handle alphabetic queries (for, e.g., specific names)
     if ggrep -q '.*[[:alpha:]].*' <<< "$*"; then
         # extract number if name is given
-        matches=$(~/.bin/contacts "$*" 2> /dev/null)
+        matches=$(~/.dotfiles/bin/contacts "$*" 2> /dev/null)
         if [[ -z $matches ]]; then
-            echo "$_RED\0no matches found for $_MAGENTA$*$_RED, aborting$_NONE"
+            echo "$_RED\0no matches found for $_MAGENTA$*$_RED$_NONE"
             return 1
         fi
         num=$(sed -E 's/.*ue=(.*),.*/\1/' <<< $matches | tr -d ' ')

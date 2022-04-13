@@ -4,6 +4,36 @@
 " (modeled after junegunn/dotfiles)
 
 " * TODO: fix autocommands being multiply added with every 'source vimrc'
+" * TODO: stop text from being autobroken/wrapped in non-text files. e.g. autowrapping at
+" 90 chars can mess up bash scripts. Instead consider turning on highlighting for
+" characters over 80 chars and shutting off whatever the auto-break option is. Probably
+" bundle this in with the textwidth augroup stub being built below.
+" * TODO: now that 'hidden' is set, find a way to automatically close empty new buffers
+" with the leader-c binding (otherwise a bunch of scratch buffers are accumulated
+" as hidden after they're opened)
+" * TODO: Possible to have empty buffers be closed instead of going hidden? autocommand?
+" * TODO: make tab movement shortcuts (,t<, ,t>) accept a count
+" * TODO integrate this function below into the above todo item, could be handy to just
+" clean out empty buffers wheneever needed instead of some complicated autocommand
+" construction. Or could call this function as an autocommand. Probably need to learn
+" more vimscipt/autocommand stuff first to figure out how to properly integrate this
+" though.
+" * TODO Make <leader>J map to activating relative line numbers, highlighting the number column,
+" accepting a count (positive or negative), and jumping to that count
+" * TODO is function "MoveBack" doing anything? Can it just be deleted?
+
+function! DeleteEmptyBuffers()
+    let [i, n; empty] = [1, bufnr('$')]
+    while i <= n
+        if bufexists(i) && bufname(i) ==# ''
+            call add(empty, i)
+        endif
+        let i += 1
+    endwhile
+    if len(empty) > 0
+        exe 'bdelete' join(empty)
+    endif
+endfunction
 
 " ============================================================================
 " BASIC SETTINGS {{{
@@ -37,7 +67,7 @@ let &showbreak='••• '    " prefix for wrapped lines
 colorscheme palenight
 let g:palenight_termcolors = 256
 syn enable         " syntax highlighting
-set number         " normal line numbering
+set number         " display line numbering
 set ruler
 set scl=number
 set laststatus=2   " show status bar by default
@@ -85,31 +115,37 @@ noremap \, ,
 noremap ; :
 noremap \; ;
 
-" Exit
+" Escape
 cnoremap jk <C-c>
 
 " Navigation
 cnoremap <nowait> <esc> <C-c>
 cnoremap h <left>
 cnoremap l <right>
-cnoremap H <C-left>
-cnoremap L <C-right>
+cnoremap b <C-left>
+cnoremap w <C-right>
 cnoremap j <down>
 cnoremap k <up>
 cnoremap J <S-down>
 cnoremap K <S-up>
 cnoremap a <C-b>
 cnoremap e <C-e>
+cnoremap H <C-b>
+cnoremap L <C-e>
 cnoremap c <C-c>
 
 " Editing
-cnoremap w <C-w>
+cnoremap d <C-w>
 cnoremap u <C-u>
-cnoremap d <BS>
-cnoremap D <Del>
+cnoremap x <Del>
+cnoremap X <BS>
 
 " Capture-group insertion
-cmap ;\ \(\)<left><left>
+cnoremap ;\ \(\)<left><left>
+
+" Substitution
+cnoremap ;s s:::g<left><left><left>
+
 
 
 " ----------------------------------------------------------------------------
@@ -141,7 +177,7 @@ inoremap ;k <C-k>
 inoremap ;d   <esc>ddkA
 inoremap ;p   <C-o>p
 
-" Normal-mode
+" Normal-mode command
 inoremap ;n   <C-o>
 
 " Registers
@@ -193,9 +229,12 @@ nnoremap <silent> <leader>ev :tabedit ~/.vimrc<CR>
 nnoremap <silent> <leader>ez :tabedit ~/.dotfiles/.zsh_profile<CR>
 nnoremap <leader>ef :set ft=
 nnoremap <silent> <leader>er :SynReveal<CR>
-nnoremap <silent> <leader>ec :CdPwd<CR> <bar> :echo "changed pwd to" getcwd()<CR>
+nnoremap <silent> <leader>ec :CdBuf<CR> <bar> :echo "changed pwd to" getcwd()<CR>
 nnoremap <silent> <leader>ep :pwd<cr>
 nnoremap <silent> <leader>ew :Chomp<CR>
+
+" Launch a shell
+nnoremap <silent> <leader>; :sh<CR>
 
 " Movement by visual line
 noremap j gj
@@ -205,6 +244,9 @@ noremap gk k
 
 " Goto line
 noremap gl G
+
+" Mark jumping (map comma -> backtick, accomodates tmux prefix and ergonomic)
+nnoremap ' `
 
 " Scrolling
 noremap <silent> - :call smoothie#downwards()<CR>
@@ -218,13 +260,13 @@ noremap H ^
 noremap L $
 noremap J L
 noremap K H
+noremap gH g0
+noremap gL g$
 noremap & J
 nnoremap <C-k> K
 
-noremap gL g$
-
 " Select all
-noremap <leader>va :keepjumps normal! ggVG<CR>
+noremap <silent> <leader>va :keepjumps normal! ggVG<CR>
 
 " Insert new line below and above current line
 nnoremap <leader>o o<esc>
@@ -243,7 +285,7 @@ nnoremap Q @@
 
 " Show registers and marks
 nnoremap <leader>R :registers<CR>
-nnoremap <leader>m :marks<CR>
+nnoremap <leader>M :marks<CR>
 
 " Insert an open-paren and yank the close-paren
 nnoremap <leader>( i()<esc>x
@@ -258,22 +300,24 @@ nnoremap <leader>bn  :enew<CR>
 nnoremap <leader>bo  :e <C-r>=trim(execute('pwd'))<CR>/
 
 " Close
-nnoremap <silent><leader>bc  :<C-u>call <SID>close_buffer(0)<CR>
-nnoremap <leader>bC  :call <SID>close_buffer(1)<CR>
-function! s:close_buffer(force) abort
+nnoremap <silent><leader>c  :<C-u>call <SID>close_buffer(0, 0)<CR>
+nnoremap <silent><leader>C  :<C-u>call <SID>close_buffer(1, 0)<CR>
+nnoremap <silent><leader>bc  :<C-u>call <SID>close_buffer(0, 1)<CR>
+nnoremap <silent><leader>bC  :<C-u>call <SID>close_buffer(1, 1)<CR>
+function! s:close_buffer(force, preservewindow) abort
     let l:buf_no = v:count ? v:count : bufnr('%')
     if bufnr(l:buf_no) < 0
-        echohl ErrorMsg | echo 'Buffer ' . l:buf_no . ' not found' | echohl None
+        call Echop('Buffer ' . l:buf_no . ' not found', 'ErrorMsg')
         return
     elseif getbufinfo('%')[0].changed && ! a:force
-        echohl ErrorMsg | echo 'Buffer ' . l:buf_no . ' is modified' | echohl None
+        call Echop('Buffer ' . l:buf_no . ' is modified', 'ErrorMsg')
         return
     endif
-
-    let l:buf_name = bufname(bufnr(l:buf_no))
+    let l:buf_name = expand('#' . string(bufnr(l:buf_no)) . ':t')
     if l:buf_name ==# '' | let l:buf_name = '[No Name]' | endif
-    let l:cmd = a:force  ? 'Bdelete! ' : 'Bdelete '
-    exec l:cmd . l:buf_no
+    let l:cmd = a:preservewindow ? 'Bdelete' : 'bdelete'
+    let l:cmd = a:force ? l:cmd . '! ' : l:cmd . ' '
+    exe l:cmd . l:buf_no
     echo 'Closed buffer <' . l:buf_no . ': ' . l:buf_name . '>'
 endfunction
 
@@ -294,12 +338,11 @@ nnoremap <leader>bi  2<C-g>
 
 " Open
 nnoremap <silent> <leader>-  :sp<CR>
-nnoremap <silent> <leader>_  :new<CR>
+nnoremap <silent> <leader>_  :sp<CR><C-w>J
 nnoremap <silent> <leader>\  :vsp<CR>
-nnoremap <silent> <leader>\| :vne<CR>
+nnoremap <silent> <leader>\| :vsp<CR><C-w>L
 
 " Close
-nnoremap <silent> <leader>c :close<CR>
 nnoremap <silent> <leader>wc :close<CR>
 
 " Navigate
@@ -390,11 +433,11 @@ if !v:vim_did_enter
         set modelines=0  " this should work with 'nomodeline' but doesn't for some reason
         source ~/.vimrc
         let &modelines=old_mls
-        echohl Statement | echo 'vimrc sourced' | echohl None
+        call Echop('vimrc sourced', 'Statement')
     endfunction
 endif
 function s:echo_src()
-    echohl Statement | echo 'vimrc sourced' | echohl None
+    call Echop('vimrc sourced', 'Statement')
 endfunction
 
 
@@ -409,15 +452,15 @@ endfunction
 function! s:textobj_cancel()
     if v:operator ==# 'c'
         augroup textobj_undo_empty_change
-            autocmd InsertLeave <buffer> execute 'normal! u'
-                        \| execute 'autocmd! textobj_undo_empty_change'
-                        \| execute 'augroup! textobj_undo_empty_change'
+            autocmd InsertLeave <buffer> exe 'normal! u'
+                        \| exe 'autocmd! textobj_undo_empty_change'
+                        \| exe 'augroup! textobj_undo_empty_change'
         augroup END
     endif
 endfunction
 
 noremap         <Plug>(TOC) <nop>
-inoremap <expr> <Plug>(TOC) exists('#textobj_undo_empty_change')?"\<esc>":''
+inoremap <expr> <Plug>(TOC) exists('#textobj_undo_empty_change') ? "\<esc>" : ''
 
 
 " ----------------------------------------------------------------------------
@@ -457,7 +500,7 @@ function! s:indent_object(op, skip_blank, b, e, bd, ed)
             else | break | end
         endwhile
     endfor
-    execute printf('normal! %dGV%dG', max([1, d[0] + a:bd]), min([x, d[1] + a:ed]))
+    exe printf('normal! %dGV%dG', max([1, d[0] + a:bd]), min([x, d[1] + a:ed]))
 endfunction
 xnoremap <silent> ii :<c-u>call <SID>indent_object('>=', 1, line("'<"), line("'>"), 0, 0)<cr>
 onoremap <silent> ii :<c-u>call <SID>indent_object('>=', 1, line('.'), line('.'), 0, 0)<cr>
@@ -485,7 +528,7 @@ function! s:go_indent(times, dir)
             endif
         endwhile
         let l = min([max([1, l]), x])
-        execute 'normal! '. l .'G^'
+        exe 'normal! '. l .'G^'
     endfor
 endfunction
 nnoremap <silent> [i :<c-u>call <SID>go_indent(v:count1, -1)<cr>
@@ -518,7 +561,7 @@ function! s:between_the_chars(incll, inclr, char, vis)
         if i < 0 | throw 'exit' | end
         let e = cursor + i + 1 - (a:inclr ? 0 : 1)
 
-        execute printf('normal! 0%dlhv0%dlh', b, e)
+        exe printf('normal! 0%dlhv0%dlh', b, e)
     catch 'exit'
         call s:textobj_cancel()
         if a:vis
@@ -534,10 +577,10 @@ function! s:between_the_chars(incll, inclr, char, vis)
 endfunction
 
 for [s:c, s:l] in items({'_': 0, '.': 0, ',': 0, '/': 1, '-': 0})
-    execute printf("xmap <silent> i%s :<C-U>call <SID>between_the_chars(0,  0, '%s', 1)<CR><Plug>(TOC)", s:c, s:c)
-    execute printf("omap <silent> i%s :<C-U>call <SID>between_the_chars(0,  0, '%s', 0)<CR><Plug>(TOC)", s:c, s:c)
-    execute printf("xmap <silent> a%s :<C-U>call <SID>between_the_chars(%s, 1, '%s', 1)<CR><Plug>(TOC)", s:c, s:l, s:c)
-    execute printf("omap <silent> a%s :<C-U>call <SID>between_the_chars(%s, 1, '%s', 0)<CR><Plug>(TOC)", s:c, s:l, s:c)
+    exe printf("xmap <silent> i%s :<C-U>call <SID>between_the_chars(0,  0, '%s', 1)<CR><Plug>(TOC)", s:c, s:c)
+    exe printf("omap <silent> i%s :<C-U>call <SID>between_the_chars(0,  0, '%s', 0)<CR><Plug>(TOC)", s:c, s:c)
+    exe printf("xmap <silent> a%s :<C-U>call <SID>between_the_chars(%s, 1, '%s', 1)<CR><Plug>(TOC)", s:c, s:l, s:c)
+    exe printf("omap <silent> a%s :<C-U>call <SID>between_the_chars(%s, 1, '%s', 0)<CR><Plug>(TOC)", s:c, s:l, s:c)
 endfor
 
 
@@ -566,7 +609,7 @@ function! s:inner_comment(vis)
     let line = origin
     let line += dir
     while line >= 1 && line <= line('$')
-      execute 'normal!' line.'G^'
+      exe 'normal!' line.'G^'
       if synIDattr(synID(line('.'), col('.'), 0), 'name') !~? 'comment'
         break
       endif
@@ -576,7 +619,7 @@ function! s:inner_comment(vis)
     call add(lines, line)
   endfor
 
-  execute 'normal!' lines[0].'GV'.lines[1].'G'
+  exe 'normal!' lines[0].'GV'.lines[1].'G'
 endfunction
 xmap <silent> ic :<C-U>call <SID>inner_comment(1)<CR><Plug>(TOC)
 omap <silent> ic :<C-U>call <SID>inner_comment(0)<CR><Plug>(TOC)
@@ -591,7 +634,7 @@ function! s:inner_blockwise_column(vmode, cmd)
     normal! `z
   endif
 
-  execute "normal! \<C-V>".a:cmd."o\<C-C>"
+  exe "normal! \<C-V>".a:cmd."o\<C-C>"
   let [line, col] = [line('.'), col('.')]
   let [cb, ce]    = [col("'<"), col("'>")]
   let [mn, mx]    = [line, line]
@@ -599,8 +642,8 @@ function! s:inner_blockwise_column(vmode, cmd)
   for dir in [1, -1]
     let l = line + dir
     while line('.') > 1 && line('.') < line('$')
-      execute 'normal! '.l.'G'.col.'|'
-      execute 'normal! v'.a:cmd."\<C-C>"
+      exe 'normal! '.l.'G'.col.'|'
+      exe 'normal! v'.a:cmd."\<C-C>"
       if cb != col("'<") || ce != col("'>")
         break
       endif
@@ -609,15 +652,15 @@ function! s:inner_blockwise_column(vmode, cmd)
     endwhile
   endfor
 
-  execute printf("normal! %dG%d|\<C-V>%s%dG", mn, col, a:cmd, mx)
+  exe printf("normal! %dG%d|\<C-V>%s%dG", mn, col, a:cmd, mx)
 
   if a:vmode ==# "\<C-V>"
     normal! o
-    if pvb[1] < line('.') | execute 'normal! '.pvb[1].'G' | endif
-    if pvb[2] < col('.')  | execute 'normal! '.pvb[2].'|' | endif
+    if pvb[1] < line('.') | exe 'normal! '.pvb[1].'G' | endif
+    if pvb[2] < col('.')  | exe 'normal! '.pvb[2].'|' | endif
     normal! o
-    if pve[1] > line('.') | execute 'normal! '.pve[1].'G' | endif
-    if pve[2] > col('.')  | execute 'normal! '.pve[2].'|' | endif
+    if pve[1] > line('.') | exe 'normal! '.pve[1].'G' | endif
+    if pve[2] > col('.')  | exe 'normal! '.pve[2].'|' | endif
   endif
 endfunction
 
@@ -636,6 +679,13 @@ onoremap <silent> aB :<C-U>call   <SID>inner_blockwise_column('',           'aW'
 " COMMANDS {{{
 " ============================================================================
 
+" Echop: pretty-echo a highlighted message (utility for other commands)
+function! Echop(message, highlight)
+    exe 'echohl ' . a:highlight
+    echo a:message
+    echohl None
+endfunction
+
 " Autosave: toggle buffer autosaving
 command! -bang Autosave call s:autosave(<bang>1)
 function! s:autosave(enable)
@@ -644,23 +694,22 @@ function! s:autosave(enable)
         if a:enable
             autocmd TextChanged,InsertLeave <buffer>
                 \ if empty(&buftype) && !empty(bufname('')) | silent! update | endif
-            echohl Statement | echo 'autosave enabled'
+            call Echop('Autosave enabled', 'Statement')
         else
-            echohl WarningMsg | echo 'autosave disabled'
+            call Echop('Autosave disabled', 'WarningMsg')
         endif
-        echohl None
     augroup END
 endfunction
 
-" CdPwd: Change directory (only for current window) to that of current buffer file
-command! CdPwd :lcd %:p:h
+" CdBuf: Change directory (only for current window) to that of current buffer file
+command! CdBuf :lcd %:p:h
 
 " Chomp: Delete trailing whitespace
-command! Chomp exec "norm mt" | :%s/\s\+$//e | exe "norm `t"
-    \ | echohl WarningMsg | echo "deleted trailing whitespace" | echohl None | noh
+command! Chomp exe 'norm mt' | :%s/\s\+$//e | exe "norm `t"
+    \ | call Echop('Deleted trailing whitespace', 'WarningMsg') | noh
 
 " Count: count number of occurrences in a file
-command! -nargs=1 Count execute printf('%%s/%s//gn', escape(<q-args>, '/')) | normal! ``
+command! -nargs=1 Count exe printf('%%s/%s//gn', escape(<q-args>, '/')) | normal! ``
 
 " Diff: Toggle vimdiff for two splits
 command! Diff :call ToggleDiff()
@@ -683,26 +732,23 @@ function! s:git_root()
   if v:shell_error
     echo 'Not in git repo'
   else
-    execute 'lcd' root
+    exe 'lcd' root
     echo 'Changed directory to: '.root
   endif
 endfunction
 command! GitRoot call s:git_root()
 
 " Goo: google a query
-command! -nargs=1 Goo call s:goo(<f-args>, 0)
-function! s:goo(pat, lucky)
+command! -nargs=1 Goo call s:goo(<f-args>)
+function! s:goo(pat)
   let q = substitute(a:pat, '["\n]', ' ', 'g')
   let q = substitute(q, '[[:punct:] ]',
        \ '\=printf("%%%02X", char2nr(submatch(0)))', 'g')
-  call system(printf('open "https://www.google.com/search?%sq=%s"',
-                   \ a:lucky ? 'btnI&' : '', q))
+  call system(printf('open "https://www.google.com/search?q=%s"', q))
 endfunction
 nnoremap <leader>go :Goo<space>
-" nnoremap <leader>? :call <SID>goog(expand("<cWORD>"), 0)<cr>
-" nnoremap <leader>! :call <SID>goog(expand("<cWORD>"), 1)<cr>
-" xnoremap <leader>? "gy:call <SID>goog(@g, 0)<cr>gv
-" xnoremap <leader>! "gy:call <SID>goog(@g, 1)<cr>gv
+nnoremap <silent> <leader>? :call <SID>goo(expand("<cWORD>"))<cr>
+xnoremap <silent> <leader>? "gy:call <SID>goo(@g)<cr>gv
 
 " Redir: redirect command output into a scratch buffer
 " https://gist.github.com/romainl/eae0a260ab9c135390c30cd370c20cd7
@@ -713,7 +759,7 @@ command! -nargs=1 -complete=command -bar -range Redir silent call Redir(<q-args>
 function Redir(cmd, rng, start, end)
 	for win in range(1, winnr('$'))
 		if getwinvar(win, 'scratch')
-			execute win . 'windo close'
+			exe win . 'windo close'
 		endif
 	endfor
 	if a:cmd =~# '^!'
@@ -729,7 +775,7 @@ function Redir(cmd, rng, start, end)
 		endif
 	else
 		redir => output
-		execute a:cmd
+		exe a:cmd
 		redir END
 		let output = split(output, "\n")
 	endif
@@ -776,41 +822,37 @@ endfunction
 " Z: jump to directory
 command! -nargs=* Z :call s:_fasd_cd(0, <f-args>)
 
-" Z: jump to directory, interactively (with FZF)
+" ZZ: jump to directory, interactively (with FZF)
 command! -nargs=* ZZ :call s:_fasd_cd(1, <f-args>)
 
-" utility functions
+" Z/ZZ utility functions
 function s:_fasd_cd(interactive, ...)
-    if a:0 == 0
-        echoe 'No argument given'
-    else
-        let args = ''
-        for arg in a:000
-            let args = args . ' ' . arg
-        endfor
-        if a:interactive == 0
-            let cmd = 'fasd -d -e printf'
-            let path = system(cmd . args)
-            if !isdirectory(path)
-                echoe 'no matches for [' . args . ' ] in fasd database'
-                return
-            endif
-            call s:_call_fasd_hook(path)
-            exec 'cd ' . path
-            echo path
-        elseif a:interactive == 1
-            let cmd = 'fasd -dlR'
-            let fasd_output = split(system(cmd . args), '\n')
-            call fzf#run(fzf#wrap({'source': fasd_output,
-                \ 'sink': function('s:_fasdcd_sink_for_fzf')}))
+    let args = ''
+    for arg in a:000
+        let args = args . ' ' . arg
+    endfor
+    if a:interactive == 0
+        let cmd = 'fasd -d -e printf'
+        let path = system(cmd . args)
+        if !isdirectory(path)
+            call Echop('No matches for <' . trim(args, ' ') . '> in fasd database.', 'ErrorMsg')
+            return
         endif
+        call s:_call_fasd_hook(path)
+        exe 'cd ' . path
+        echo path
+    elseif a:interactive == 1
+        let cmd = 'fasd -dlR'
+        let fasd_output = split(system(cmd . args), '\n')
+        call fzf#run(fzf#wrap({'source': fasd_output,
+            \ 'sink': function('s:_fasdcd_sink_for_fzf')}))
     endif
 endfunction
 function s:_call_fasd_hook(dir)
     let fasd_ps = job_start('fasd --proc $(fasd --sanitize cd ' . a:dir . ')')
 endfunction
 function s:_fasdcd_sink_for_fzf(dir)
-    exec 'cd ' . a:dir
+    exe 'cd ' . a:dir
     call s:_call_fasd_hook(a:dir)
     echo a:dir
 endfunction
@@ -830,6 +872,14 @@ function! s:helptab()
     endif
 endfunction
 autocmd BufEnter *.txt call s:helptab()
+
+" make textwidth 78 for text-files
+" from usr_05.2
+" learn how to make augroups work and fix this, also learn how autopats work and
+" add more filetypes eg markdown
+" augroup vimrcEx au!  autocmd FileType text setlocal textwidth=78
+"     " also add md markdown txt etc
+" augroup END
 
 
 " }}}
@@ -851,6 +901,7 @@ Plug 'preservim/tagbar'
 Plug 'mbbill/undotree'
 Plug 'airblade/vim-gitgutter'
 Plug 'mhinz/vim-startify'
+Plug 'wfxr/minimap.vim'
 
 " Utilities
 Plug 'aymericbeaumet/vim-symlink'
@@ -903,15 +954,15 @@ nnoremap <silent><leader>st  :ALEToggle<CR>
 nnoremap <silent><leader>so  :lop<CR>
 nnoremap <silent><leader>sc  :ccl<bar>lcl<CR>
 nnoremap <leader>sb  obreakpoint()<esc>k
+" let g:ale_disable_lsp = 1  " Diagnostics sent by CoC
 let g:ale_enabled = 0
 let g:ale_linters = {
-    \ 'python': ['pylint'],
+    \ 'python': ['flake8'],
     \ 'rust': ['rls', 'rustc', 'analyzer', 'cargo'],
     \ 'zsh': ['shell', 'shellcheck'],
     \ 'cpp': ['ccls'] }
-let g:ale_python_pylint_options =
-    \ "-d C0115,C0116,WO401 --variable-rgx '..?' --argument-rgx '..?'"  " allow 1-2 char variable names in pylint
 let g:ale_sh_shellcheck_dialect = 'bash'
+let g:ale_python_flake8_options = '--max-line-length=100'
 
 
 " ----------------------------------------------------------------------------
@@ -919,31 +970,31 @@ let g:ale_sh_shellcheck_dialect = 'bash'
 " ----------------------------------------------------------------------------
 
 " Completion
-function! ShouldTabComplete()
-    let col = col('.') - 1
-    let char = getline('.')[col - 1]
-    if !col || char =~# '\s'
-        return 0
-    else
-        return 1
-    endif
-endfunction
-inoremap <silent><expr> <TAB>
-    \ pumvisible() ? "\<C-n>" :
-    \ ShouldTabComplete() ? coc#refresh() : "<TAB>"
-inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
-nmap <silent> <leader>sd <Plug>(coc-definition)
+" function! ShouldTabComplete()
+"     let col = col('.') - 1
+"     let char = getline('.')[col - 1]
+"     if !col || char =~# '\s'
+"         return 0
+"     else
+"         return 1
+"     endif
+" endfunction
+inoremap <silent><expr> <TAB> coc#pum#visible() ? coc#pum#next(1) : coc#refresh()
+inoremap <silent><expr> <S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<TAB>"
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#_select_confirm() : "\<CR>"
+inoremap <silent><expr> <C-d> coc#pum#visible() ? coc#pum#scroll(1) : "\<C-d>"
+inoremap <silent><expr> <C-u> coc#pum#visible() ? coc#pum#scroll(0) : "\<C-u>"
+
 
 " Show documentation
-nnoremap <silent> <leader>sk :call <SID>show_documentation()<CR>
+nnoremap <silent> <leader>sh :call <SID>show_documentation()<CR>
 function! s:show_documentation()
     if (index(['vim','help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
+        exe 'h '.expand('<cword>')
     elseif (coc#rpc#ready())
         call CocActionAsync('doHover')
     else
-        execute '!' . &keywordprg . ' ' . expand('<cword>')
+        exe '!' . &keywordprg . ' ' . expand('<cword>')
     endif
 endfunction
 
@@ -958,12 +1009,14 @@ inoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ?
      \ "\<c-r>=coc#float#scroll(0)\<CR>" : "\<Left>"
 
 " Misc
+nnoremap <silent> <leader>sd <Plug>(coc-definition)
 nnoremap <leader>sl :CocList<CR>
 nmap <leader>sr <Plug>(coc-rename)
 nnoremap <leader>sC :tabedit ~/.vim/coc-settings.json<CR>
 set updatetime=300  " (for some reason, LSP/completion broken without this)
 set shortmess+=c " Don't update statusline with completion information
 "" set nobackup nowritebackup  " Some servers have issues with backup files (see #649)
+
 
 " ----------------------------------------------------------------------------
 " undotree
@@ -1027,6 +1080,16 @@ autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree')
     \ && b:NERDTree.isTabTree() | quit | endif
 
 " ----------------------------------------------------------------------------
+" Minimap
+" ----------------------------------------------------------------------------
+
+" Minimap colors
+nnoremap <leader>m :Minimap<CR>
+" hi minimapCursor ctermbg=63 ctermfg=111
+" hi minimapRange ctermbg=177 ctermfg=102
+
+
+" ----------------------------------------------------------------------------
 " FZF
 " ----------------------------------------------------------------------------
 
@@ -1053,28 +1116,29 @@ let g:fzf_colors = {
     \ }
 
 " Top-level bindings
-nnoremap <leader>/ :FzfDropbox<CR>
-nnoremap <leader>h :Helptags<CR>
+nnoremap <silent> <leader>. :FzfPwd<CR>
+nnoremap <silent> <leader>/ :FzfDropbox<CR>
+nnoremap <silent> <leader>h :Helptags<CR>
 
 " Second-level bindings
-nnoremap <leader>z/ :FzfPwd<CR>
-nnoremap <leader>zb :Buffers<CR>
-nnoremap <leader>zj :BLines<CR>
-nnoremap <leader>zt :BTags<CR>
-nnoremap <leader>zm :Marks<CR>
-nnoremap <leader>zg :Rg<CR>
-nnoremap <leader>zG :Rghidden<CR>
+nnoremap <silent> <leader>zb :Buffers<CR>
+nnoremap <silent> <leader>zj :BLines<CR>
+nnoremap <silent> <leader>zt :BTags<CR>
+nnoremap <silent> <leader>zm :Marks<CR>
+nnoremap <silent> <leader>zg :Rg<CR>
+nnoremap <silent> <leader>zG :Rghidden<CR>
 
 " Custom commands
 command! -bang -nargs=* Rghidden call fzf#vim#grep("rg -. --column --line-number
     \ --no-heading --color=always --smart-case -- ".shellescape(<q-args>),
     \ 1, fzf#vim#with_preview(), <bang>0)
 command! FzfDropbox call fzf#run(fzf#wrap({'source':
-    \ 'fd -H -E .git -E .dropbox.cache --ignore-file
+    \ 'fd -H -I -E .git -E .dropbox.cache --ignore-file
     \ ~/.dotfiles/.gitignore-global . ~/desktop/dropbox'}))
 command! FzfPwd call fzf#run(fzf#wrap({'source':
-    \ 'fd -H -E .git -E --ignore-file ~/.dotfiles/.gitignore-global'}))
-command! -bar MoveBack if &buftype == 'nofile' && (winwidth(0) < &columns / 3 || winheight(0) < &lines / 3) | execute "normal! \<c-w>\<c-p>" | endif
+    \ 'fd -H -I -E .git --ignore-file ~/.dotfiles/.gitignore-global'}))
+" command! -bar MoveBack if &buftype == 'nofile' && (winwidth(0) < &columns / 3 || winheight(0) < &lines / 3) | execute "normal! \<c-w>\<c-p>" | endif
+
 
 " ----------------------------------------------------------------------------
 " lightline
@@ -1111,27 +1175,42 @@ let g:lightline.component_type = {
     \ }
     let g:lightline.subseparator = { 'left': '|', 'right': '|' }
 
+
 " ----------------------------------------------------------------------------
-" Git (fugitive, gitgutter, gv.vim)
+" Git (Fugitive, GitGutter, gv.vim)
 " ----------------------------------------------------------------------------
+
+" Fugitive
 set tags^=.git/tags;~
-let g:gitgutter_map_keys = 0
 nnoremap <silent> <leader>gg :Git<CR>
-nnoremap <silent> <leader>gd :Git diff<CR>
-nnoremap <silent> <leader>gl :Git log<CR>
-nnoremap <silent> <leader>gs :Git status<CR>
 nnoremap <silent> <leader>gb :Git blame<CR>
+nnoremap <silent> <leader>gD :Git diff<CR>
+nnoremap <silent> <leader>gl :Git log<CR>
 nnoremap <silent> <leader>gm :Gvdiffsplit!<CR>
-nnoremap <silent> <leader>gt :GitGutterToggle<CR>
+nnoremap <silent> <leader>gs :Git status<CR>
+
+" GitGutter
+let g:gitgutter_map_keys = 0
+let g:gitgutter_diff_open = 0
+nnoremap <silent> <leader>g= :GitGutterStageHunk<CR>
+nnoremap <silent><expr> <leader>gd &diff ? ':+clo<CR>' : ':GitGutterDiffOrig<CR>'
 nnoremap <silent> <leader>gc :pclose<CR>
-nnoremap <silent> <leader>gv :GV<CR>
-nnoremap <silent> <leader>gV :GV!<CR>
-nnoremap <silent> <leader>g1 :diffge //2<CR>
-nnoremap <silent> <leader>g2 :diffge //3<CR>
+nnoremap <silent> <leader>gh :GitGutterLineHighlightsToggle<CR>
+nnoremap <silent> <leader>gz :GitGutterFold<CR>
+nnoremap <silent> <leader>gt :GitGutterBufferToggle<CR>
 nnoremap <leader>gp <Plug>(GitGutterPreviewHunk)
 nnoremap <leader>gu <Plug>(GitGutterUndoHunk)
 nnoremap ]g         <Plug>(GitGutterNextHunk)
 nnoremap [g         <Plug>(GitGutterPrevHunk)
+
+" GV
+nnoremap <silent> <leader>gv :GV<CR>
+nnoremap <silent> <leader>gV :GV!<CR>
+
+" Other
+nnoremap <silent> <leader>g1 :diffge //2<CR>
+nnoremap <silent> <leader>g2 :diffge //3<CR>
+
 
 " ----------------------------------------------------------------------------
 " vim-smoothie
@@ -1156,6 +1235,8 @@ let g:vimtex_compiler_latexmk = {
         \   '-interaction=nonstopmode',
         \ ],
     \ }
+autocmd FileType tex nnoremap <buffer><silent> <leader>lc :VimtexCompile<CR>
+autocmd FileType tex nnoremap <buffer><silent> <leader>lv :VimtexView<CR>
 
 " ----------------------------------------------------------------------------
 " emmet
@@ -1193,6 +1274,7 @@ set smartindent
 " Bindings
 noremap <silent> <leader><CR> :noh<CR>
 
+autocmd ColorScheme * hi minimapCursor ctermbg=147 ctermfg=177 | hi minimapRange ctermbg=63 ctermfg=111
 
 " }}}
 " ============================================================================

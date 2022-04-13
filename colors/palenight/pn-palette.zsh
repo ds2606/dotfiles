@@ -1,4 +1,4 @@
-# color palette for onedark-palenight custom highlighting
+# Color palette for palenight colorscheme
 pn_colors () {
     if [[ $1 == '16' ]]; then
         echo '16 colors not yet implemented'

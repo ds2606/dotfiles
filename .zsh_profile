@@ -8,6 +8,7 @@ fi
 # ----------
 
 # Set-up environment
+DOTS="$HOME/.dotfiles"
 source "$HOME/.dotfiles/.shfunctions.zsh"
 source "$HOME/.dotfiles/.zsh_aliases"
 source "$HOME/.dotfiles/.zsh_prompt"
@@ -26,6 +27,7 @@ export LESS="-RF"
 export CLICOLOR=1
 export BASH_SILENCE_DEPRECATION_WARNING=1
 export ITERM2_SQUELCH_MARK=0
+export PSQL_PAGER="pspg -s s"
 export PYTHONDONTWRITEBYTECODE=1
 export PYTHONBREAKPOINT=ipdb.set_trace
 setopt EXTENDED_GLOB
@@ -40,6 +42,8 @@ bindkey "^[h" backward-char
 bindkey "^[l" forward-char
 bindkey "^[H" beginning-of-line
 bindkey "^[L" end-of-line
+bindkey "^[a" beginning-of-line
+bindkey "^[e" end-of-line
 bindkey "^[b" backward-word
 bindkey "^[w" forward-word
 bindkey "^[J" down-line-or-history
@@ -56,6 +60,9 @@ bindkey "^[U" kill-line
 bindkey "^[c" kill-whole-line
 ## misc
 bindkey "^[C" clear-screen  # remap for "^l"
+insert-last-word-forward() { zle insert-last-word 1 }
+zle -N insert-last-word-forward
+bindkey '\e,' insert-last-word-forward
 
 # History
 HISTFILE=$HOME/.zsh_history
@@ -86,9 +93,9 @@ type brew &>/dev/null && FPATH="${FPATH}:$(brew --prefix)/share/zsh/site-functio
 eval "$(fasd --init auto)"
 
 # initialize fzf
-source "$HOME/.fzf.zsh"
+source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
 _fzf_path='~/desktop/dropbox'
-_fd_flags="-H -E .git -E '.dropbox*' --ignore-file ~/.dotfiles/.gitignore_global"
+_fd_flags="-H -I -E .git -E '.dropbox*' --ignore-file ~/.dotfiles/.gitignore_global"
 export FZF_DEFAULT_COMMAND="fd $_fd_flags . $_fzf_path"
 export FZF_CTRL_T_COMMAND="fd -t f $_fd_flags . $_fzf_path"
 export FZF_ALT_C_COMMAND="fd -t d $_fd_flags . $_fzf_path"
@@ -131,6 +138,7 @@ HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=204'
 # Initialize language environment managers
 eval "$(rbenv init - zsh)"
 eval "$(pyenv init --path)"
+eval "$(pyenv virtualenv-init -)"
 
 # The following lines were added by compinstall
 zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|[._-]=** r:|=**'

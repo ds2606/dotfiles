@@ -315,6 +315,9 @@ call s:h("rustAssert", { "fg": s:orange })
 " Java
 call s:h("javaAccessKeyword", { "fg": s:blue })
 
+" CSS/SCSS
+call s:h("scssSelectorName", { "fg": s:blue })
+
 
 " PLUGIN-SPECIFIC HIGHLIGHTING
 

@@ -14,11 +14,6 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
-# Suffix defaults
-alias -s py='python3'
-alias -s html='open -a Google\ Chrome'
-alias -s pdf='open'
-
 # Built-ins
 alias cl='clear'
 alias du1='du -sh'
@@ -34,7 +29,6 @@ alias w='which'
 
 # 3rd-party
 alias bd='batdiff'
-alias fd='fd -i'
 alias htop='htop-vim'
 alias ipy='ipython --profile=dschreck'
 alias la='exa -a'
@@ -43,6 +37,7 @@ alias ls='exa'
 alias g='git'
 alias moo='fortune | cowsay | lolcat'
 alias myth='ssh myth'
+alias pg='pgcli'
 alias rg='rg --smart-case'
 alias rsync='rsync -havz --stats'
 alias trash='trash -F'
@@ -52,8 +47,9 @@ alias t='tmux'
 alias ta='tmux attach -t mbp'
 alias ti='tmux_nested'
 alias tn='tmux new-session -As mbp'
-alias myip4='curl -4 ifconfig.co'
-alias myip6='curl -6 ifconfig.co'
+alias myip4='curl -s -4 ifconfig.co'
+alias myip6='curl -s -6 ifconfig.co'
+ipgeo() { curl -s http://ipwhois.app/json/$1?objects=ip,success,message,country,country_code,region,city | jq }
 tree() { /usr/bin/env tree -C $@ | less }
 
 # GUI applications
