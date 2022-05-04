@@ -5,7 +5,7 @@
     defaultBranch = main
 [alias]
     a        = add
-    aa       = add .
+    aa       = add -A
     ai       = add -i
     amend    = commit --amend
     amno     = commit --amend --no-edit
@@ -43,7 +43,7 @@
 [core]
     excludesfile = ~/.dotfiles/.gitignore_global
     editor = vim
-    pager = less
+	pager = diff-so-fancy | less --tabs=4 -RF
 [diff]
 	mnemonicprefix = true
 [pretty]
@@ -59,3 +59,20 @@
 	ff = only
 [push]
 	default = simple
+[color "diff-highlight"]
+	oldNormal = 161 bold
+	oldHighlight = 211 bold 52
+	newNormal = 114 bold
+	newHighlight = 114 bold 22
+[color "diff"]
+	meta = 153
+	frag = 209 bold
+	func = 219 bold
+	commit = 141  ; 220 nice as well
+	old = 161
+	new = 114
+	whitespace = 204 reverse
+[color]
+	ui = true
+[interactive]
+	diffFilter = diff-so-fancy --patch

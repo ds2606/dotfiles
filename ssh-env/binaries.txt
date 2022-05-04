@@ -1,4 +1,5 @@
 bat
+diff-so-fancy
 exa
 fasd
 fd
